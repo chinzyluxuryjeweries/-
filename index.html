@@ -13,129 +13,119 @@
             --surface-white: #FFFFFF; 
             --text-dark: #1A1A1A;     
             --accent-gold: #C5A059;   
-            --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --gold-glow: rgba(197, 160, 89, 0.1); 
+            --transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             
-            /* Hierarchy Base (Adjust these to your liking) */
-            --brand-sz: 60px; 
-            --sub-sz: 16px; /* Exactly 1px smaller */
+            /* LUXURY HIERARCHY (340 DPI SCALE) */
+            --brand-sz: 22px; 
+            --sub-sz: 21px; /* Exactly 1px smaller than Brand */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
+        body { font-family: 'Work Sans', sans-serif; margin: 0; padding: 0; background: var(--bg-pearl); overflow-x: hidden; }
 
+        /* --- THE MASTER HEADER --- */
         header {
             background: var(--surface-white);
             position: sticky; top: 0; z-index: 2000;
-            width: 100%;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.02);
+            width: 100%; box-shadow: 0 2px 20px rgba(0,0,0,0.02);
             transition: var(--transition);
         }
 
-        /* --- TOP ROW: BRAND DOMINANCE --- */
-        .header-top {
+        /* ROW 1: Branding */
+        .branding-row {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 5%; height: 80px; transition: var(--transition);
-            gap: 10px;
+            padding: 10px 5%; height: 80px; transition: var(--transition); gap: 10px;
         }
-
         .date-box { 
-            flex: 1; font-size: 0.65rem; color: #999; 
-            text-transform: uppercase; letter-spacing: 1px;
-            display: flex; align-items: center; height: var(--sub-sz);
+            flex: 1; font-size: 0.65rem; color: #999; text-transform: uppercase; 
+            height: var(--sub-sz); display: flex; align-items: center;
         }
-
-        .brand-center { 
-            flex: 2; display: flex; justify-content: center; align-items: center; 
-        }
-        .brand-center img { 
-            height: var(--brand-sz); width: auto; transition: 0.3s; 
-        }
-
+        .brand-center { flex: 2; display: flex; justify-content: center; align-items: center; }
+        .brand-center img { height: var(--brand-sz); width: auto; }
+        
         .icons-right { 
-            flex: 1; display: flex; justify-content: flex-end; gap: 18px; 
+            flex: 1; display: flex; justify-content: flex-end; gap: 20px; 
             align-items: center; height: var(--sub-sz);
         }
-        .icons-right i { font-size: 0.95rem; cursor: pointer; color: var(--text-dark); }
+        .icons-right i { font-size: 1rem; color: var(--text-dark); cursor: pointer; }
 
-        /* --- BOTTOM ROW: NAVIGATION --- */
+        /* ROW 2: Navigation */
         .nav-row {
-            padding: 12px 5%; border-top: 1px solid #F0F0F0;
+            padding: 15px 5%; border-top: 1px solid #F0F0F0;
             display: flex; justify-content: center; align-items: center;
             transition: var(--transition); position: relative;
         }
-
-        .nav-links { display: flex; gap: 25px; list-style: none; padding: 0; margin: 0; }
+        .nav-links { display: flex; gap: 30px; list-style: none; padding: 0; margin: 0; }
         .nav-links a { 
-            text-decoration: none; color: var(--text-dark); 
-            font-size: 0.85rem; font-weight: 300; text-transform: uppercase;
-            letter-spacing: 1.5px; transition: 0.3s;
+            text-decoration: none; color: var(--text-dark); font-size: 0.85rem; 
+            font-weight: 300; text-transform: uppercase; letter-spacing: 1.5px;
+            transition: 0.3s;
         }
 
-        /* --- THE MORPH (SCROLLED) --- */
+        /* --- THE MORPH --- */
         header.scrolled { transform: translateY(-80px); }
+        .logo-peek { position: absolute; left: 5%; opacity: 0; transform: translateX(-15px); transition: 0.4s; }
+        header.scrolled .logo-peek { opacity: 1; transform: translateX(0); }
+        .logo-peek img { height: 18px; } /* Smaller than the Nav for hierarchy */
 
-        /* Logo Peek on Scroll */
-        .logo-peek {
-            position: absolute; left: 5%; opacity: 0; transform: translateX(-15px);
-            transition: 0.4s; pointer-events: none;
-        }
-        header.scrolled .logo-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
-        .logo-peek img { height: 20px; }
-
-        /* Nav Micro-Shrink (-2px) */
         header.scrolled .nav-links a { font-size: calc(0.85rem - 2px); letter-spacing: 1px; }
 
-        /* Icons Peek on Scroll */
-        .icons-peek {
-            position: absolute; right: 5%; opacity: 0; transform: translateX(15px);
-            transition: 0.4s; pointer-events: none; display: flex; gap: 18px;
-        }
-        header.scrolled .icons-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
-        .icons-peek i { font-size: 0.9rem; color: var(--text-dark); }
+        .icons-peek { position: absolute; right: 5%; opacity: 0; transform: translateX(15px); transition: 0.4s; display: flex; gap: 20px; }
+        header.scrolled .icons-peek { opacity: 1; transform: translateX(0); }
 
-        /* --- SEARCH DRAWER (FUNCTIONAL) --- */
+        /* --- SEARCH DRAWER --- */
         .search-drawer {
             position: absolute; top: 100%; left: 0; width: 100%;
             background: white; border-top: 1px solid #eee; padding: 20px;
             transform: translateY(-100%); opacity: 0; transition: 0.4s; z-index: -1;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
-        .search-drawer.active { transform: translateY(0); opacity: 1; }
+        .search-drawer.active { transform: translateY(0); opacity: 1; z-index: 1500; }
         .search-input {
             width: 100%; border: none; border-bottom: 1px solid var(--accent-gold);
-            padding: 10px; font-family: 'Work Sans'; font-size: 1rem; outline: none;
-            text-align: center; text-transform: uppercase;
+            padding: 10px; font-family: 'Work Sans'; font-size: 1rem; outline: none; text-align: center;
         }
-        #results-list { max-height: 250px; overflow-y: auto; margin-top: 15px; }
-        .search-item { 
-            padding: 12px; border-bottom: 1px solid #f9f9f9; 
-            display: flex; justify-content: space-between; font-size: 0.85rem;
-            cursor: pointer;
-        }
-        .search-item:hover { background: #fdfaf4; }
+        #results-list { max-height: 250px; overflow-y: auto; margin-top: 15px; font-size: 0.85rem; }
+        .res-item { padding: 12px; border-bottom: 1px solid #f9f9f9; display: flex; justify-content: space-between; }
 
-        /* --- MOBILE SCALE (340 DPI) --- */
-        @media (max-width: 240px) {
-            :root { --brand-sz: 50px; --sub-sz: 10px; }
-            .header-top { height: 70px; }
-            header.scrolled { transform: translateY(-70px); }
+        /* --- NEW ARRIVALS (HALF-FULL-HALF) --- */
+        .arrivals-wrap { width: 100%; overflow: hidden; padding: 30px 0; position: relative; }
+        .arrivals-track { display: flex; align-items: center; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        .arrivals-track img { 
+            width: 70vw; max-width: 300px; aspect-ratio: 4/5; object-fit: cover; 
+            margin: 0 15px; border-radius: 4px; box-shadow: 0 10px 25px var(--gold-glow);
+            opacity: 0.4; transition: 0.5s; flex-shrink: 0;
+        }
+        .arrivals-track img.active { opacity: 1; transform: scale(1.05); }
+
+        /* --- VIDEO (250px HEIGHT) --- */
+        .video-box { width: 100%; height: 250px; background: #000; position: relative; overflow: hidden; margin: 40px 0; }
+        .video-box video { width: 100%; height: 100%; object-fit: cover; }
+        .mute-btn { position: absolute; bottom: 15px; right: 15px; background: rgba(255,255,255,0.8); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; cursor: pointer; }
+
+        /* --- TESTIMONIALS (CYCLE > 7) --- */
+        .testimony-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px 5%; justify-items: center; }
+        .testimony-box { width: 340px; height: 500px; border-radius: 4px; overflow: hidden; position: relative; box-shadow: 0 10px 20px var(--gold-glow); }
+        .testimony-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0; transition: 1.5s; }
+        .testimony-box img.active { opacity: 1; }
+
+        @media (max-width: 400px) {
+            :root { --brand-sz: 19px; --sub-sz: 18px; }
             .nav-links { gap: 15px; }
-            .nav-links a { font-size: 0.65rem; }
-            header.scrolled .nav-links a { font-size: calc(0.65rem - 2px); }
+            .nav-links a { font-size: 0.75rem; }
+            .testimony-box { width: 90vw; height: 450px; }
         }
 
-        /* Simple Spacer */
-        .content { padding: 40px 5%; min-height: 1500px; text-align: center; color: #ccc; }
+        footer { text-align: center; padding: 40px; border-top: 1px solid #eee; color: #999; font-size: 0.7rem; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
     <header id="main-header">
-        <div class="header-top">
+        <div class="branding-row">
             <div class="date-box" id="live-date"></div>
-            <div class="brand-center">
-                <img src="brand/brandname.jpg" alt="Chinzy Luxury">
-            </div>
+            <div class="brand-center"><img src="brand/brandname.jpg" alt="CHINZY"></div>
             <div class="icons-right">
                 <i class="fas fa-magnifying-glass" onclick="toggleSearch()"></i>
                 <i class="fas fa-shopping-cart" onclick="window.location.href='shop.html'"></i>
@@ -143,9 +133,7 @@
         </div>
 
         <nav class="nav-row">
-            <div class="logo-peek">
-                <img src="logo/logo.jpg" alt="L">
-            </div>
+            <div class="logo-peek"><img src="logo/logo.jpg" alt="L"></div>
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="shop.html">Shop</a></li>
@@ -157,75 +145,96 @@
             </div>
         </nav>
 
-        <div class="search-drawer" id="search-box">
-            <input type="text" class="search-input" id="search-input" placeholder="Search for jewelry..." oninput="filterResults()">
+        <div class="search-drawer" id="search-panel">
+            <input type="text" class="search-input" id="search-input" placeholder="SEARCH PIECES..." oninput="doSearch()">
             <div id="results-list"></div>
-            <div style="text-align:center; padding-top:10px;">
-                <i class="fas fa-times" onclick="toggleSearch()" style="color:#ddd; cursor:pointer;"></i>
-            </div>
         </div>
     </header>
 
-    <div class="content">
-        <h2 style="font-family:'Playfair Display'; color:#1a1a1a; font-weight:400;">Timeless Beauty</h2>
-        <p>Scroll down to see the luxury morphing effect...</p>
-    </div>
+    <main>
+        <h2 style="text-align:center; font-family:'Playfair Display'; font-weight:400; margin-top:40px;">New Arrivals</h2>
+        <div class="arrivals-wrap">
+            <div class="arrivals-track" id="track">
+                <script>
+                    for(let i=1; i<=10; i++) document.write(`<img src="products/prod${i}.jpg" class="${i===1?'active':''}" onerror="this.style.display='none'">`);
+                </script>
+            </div>
+        </div>
+
+        <div class="video-box">
+            <video id="v" autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
+            <div class="mute-btn" onclick="tM()"><i id="mI" class="fas fa-volume-xmark"></i></div>
+        </div>
+
+        <h2 style="text-align:center; font-family:'Playfair Display'; font-weight:400;">Client Stories</h2>
+        <div class="testimony-section">
+            <div class="testimony-box" id="b1"></div>
+            <div class="testimony-box" id="b2"></div>
+            <div class="testimony-box" id="b3"></div>
+        </div>
+    </main>
+
+    <footer>&copy; 2026 CHINZY LUXURY JEWERIES</footer>
 
     <script>
-        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv';
-        let inventory = [];
+        const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv';
+        let items = [];
 
-        // 1. Functional Search Data Fetch
-        async function loadInventory() {
-            try {
-                const resp = await fetch(CSV_URL);
-                const data = await resp.text();
-                const lines = data.split('\n').slice(1);
-                inventory = lines.map(line => {
-                    const parts = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    return parts.length > 1 ? { name: parts[1].replace(/"/g, '').trim(), price: parts[3] } : null;
-                }).filter(x => x);
-            } catch (err) { console.error("Search fetch failed", err); }
+        // 1. Live Search
+        async function load() {
+            const r = await fetch(CSV); const t = await r.text();
+            items = t.split('\n').slice(1).map(l => {
+                const p = l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                return p.length > 1 ? { n: p[1].replace(/"/g, ''), p: p[3] } : null;
+            }).filter(x => x);
         }
-        loadInventory();
+        load();
 
-        function filterResults() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const list = document.getElementById('results-list');
-            list.innerHTML = '';
-            if(!query) return;
-
-            const filtered = inventory.filter(item => item.name.toLowerCase().includes(query));
-            filtered.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'search-item';
-                div.innerHTML = `<span>${item.name}</span><span style="color:var(--accent-gold)">₦${Number(item.price).toLocaleString()}</span>`;
-                div.onclick = () => window.location.href = 'shop.html';
-                list.appendChild(div);
+        function doSearch() {
+            const q = document.getElementById('search-input').value.toLowerCase();
+            const l = document.getElementById('results-list'); l.innerHTML = '';
+            if(!q) return;
+            items.filter(i => i.n.toLowerCase().includes(q)).forEach(i => {
+                l.innerHTML += `<div class="res-item" onclick="window.location.href='shop.html'"><span>${i.n}</span><b>₦${Number(i.p).toLocaleString()}</b></div>`;
             });
         }
 
-        // 2. Toggles
-        function toggleSearch() {
-            document.getElementById('search-box').classList.toggle('active');
-            if(document.getElementById('search-box').classList.contains('active')) {
-                document.getElementById('search-input').focus();
-            }
-        }
+        function toggleSearch() { document.getElementById('search-panel').classList.toggle('active'); document.getElementById('search-input').focus(); }
 
-        // 3. Header Scroll
-        window.addEventListener('scroll', () => {
-            const h = document.getElementById('main-header');
-            if (window.scrollY > 80) h.classList.add('scrolled');
-            else h.classList.remove('scrolled');
-        });
+        // 2. Carousel Half-Full-Half
+        const tr = document.getElementById('track');
+        const imgs = tr.getElementsByTagName('img');
+        let cur = 0;
 
-        // 4. Date
-        function updateDate() {
-            const opt = { weekday: 'short', month: 'short', day: 'numeric' };
-            document.getElementById('live-date').innerText = new Date().toLocaleDateString('en-US', opt);
+        function scrollCarousel() {
+            const w = window.innerWidth;
+            const iw = imgs[0].offsetWidth + 30;
+            const off = (w / 2) - (iw / 2) - (cur * iw);
+            tr.style.transform = `translateX(${off}px)`;
+            for(let i=0; i<imgs.length; i++) imgs[i].classList.toggle('active', i === cur);
+            cur = (cur + 1) % imgs.length;
         }
-        setInterval(updateDate, 1000); updateDate();
+        setInterval(scrollCarousel, 4000); window.onload = scrollCarousel;
+
+        // 3. Testimonial Cycle (>7 images)
+        const tImgs = ['test/test1.jpg','test/test2.jpg','test/test3.jpg','test/test4.jpg','test/test5.jpg','test/test6.jpg','test/test7.jpg','test/test8.jpg','test/test9.jpg'];
+        function cycle(id, start, end) {
+            const b = document.getElementById(id); let c = 0;
+            const slice = tImgs.slice(start, end);
+            slice.forEach((s, i) => { const img = document.createElement('img'); img.src = s; if(i===0) img.classList.add('active'); b.appendChild(img); });
+            setInterval(() => {
+                const pics = b.getElementsByTagName('img');
+                pics[c].classList.remove('active');
+                c = (c + 1) % pics.length;
+                pics[c].classList.add('active');
+            }, 3000 + (start * 200));
+        }
+        cycle('b1', 0, 3); cycle('b2', 3, 6); cycle('b3', 6, 9);
+
+        // 4. Mute & Scroll
+        function tM() { const v = document.getElementById('v'); const i = document.getElementById('mI'); v.muted = !v.muted; i.classList.toggle('fa-volume-xmark'); i.classList.toggle('fa-volume-high'); }
+        window.onscroll = () => { document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 60); };
+        setInterval(() => { document.getElementById('live-date').innerText = new Date().toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'}); }, 1000);
     </script>
 </body>
 </html>
