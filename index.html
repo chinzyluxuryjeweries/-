@@ -16,7 +16,6 @@
             --transition-speed: 0.4s;
         }
 
-        /* Prevent side-scrolling on narrow 340 DPI screens */
         * { box-sizing: border-box; }
         body { 
             font-family: 'Work Sans', sans-serif; 
@@ -26,7 +25,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- THE MORPHING HEADER --- */
+        /* --- THE LIQUID MORPHING HEADER --- */
         header {
             background: var(--surface-white);
             position: sticky; top: 0; z-index: 1000;
@@ -35,18 +34,34 @@
             transition: all var(--transition-speed) ease-in-out;
         }
 
-        /* Row 1: The Brand Spread */
+        /* Row 1: Logo | Brand | Date */
         .header-top {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 4%;
             height: 70px;
             transition: all 0.3s ease;
         }
-        .header-left img { height: 45px; width: auto; }
-        .header-center img { height: 35px; width: auto; }
-        .header-right { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #888; }
+        
+        /* Using vw (Viewport Width) ensures these shrink on narrow phones */
+        .header-left img { height: 12vw; max-height: 45px; width: auto; flex-shrink: 0; }
+        .header-center { flex-grow: 1; text-align: center; padding: 0 10px; }
+        .header-center img { height: 10vw; max-height: 35px; width: auto; max-width: 100%; }
+        
+        .header-right { 
+            flex-shrink: 0; 
+            text-align: right; 
+            min-width: 60px; 
+        }
+        #datetime-display {
+            font-size: 2.2vw; /* Scales perfectly with your 340dpi screen */
+            max-font-size: 0.7rem;
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            color: #888;
+            white-space: nowrap;
+        }
 
-        /* Row 2: Navigation Control */
+        /* Row 2: Nav | Icons */
         .header-bottom {
             display: flex; align-items: center; 
             padding: 10px 4%;
@@ -54,28 +69,28 @@
             transition: all var(--transition-speed) ease;
         }
 
-        /* Brand image that only slides in on scroll */
         .brand-scrolled {
-            display: none; height: 22px; width: auto;
+            display: none; height: 25px; width: auto;
             margin-right: 15px;
-            animation: slideIn 0.3s ease forwards;
+            flex-shrink: 0;
         }
 
         .nav-links {
-            display: flex; gap: 20px; list-style: none; padding: 0; margin: 0 auto;
+            display: flex; gap: 4vw; list-style: none; padding: 0; margin: 0 auto;
             text-transform: uppercase; white-space: nowrap;
             transition: all var(--transition-speed) ease;
         }
         .nav-links li a {
             text-decoration: none; color: var(--text-dark);
-            font-size: 0.85rem; letter-spacing: 1px; font-weight: 300;
+            font-size: 2.8vw; max-font-size: 0.85rem; 
+            letter-spacing: 1px; font-weight: 300;
         }
         .nav-links li a.active { color: var(--accent-gold); font-weight: 500; }
 
-        .action-icons { display: flex; gap: 15px; align-items: center; }
-        .action-icons i { font-size: 0.9rem; cursor: pointer; }
+        .action-icons { display: flex; gap: 4vw; align-items: center; flex-shrink: 0; }
+        .action-icons i { font-size: 3.5vw; max-font-size: 0.9rem; cursor: pointer; }
 
-        /* --- THE SCROLLED "SINGLE LINE" MORPH --- */
+        /* --- SCROLLED MORPH --- */
         header.scrolled .header-top { 
             height: 0; padding: 0; opacity: 0; pointer-events: none; overflow: hidden;
         }
@@ -84,52 +99,47 @@
             padding: 8px 4%;
             justify-content: space-between;
         }
-        header.scrolled .brand-scrolled { display: block; }
+        header.scrolled .brand-scrolled { display: block; height: 6vw; max-height: 25px; }
         header.scrolled .nav-links { 
-            margin: 0; /* Moves from center to follow the brand */
-            gap: 12px;
+            margin: 0; 
+            gap: 3vw;
         }
-        header.scrolled .nav-links li a { font-size: 0.75rem; }
+        header.scrolled .nav-links li a { font-size: 2.5vw; }
 
-        /* --- CONTENT SCALING --- */
+        /* --- CONTENT --- */
         main { padding: 15px; }
         h2.section-title { text-align: center; font-family: 'Playfair Display'; font-weight: 400; font-size: 1.8rem; margin: 30px 0 20px; }
 
-        /* Arrivals: scaled for 340 DPI */
         .carousel-container { width: 100%; overflow: hidden; padding: 10px 0; }
         .carousel-track { display: flex; transition: transform 0.8s ease; }
         .carousel-track img {
             width: 75vw; max-width: 280px; height: auto; aspect-ratio: 4/5;
             object-fit: cover; margin-right: 15px; border-radius: 4px;
-            box-shadow: 0 8px 20px var(--gold-glow);
+            box-shadow: 0 8px 20px rgba(197, 160, 89, 0.2);
         }
 
-        /* Video */
         .video-container { width: 100%; height: 400px; background: #000; position: relative; border-radius: 8px; overflow: hidden; }
         .video-container video { width: 100%; height: 100%; object-fit: cover; }
         .mute-btn { position: absolute; bottom: 15px; right: 15px; background: rgba(255,255,255,0.8); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; }
 
-        /* Testimonials: Responsive Fix */
         .testimony-grid { display: grid; grid-template-columns: 1fr; gap: 20px; justify-items: center; }
-        .testimony-box { 
-            width: 90vw; max-width: 350px; height: 500px; 
-            border-radius: 8px; overflow: hidden; position: relative;
-            box-shadow: 0 10px 25px var(--gold-glow);
-        }
+        .testimony-box { width: 90vw; max-width: 350px; height: 500px; border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(197, 160, 89, 0.2); }
         .testimony-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0; transition: 1.5s; }
         .testimony-box img.visible { opacity: 1; }
 
-        /* Specific Mobile UI Overrides */
-        @media (max-width: 400px) {
-            .nav-links { gap: 10px; }
-            .nav-links li a { font-size: 3vw; } /* Dynamic font based on your 340dpi width */
-            .header-right { display: none; } /* Remove date on tiny screens to save the row */
-        }
-
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-
         footer { text-align: center; padding: 40px 20px; border-top: 1px solid #eee; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; }
         .whatsapp-link { display: inline-flex; width: 50px; height: 50px; background: #25D366; color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 1.5rem; margin-top: 10px; text-decoration: none; }
+
+        /* Desktop specific tweaks */
+        @media (min-width: 800px) {
+            .header-left img { height: 45px; }
+            .header-center img { height: 35px; }
+            #datetime-display { font-size: 0.7rem; }
+            .nav-links li a { font-size: 0.85rem; }
+            .action-icons i { font-size: 0.9rem; }
+            .nav-links { gap: 30px; }
+            .testimony-grid { grid-template-columns: repeat(3, 1fr); }
+        }
     </style>
 </head>
 <body>
@@ -142,15 +152,13 @@
         </div>
         <div class="header-bottom">
             <img class="brand-scrolled" src="brand/brandname.jpg" alt="Brand">
-            
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
-            
             <div class="action-icons">
-                <i class="fas fa-magnifying-glass" onclick="alert('Search Open')"></i>
+                <i class="fas fa-magnifying-glass"></i>
                 <i class="fas fa-shopping-cart" onclick="window.location.href='shop.html'"></i>
             </div>
         </div>
@@ -167,7 +175,7 @@
             </div>
         </div>
 
-        <h2 class="section-title">The Gallery</h2>
+        <h2 class="section-title">Experience Luxury</h2>
         <div class="video-container">
             <video id="vid" autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
             <div class="mute-btn" onclick="toggleMute()"><i id="muteIcon" class="fas fa-volume-xmark"></i></div>
@@ -187,20 +195,17 @@
     </footer>
 
     <script>
-        // Date & Time
         setInterval(() => {
             const now = new Date();
             document.getElementById('datetime-display').innerText = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
         }, 1000);
 
-        // Morphing Logic
         const head = document.getElementById('main-header');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) head.classList.add('scrolled');
+            if (window.scrollY > 60) head.classList.add('scrolled');
             else head.classList.remove('scrolled');
         });
 
-        // Dynamic Snap Carousel (calculates based on your current DPI/Width)
         const tr = document.getElementById('product-track');
         let slide = 0;
         setInterval(() => {
@@ -212,16 +217,14 @@
             }
         }, 5000);
 
-        // Mute Toggle
         function toggleMute() {
             const v = document.getElementById('vid'); const i = document.getElementById('muteIcon');
-            v.muted = !v.muted;
-            i.classList.toggle('fa-volume-xmark'); i.classList.toggle('fa-volume-high');
+            v.muted = !v.muted; i.classList.toggle('fa-volume-xmark'); i.classList.toggle('fa-volume-high');
         }
 
-        // Testimonial Fade
         function rotate(aID, bID) {
             const a = document.getElementById(aID); const b = document.getElementById(bID);
+            if (!a || !b) return;
             if (a.classList.contains('visible')) { a.classList.remove('visible'); b.classList.add('visible'); }
             else { b.classList.remove('visible'); a.classList.add('visible'); }
         }
