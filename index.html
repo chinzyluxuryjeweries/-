@@ -63,8 +63,6 @@
             transition: all var(--transition-speed) ease; text-transform: uppercase;
         }
 
-        .mobile-menu-btn { display: none; font-size: 1.5rem; cursor: pointer; color: var(--text-dark); }
-
         .nav-links {
             display: flex; gap: 35px; list-style: none; padding: 0; margin: 0;
             transition: all var(--transition-speed) ease; align-items: center;
@@ -84,7 +82,7 @@
             width: 100%; height: 1px; background-color: var(--accent-gold);
         }
 
-        /* Dropdown Styles for Desktop */
+        /* Dropdown Styles */
         .dropdown-parent { position: relative; }
         .dropdown {
             display: none; position: absolute; top: 100%; left: 0;
@@ -92,13 +90,15 @@
             list-style: none; padding: 15px 0; margin: 0; min-width: 180px; z-index: 100;
             border: 1px solid #F0F0F0; border-radius: 4px;
         }
-        .dropdown-parent:hover .dropdown { display: block; animation: fadeUp 0.3s ease; }
-        .dropdown li { padding: 0; }
-        .dropdown li a {
-            display: block; padding: 10px 20px; font-size: 0.85rem; letter-spacing: 1.5px;
-        }
-        .mobile-only { display: none; } /* Hidden on desktop */
         
+        /* Triggers on hover for desktop, tap for mobile */
+        .dropdown-parent:hover .dropdown, 
+        .dropdown-parent:active .dropdown { 
+            display: block; animation: fadeUp 0.3s ease; 
+        }
+        
+        .dropdown li { padding: 0; }
+        .dropdown li a { display: block; padding: 10px 20px; font-size: 0.85rem; letter-spacing: 1.5px; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .action-icons { display: flex; align-items: center; gap: 25px; position: relative; }
@@ -140,33 +140,46 @@
         header.scrolled .header-bottom { padding: 5px 40px; }
         header.scrolled .nav-links li a { font-size: 0.8rem; letter-spacing: 1.5px; }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* --- FLUID MOBILE RESPONSIVENESS (NO HAMBURGER MENU) --- */
         @media (max-width: 800px) {
-            .header-top { padding: 15px 20px; }
-            .header-left, .header-right { display: none; } 
-            .header-center { text-align: left; }
-            .header-center img { height: 35px; } 
-
-            .header-bottom { padding: 15px 20px; }
-            .mobile-menu-btn { display: block; }
+            .header-top { padding: 15px 3vw; }
+            .header-bottom { padding: 15px 3vw; }
             
-            /* Mobile Nav Overrides */
-            .desktop-only { display: none; } /* Hide the 'More' dropdown entirely */
-            .mobile-only { display: block; } /* Show flat links */
+            /* Fluid Images */
+            .header-left img { height: 6vw; min-height: 20px; }
+            .header-center img { height: 6.5vw; min-height: 22px; }
+            .header-right { min-width: auto; }
+            
+            /* Fluid Fonts using Viewport Width (vw) */
+            #datetime-display { font-size: 2vw; letter-spacing: 0.5px; }
+            
+            .nav-links { gap: 3vw; }
+            .nav-links li a { font-size: 2.8vw; letter-spacing: 1px; }
+            
+            .action-icons { gap: 3vw; }
+            .search-icon, .cart-icon { font-size: 3.5vw; }
+            .cart-wrapper { font-size: 2.8vw; gap: 2px; }
+            
+            /* Shrink search bar so it doesn't overflow mobile screen */
+            .search-container.active .search-input { width: 45vw; font-size: 2.5vw; }
 
-            .nav-links {
-                position: absolute; top: 100%; left: 0; width: 100%;
-                background: var(--surface-white); flex-direction: column; gap: 0;
-                max-height: 0; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-                align-items: center;
-            }
-            .nav-links.show { max-height: 400px; border-top: 1px solid #F0F0F0; }
-            .nav-links li { text-align: center; padding: 15px 0; border-bottom: 1px solid #F0F0F0; width: 100%; }
+            /* Center the dropdown so it doesn't bleed off the screen edge */
+            .dropdown { left: 50%; transform: translateX(-50%); min-width: 140px; }
+            .dropdown li a { font-size: 3vw; }
 
-            .action-icons { gap: 15px; }
-            .search-container.active .search-input { width: 160px; } 
-            header.scrolled .header-top { padding: 10px 20px; }
-            header.scrolled .header-bottom { padding: 10px 20px; }
+            /* Scrolled State for Mobile */
+            header.scrolled .header-top { padding: 8px 3vw; }
+            header.scrolled .header-bottom { padding: 8px 3vw; }
+            header.scrolled .header-left img { height: 4.5vw; }
+            header.scrolled .header-center img { height: 5vw; }
+            header.scrolled #datetime-display { font-size: 1.8vw; }
+            header.scrolled .nav-links li a { font-size: 2.5vw; }
+        }
+
+        /* Extremely small screens (e.g. old iPhones) */
+        @media (max-width: 400px) {
+            .nav-links li a { letter-spacing: 0; }
+            #datetime-display { letter-spacing: 0; }
         }
 
         /* --- MAIN BODY STYLES --- */
@@ -183,18 +196,9 @@
             background-color: var(--accent-gold); margin: 15px auto 0;
         }
 
-        /* --- 1. NEW PAUSE-AND-SLIDE CAROUSEL --- */
-        .carousel-container { 
-            width: 100%; overflow: hidden; position: relative; padding: 30px 0; 
-        }
-        
-        .carousel-track { 
-            display: flex; 
-            width: calc(320px * 20); /* 280px image + 40px margin = 320px per slide */
-            /* Removed the CSS animation entirely. JS controls this now. */
-            transform: translateX(0);
-        }
-        
+        /* Carousel */
+        .carousel-container { width: 100%; overflow: hidden; position: relative; padding: 30px 0; }
+        .carousel-track { display: flex; width: calc(320px * 20); transform: translateX(0); }
         .carousel-track img {
             width: 280px; height: 350px; object-fit: cover; border-radius: var(--border-radius); 
             margin: 0 20px; box-shadow: 0 10px 25px var(--gold-glow); 
@@ -254,15 +258,11 @@
         </div>
 
         <div class="header-bottom">
-            <!-- Mobile Hamburger Menu Button -->
-            <i class="fas fa-bars mobile-menu-btn" onclick="toggleMobileMenu()"></i>
-            
             <ul class="nav-links" id="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 
-                <!-- Desktop Dropdown -->
-                <li class="desktop-only dropdown-parent">
+                <li class="dropdown-parent">
                     <a href="javascript:void(0)">More <i class="fas fa-chevron-down" style="font-size: 0.7em; margin-left: 3px;"></i></a>
                     <ul class="dropdown">
                         <li><a href="services.html">Other Services</a></li>
@@ -270,11 +270,6 @@
                         <li><a href="contact.html">Contact Us</a></li>
                     </ul>
                 </li>
-
-                <!-- Mobile Only Links (Show when hamburger is clicked) -->
-                <li class="mobile-only"><a href="services.html">Other Services</a></li>
-                <li class="mobile-only"><a href="about.html">About Us</a></li>
-                <li class="mobile-only"><a href="contact.html">Contact Us</a></li>
             </ul>
 
             <div class="action-icons">
@@ -296,7 +291,6 @@
         <h2 class="section-title">New Arrivals</h2>
         <div class="carousel-container">
             <div class="carousel-track" id="product-track">
-                <!-- Images 1 to 10 -->
                 <img src="products/prod1.jpg" alt="Product 1" onerror="this.src='https://via.placeholder.com/280x350?text=PROD1'">
                 <img src="products/prod2.jpg" alt="Product 2" onerror="this.src='https://via.placeholder.com/280x350?text=PROD2'">
                 <img src="products/prod3.jpg" alt="Product 3" onerror="this.src='https://via.placeholder.com/280x350?text=PROD3'">
@@ -386,44 +380,32 @@
             }
         });
 
-        // --- 4. Mobile Menu Toggle ---
-        function toggleMobileMenu() {
-            const navLinks = document.getElementById('nav-links');
-            navLinks.classList.toggle('show');
-        }
-
-        // --- 5. Step-by-Step Javascript Carousel ---
+        // --- 4. Step-by-Step Javascript Carousel ---
         const track = document.getElementById('product-track');
         let currentSlide = 0;
         const totalUniqueSlides = 10; 
-        const slideWidth = 320; // 280px image + 40px margin
+        const slideWidth = 320; 
 
         function moveCarousel() {
             currentSlide++;
-            // Snap to the left smoothly
             track.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
             track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
 
-            // If we hit the 10th slide, reset invisibly back to 0
             if (currentSlide === totalUniqueSlides) {
                 setTimeout(() => {
                     track.style.transition = 'none';
                     currentSlide = 0;
                     track.style.transform = `translateX(0)`;
-                }, 600); // Wait for the transition to finish
+                }, 600); 
             }
         }
         
-        // Triggers the snap every 5 seconds
         let carouselTimer = setInterval(moveCarousel, 5000);
-
-        // Pause when mouse hovers over images
         const carouselContainer = document.querySelector('.carousel-container');
         carouselContainer.addEventListener('mouseenter', () => clearInterval(carouselTimer));
         carouselContainer.addEventListener('mouseleave', () => carouselTimer = setInterval(moveCarousel, 5000));
 
-
-        // --- 6. Testimonial Slideshow Logic ---
+        // --- 5. Testimonial Slideshow Logic ---
         let testIndex = 0;
         let testInterval;
         function showTestimonials() {
