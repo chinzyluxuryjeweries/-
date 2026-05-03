@@ -14,6 +14,8 @@
             --text-dark: #1A1A1A;     
             --accent-gold: #C5A059;   
             --transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* EXACT 1PX HIERARCHY */
             --brand-sz: 22px; 
             --sub-sz: 21px; 
         }
@@ -21,40 +23,70 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
 
-        /* --- PERSISTENT MORPHING HEADER --- */
-        header { background: var(--surface-white); position: sticky; top: 0; z-index: 2000; width: 100%; box-shadow: 0 2px 20px rgba(0,0,0,0.02); transition: var(--transition); }
-        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 5%; height: 80px; transition: var(--transition); }
+        /* --- THE BOUTIQUE HEADER (EXACT REPLICA) --- */
+        header {
+            background: var(--surface-white);
+            position: sticky; top: 0; z-index: 2000;
+            width: 100%; box-shadow: 0 2px 20px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+
+        .header-top {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 5%; height: 80px; transition: var(--transition); gap: 10px;
+        }
+        .date-box { flex: 1; font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 1px; height: var(--sub-sz); display: flex; align-items: center; }
+        .brand-center { flex: 2; display: flex; justify-content: center; align-items: center; }
         .brand-center img { height: var(--brand-sz); width: auto; }
-        .date-box { flex: 1; font-size: 0.65rem; color: #999; text-transform: uppercase; height: var(--sub-sz); display: flex; align-items: center; }
         .icons-right { flex: 1; display: flex; justify-content: flex-end; gap: 20px; align-items: center; height: var(--sub-sz); }
         .icons-right i { font-size: 1rem; color: var(--text-dark); cursor: pointer; }
 
-        .nav-row { padding: 15px 5%; border-top: 1px solid #F0F0F0; display: flex; justify-content: center; align-items: center; transition: var(--transition); position: relative; }
+        .nav-row {
+            padding: 15px 5%; border-top: 1px solid #F0F0F0;
+            display: flex; justify-content: center; align-items: center;
+            transition: var(--transition); position: relative;
+        }
         .nav-links { display: flex; gap: 30px; list-style: none; padding: 0; margin: 0; }
-        .nav-links a { text-decoration: none; color: var(--text-dark); font-size: 0.85rem; font-weight: 300; text-transform: uppercase; letter-spacing: 1.5px; }
-        .nav-links a.active { color: var(--accent-gold); font-weight: 500; }
+        .nav-links a { 
+            text-decoration: none; color: var(--text-dark); font-size: 0.85rem; 
+            font-weight: 300; text-transform: uppercase; letter-spacing: 1.5px;
+            transition: 0.3s;
+        }
+        /* Highlight for Shop Page */
+        .nav-links a.active { color: var(--accent-gold); font-weight: 500; border-bottom: 1px solid var(--accent-gold); }
 
+        /* --- THE MORPH --- */
         header.scrolled { transform: translateY(-80px); }
         .logo-peek { position: absolute; left: 5%; opacity: 0; transform: translateX(-15px); transition: 0.4s; }
         header.scrolled .logo-peek { opacity: 1; transform: translateX(0); }
         .logo-peek img { height: 18px; }
-        header.scrolled .nav-links a { font-size: calc(0.85rem - 2px); }
 
-        /* --- SHOP GRID --- */
+        /* 2px Shrink logic */
+        header.scrolled .nav-links a { font-size: calc(0.85rem - 2px); letter-spacing: 1px; }
+
+        .icons-peek { position: absolute; right: 5%; opacity: 0; transform: translateX(15px); transition: 0.4s; display: flex; gap: 20px; }
+        header.scrolled .icons-peek { opacity: 1; transform: translateX(0); }
+        header.scrolled .icons-peek i { font-size: 0.9rem; }
+
+        /* Search Drawer */
+        .search-drawer { position: absolute; top: 100%; left: 0; width: 100%; background: white; padding: 20px; transform: translateY(-100%); opacity: 0; transition: 0.4s; z-index: -1; box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+        .search-drawer.active { transform: translateY(0); opacity: 1; z-index: 1500; }
+        .search-input { width: 100%; border: none; border-bottom: 1px solid var(--accent-gold); padding: 10px; font-family: 'Work Sans'; font-size: 1rem; outline: none; text-align: center; }
+
+        /* --- SHOP CONTENT --- */
         .shop-container { padding: 40px 5%; max-width: 1200px; margin: auto; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
         .product-card { background: white; border-radius: 4px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; text-align: center; padding-bottom: 15px; }
         .product-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
         .product-info h3 { font-size: 0.9rem; font-weight: 400; margin: 15px 0 5px; text-transform: uppercase; }
-        .product-info p { color: var(--accent-gold); font-weight: 500; margin: 0; }
 
-        /* Search Drawer */
-        .search-drawer { position: absolute; top: 100%; left: 0; width: 100%; background: white; padding: 20px; transform: translateY(-100%); opacity: 0; transition: 0.4s; z-index: -1; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .search-drawer.active { transform: translateY(0); opacity: 1; z-index: 1500; }
-        .search-input { width: 100%; border: none; border-bottom: 1px solid var(--accent-gold); padding: 10px; font-family: 'Work Sans'; text-align: center; outline: none; }
-
-        @media (max-width: 400px) {
+        @media (max-width: 380px) {
             :root { --brand-sz: 19px; --sub-sz: 18px; }
+            .header-top { height: 70px; }
+            header.scrolled { transform: translateY(-70px); }
+            .nav-links { gap: 15px; }
+            .nav-links a { font-size: 0.75rem; }
+            header.scrolled .nav-links a { font-size: calc(0.75rem - 2px); }
             .product-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
         }
     </style>
@@ -76,45 +108,53 @@
                 <li><a href="shop.html" class="active">Shop</a></li>
                 <li><a href="about.html">About</a></li>
             </ul>
+            <div class="icons-peek">
+                <i class="fas fa-magnifying-glass" onclick="toggleSearch()"></i>
+                <i class="fas fa-shopping-cart"></i>
+            </div>
         </nav>
         <div class="search-drawer" id="search-panel">
-            <input type="text" class="search-input" id="search-input" placeholder="SEARCH COLLECTION..." oninput="doSearch()">
-            <div id="results-list" style="max-height: 200px; overflow-y: auto;"></div>
+            <input type="text" class="search-input" id="search-input" placeholder="SEARCH FOR PIECES..." oninput="doSearch()">
+            <div id="results-list" style="max-height: 250px; overflow-y: auto; margin-top: 15px;"></div>
         </div>
     </header>
 
     <main class="shop-container">
-        <h2 style="font-family: 'Playfair Display'; text-align: center; font-weight: 400;">Our Collection</h2>
+        <h2 style="font-family: 'Playfair Display'; text-align: center; font-weight: 400; margin-bottom: 40px;">Our Collection</h2>
         <div class="product-grid" id="main-shop-grid">
             </div>
     </main>
 
     <script>
         const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv';
-        
+        let items = [];
+
         async function loadShop() {
             const r = await fetch(CSV); const t = await r.text();
-            const items = t.split('\n').slice(1).map(l => {
+            items = t.split('\n').slice(1).map(l => {
                 const p = l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 return p.length > 1 ? { n: p[1].replace(/"/g, ''), p: p[3], img: p[4] } : null;
             }).filter(x => x);
 
             const grid = document.getElementById('main-shop-grid');
             items.forEach(item => {
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <img src="${item.img || 'products/prod1.jpg'}" onerror="this.src='products/prod1.jpg'">
-                        <div class="product-info">
-                            <h3>${item.n}</h3>
-                            <p>₦${Number(item.p).toLocaleString()}</p>
-                        </div>
-                    </div>`;
+                grid.innerHTML += `<div class="product-card"><img src="${item.img || 'products/prod1.jpg'}"><div class="product-info"><h3>${item.n}</h3><p style="color:var(--accent-gold);">₦${Number(item.p).toLocaleString()}</p></div></div>`;
             });
         }
         loadShop();
 
-        window.onscroll = () => { document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 60); };
+        function doSearch() {
+            const q = document.getElementById('search-input').value.toLowerCase();
+            const l = document.getElementById('results-list'); l.innerHTML = '';
+            if(!q) return;
+            items.filter(i => i.n.toLowerCase().includes(q)).forEach(i => {
+                l.innerHTML += `<div style="padding:12px; border-bottom:1px solid #f9f9f9; display:flex; justify-content:space-between;"><span>${i.n}</span><b>₦${Number(i.p).toLocaleString()}</b></div>`;
+            });
+        }
+
         function toggleSearch() { document.getElementById('search-panel').classList.toggle('active'); document.getElementById('search-input').focus(); }
+        window.onscroll = () => { document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 60); };
+        setInterval(() => { document.getElementById('live-date').innerText = new Date().toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'}); }, 1000);
     </script>
 </body>
 </html>
