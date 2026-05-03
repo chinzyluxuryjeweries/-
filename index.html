@@ -57,16 +57,19 @@
             transition: font-size var(--transition-speed) ease;
         }
 
-        /* CHANGED: justify-content to center, added gap to space nav and icons */
+        /* Pushes icons to the right, prepares center for nav links */
         .header-bottom {
-            display: flex; justify-content: center; align-items: center; gap: 50px;
+            display: flex; justify-content: flex-end; align-items: center; 
             padding: 15px 40px; border-top: 1px solid #F0F0F0; position: relative;
             transition: all var(--transition-speed) ease; text-transform: uppercase;
         }
 
+        /* Locks navigation perfectly in the dead center */
         .nav-links {
+            position: absolute; left: 50%; transform: translateX(-50%);
             display: flex; gap: 35px; list-style: none; padding: 0; margin: 0;
             transition: all var(--transition-speed) ease; align-items: center;
+            width: max-content;
         }
 
         .nav-links li a {
@@ -138,7 +141,7 @@
         header.scrolled .header-bottom { padding: 5px 40px; }
         header.scrolled .nav-links li a { font-size: 0.8rem; letter-spacing: 1.5px; }
 
-        /* Scrolled Brand Image Fixed to Left */
+        /* Scrolled Brand Image locked to far left */
         .scrolled-brand {
             display: none; height: 35px; position: absolute; left: 40px;
         }
@@ -147,11 +150,11 @@
         /* --- FLUID MOBILE RESPONSIVENESS --- */
         @media (max-width: 800px) {
             .header-top { padding: 15px 3vw; }
-            .header-bottom { padding: 15px 3vw; gap: 4vw; } /* Centers and tightens gap on mobile */
+            .header-bottom { padding: 15px 3vw; } 
             
-            .header-left img { height: 6vw; min-height: 20px; }
+            .header-left, .header-right { display: none; }
+            .header-center { text-align: center; } /* Keeps brand perfectly centered on mobile top */
             .header-center img { height: 6.5vw; min-height: 22px; }
-            .header-right { min-width: auto; }
             
             #datetime-display { font-size: 2vw; letter-spacing: 0.5px; }
             
@@ -169,16 +172,14 @@
             /* Scrolled State for Mobile */
             header.scrolled .header-top { padding: 8px 3vw; }
             header.scrolled .header-bottom { padding: 8px 3vw; }
-            header.scrolled .header-left img { height: 4.5vw; }
             header.scrolled .header-center img { height: 5vw; }
-            header.scrolled #datetime-display { font-size: 1.8vw; }
             header.scrolled .nav-links li a { font-size: 2.5vw; }
+            
             .scrolled-brand { left: 3vw; height: 5vw; }
         }
 
         @media (max-width: 400px) {
             .nav-links li a { letter-spacing: 0; }
-            #datetime-display { letter-spacing: 0; }
         }
 
         /* --- MAIN BODY STYLES --- */
