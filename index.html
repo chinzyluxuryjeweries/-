@@ -56,10 +56,10 @@
 </div>
 
 <script>
-    // --- IMPORTANT: PASTE YOUR ACTUAL LINKS BELOW ---
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv'; // E.g., https://docs.google.com/spreadsheets/d/.../pub?output=csv
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZquSe37kjZGZuzy3KUINu7tFn41CMoHa0r5_0T_tHS18BsCQ-p85dDDcpcYITN-F7/exec'; // E.g., https://script.google.com/macros/s/.../exec
-    const WHATSAPP_NUMBER = '2349057835662'; // E.g., 2348012345678 (No + or 0 at the start)
+    // --- YOUR ACTUAL LINKS ---
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv'; 
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZquSe37kjZGZuzy3KUINu7tFn41CMoHa0r5_0T_tHS18BsCQ-p85dDDcpcYITN-F7/exec'; 
+    const WHATSAPP_NUMBER = '2349057835662'; 
     // ------------------------------------------------
 
     let cart = [];
@@ -88,7 +88,7 @@
                 const isOutOfStock = qty <= 0;
                 const priceNaira = price.toLocaleString(); 
 
-                // Magic step: Looking for the image dynamically on GitHub using the ID!
+                // Looking for the image dynamically on GitHub using the ID!
                 const imagePath = `images/${id}.jpg`;
 
                 container.innerHTML += `
