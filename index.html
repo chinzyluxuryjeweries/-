@@ -57,14 +57,12 @@
             transition: font-size var(--transition-speed) ease;
         }
 
-        /* Pushes icons to the right, prepares center for nav links */
         .header-bottom {
             display: flex; justify-content: flex-end; align-items: center; 
             padding: 15px 40px; border-top: 1px solid #F0F0F0; position: relative;
             transition: all var(--transition-speed) ease; text-transform: uppercase;
         }
 
-        /* Locks navigation perfectly in the dead center */
         .nav-links {
             position: absolute; left: 50%; transform: translateX(-50%);
             display: flex; gap: 35px; list-style: none; padding: 0; margin: 0;
@@ -86,7 +84,6 @@
             width: 100%; height: 1px; background-color: var(--accent-gold);
         }
 
-        /* Dropdown Styles */
         .dropdown-parent { position: relative; }
         .dropdown {
             display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
@@ -118,20 +115,24 @@
             width: 250px; padding: 8px 35px 8px 10px; border-bottom: 1px solid var(--accent-gold);
             opacity: 1; pointer-events: auto; box-shadow: -15px 0 15px var(--surface-white); 
         }
+        
+        /* UPDATED: Icon sizes reduced by 2px and weight lightened */
         .search-icon {
-            cursor: pointer; font-size: 1.1rem; color: var(--text-dark);
+            cursor: pointer; font-size: 0.95rem; color: var(--text-dark);
             transition: color var(--transition-speed); position: relative; z-index: 11; 
+            font-weight: 300;
         }
         .search-icon:hover { color: var(--accent-gold); }
 
-        /* Cart */
         .cart-wrapper {
             display: flex; align-items: center; gap: 5px; font-weight: 300;
             color: var(--text-dark); letter-spacing: 1px; cursor: pointer; transition: color var(--transition-speed);
         }
         .cart-wrapper:hover { color: var(--accent-gold); }
         .cart-wrapper.has-items { color: var(--accent-gold); font-weight: 400; }
-        .cart-icon { font-size: 1.1rem; }
+        
+        /* UPDATED: Cart Icon size reduced by 2px */
+        .cart-icon { font-size: 0.95rem; font-weight: 300; }
 
         /* --- SCROLLED HEADER STATE --- */
         header.scrolled .header-top { padding: 5px 40px; }
@@ -141,7 +142,6 @@
         header.scrolled .header-bottom { padding: 5px 40px; }
         header.scrolled .nav-links li a { font-size: 0.8rem; letter-spacing: 1.5px; }
 
-        /* Scrolled Brand Image locked to far left */
         .scrolled-brand {
             display: none; height: 35px; position: absolute; left: 40px;
         }
@@ -151,41 +151,31 @@
         @media (max-width: 800px) {
             .header-top { padding: 15px 3vw; }
             .header-bottom { padding: 15px 3vw; } 
-            
             .header-left, .header-right { display: none; }
-            .header-center { text-align: center; } /* Keeps brand perfectly centered on mobile top */
+            .header-center { text-align: center; } 
             .header-center img { height: 6.5vw; min-height: 22px; }
-            
             #datetime-display { font-size: 2vw; letter-spacing: 0.5px; }
-            
             .nav-links { gap: 4vw; }
             .nav-links li a { font-size: 2.8vw; letter-spacing: 1px; }
             
+            /* Icon scaling for mobile */
             .action-icons { gap: 3vw; }
-            .search-icon, .cart-icon { font-size: 3.5vw; }
+            .search-icon, .cart-icon { font-size: 3vw; }
             .cart-wrapper { font-size: 2.8vw; gap: 2px; }
             
             .search-container.active .search-input { width: 45vw; font-size: 2.5vw; }
             .dropdown { min-width: 140px; }
             .dropdown li a { font-size: 3vw; }
 
-            /* Scrolled State for Mobile */
             header.scrolled .header-top { padding: 8px 3vw; }
             header.scrolled .header-bottom { padding: 8px 3vw; }
             header.scrolled .header-center img { height: 5vw; }
             header.scrolled .nav-links li a { font-size: 2.5vw; }
-            
             .scrolled-brand { left: 3vw; height: 5vw; }
-        }
-
-        @media (max-width: 400px) {
-            .nav-links li a { letter-spacing: 0; }
         }
 
         /* --- MAIN BODY STYLES --- */
         main { padding: 50px 40px; max-width: 1400px; margin: auto; }
-        @media (max-width: 800px) { main { padding: 30px 20px; } }
-
         h2.section-title {
             text-align: center; color: var(--text-dark); font-size: 2.5rem;
             margin-bottom: 40px; margin-top: 60px; font-family: 'Playfair Display', serif; 
@@ -196,7 +186,6 @@
             background-color: var(--accent-gold); margin: 15px auto 0;
         }
 
-        /* Carousel */
         .carousel-container { width: 100%; overflow: hidden; position: relative; padding: 30px 0; }
         .carousel-track { display: flex; width: calc(320px * 20); transform: translateX(0); }
         .carousel-track img {
@@ -204,16 +193,13 @@
             margin: 0 20px; box-shadow: 0 10px 25px var(--gold-glow); 
             transition: transform 0.5s ease, box-shadow 0.5s ease; background: var(--surface-white);
         }
-        .carousel-track img:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(197, 160, 89, 0.3); }
 
-        /* Video */
         .video-container {
             width: 100%; max-width: 900px; margin: 0 auto; border-radius: var(--border-radius); 
             overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.08); border: 1px solid #EAEAEA;
         }
         .video-container video { width: 100%; display: block; }
 
-        /* Testimonials */
         .testimonial-container {
             width: 100%; max-width: 800px; margin: 0 auto; position: relative; overflow: hidden;
             border: 1px solid var(--accent-gold); padding: 10px; 
@@ -223,9 +209,7 @@
         .testimonial-slide { display: none; width: 100%; }
         .testimonial-slide.active { display: block; animation: fadeEffect 1.5s ease; }
         .testimonial-slide img { width: 100%; height: auto; display: block; }
-        @keyframes fadeEffect { from { opacity: 0.2; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        /* Footer */
         footer {
             background-color: var(--surface-white); color: var(--text-dark); text-align: center;
             padding: 50px 20px 30px; margin-top: 80px; border-top: 1px solid #F0F0F0;
@@ -238,8 +222,6 @@
             border-radius: 50%; font-size: 1.8rem; text-decoration: none;
             box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); transition: all var(--transition-speed); margin-top: 10px;
         }
-        .whatsapp-link:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4); }
-
     </style>
 </head>
 <body>
@@ -258,13 +240,11 @@
         </div>
 
         <div class="header-bottom">
-            <!-- This image only shows when you scroll down -->
             <img class="scrolled-brand" src="brand/brandname.jpg" alt="Company Name" onerror="this.src='https://via.placeholder.com/150x30?text=BRAND'">
             
             <ul class="nav-links" id="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="shop.html">Shop</a></li>
-                
                 <li class="dropdown-parent">
                     <a href="javascript:void(0)">More <i class="fas fa-chevron-down" style="font-size: 0.7em; margin-left: 3px;"></i></a>
                     <ul class="dropdown">
@@ -290,7 +270,6 @@
     </header>
 
     <main>
-        <!-- 1. Auto Scrolling Images (Pause and Slide) -->
         <h2 class="section-title">New Arrivals</h2>
         <div class="carousel-container">
             <div class="carousel-track" id="product-track">
@@ -304,7 +283,7 @@
                 <img src="products/prod8.jpg" alt="Product 8" onerror="this.src='https://via.placeholder.com/280x350?text=PROD8'">
                 <img src="products/prod9.jpg" alt="Product 9" onerror="this.src='https://via.placeholder.com/280x350?text=PROD9'">
                 <img src="products/prod10.jpg" alt="Product 10" onerror="this.src='https://via.placeholder.com/280x350?text=PROD10'">
-                <!-- Duplicate 10 for the seamless Javascript loop -->
+                <!-- Duplicates -->
                 <img src="products/prod1.jpg" alt="Product 1" onerror="this.src='https://via.placeholder.com/280x350?text=PROD1'">
                 <img src="products/prod2.jpg" alt="Product 2" onerror="this.src='https://via.placeholder.com/280x350?text=PROD2'">
                 <img src="products/prod3.jpg" alt="Product 3" onerror="this.src='https://via.placeholder.com/280x350?text=PROD3'">
@@ -318,7 +297,6 @@
             </div>
         </div>
 
-        <!-- 2. Video Tour -->
         <h2 class="section-title">Take a Tour</h2>
         <div class="video-container">
             <video controls poster="https://via.placeholder.com/900x500?text=VIDEO+THUMBNAIL">
@@ -327,7 +305,6 @@
             </video>
         </div>
 
-        <!-- 3. Testimonial Slideshow -->
         <h2 class="section-title">What Our Clients Say</h2>
         <div class="testimonial-container" id="testimonial-slider">
             <div class="testimonial-inner">
@@ -346,13 +323,12 @@
 
     <footer>
         <div>&copy; <span id="current-year"></span> CHINZY LUXURY JEWERIES. ALL RIGHTS RESERVED.</div>
-        <a href="https://wa.me/2349057835662" class="whatsapp-link" target="_blank" aria-label="Chat with us on WhatsApp">
+        <a href="https://wa.me/2349057835662" class="whatsapp-link" target="_blank">
             <i class="fab fa-whatsapp"></i>
         </a>
     </footer>
 
     <script>
-        // --- 1. Date and Time Update ---
         function updateDateTime() {
             const now = new Date();
             const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -362,28 +338,19 @@
         setInterval(updateDateTime, 1000);
         updateDateTime();
 
-        // --- 2. Sticky Shrinking Header ---
         const header = document.getElementById('main-header');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 40) { header.classList.add('scrolled'); } 
             else { header.classList.remove('scrolled'); }
         });
 
-        // --- 3. Expandable Search ---
         function toggleSearch() {
             const container = document.getElementById('search-container');
             const input = document.getElementById('search-input');
             container.classList.toggle('active');
             if(container.classList.contains('active')){ input.focus(); }
         }
-        document.addEventListener('click', function(event) {
-            const container = document.getElementById('search-container');
-            if (!container.contains(event.target) && container.classList.contains('active')) {
-                container.classList.remove('active');
-            }
-        });
 
-        // --- 4. Step-by-Step Javascript Carousel ---
         const track = document.getElementById('product-track');
         let currentSlide = 0;
         const totalUniqueSlides = 10; 
@@ -393,7 +360,6 @@
             currentSlide++;
             track.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
             track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
-
             if (currentSlide === totalUniqueSlides) {
                 setTimeout(() => {
                     track.style.transition = 'none';
@@ -402,28 +368,18 @@
                 }, 600); 
             }
         }
-        
-        let carouselTimer = setInterval(moveCarousel, 5000);
-        const carouselContainer = document.querySelector('.carousel-container');
-        carouselContainer.addEventListener('mouseenter', () => clearInterval(carouselTimer));
-        carouselContainer.addEventListener('mouseleave', () => carouselTimer = setInterval(moveCarousel, 5000));
+        setInterval(moveCarousel, 5000);
 
-        // --- 5. Testimonial Slideshow Logic ---
         let testIndex = 0;
-        let testInterval;
         function showTestimonials() {
             let slides = document.getElementsByClassName("testimonial-slide");
             for (let i = 0; i < slides.length; i++) { slides[i].classList.remove("active"); }
             testIndex++;
             if (testIndex > slides.length) {testIndex = 1}    
             slides[testIndex-1].classList.add("active");  
-            testInterval = setTimeout(showTestimonials, 4000); 
+            setTimeout(showTestimonials, 4000); 
         }
         showTestimonials();
-        const sliderContainer = document.getElementById('testimonial-slider');
-        sliderContainer.addEventListener('mouseenter', () => clearTimeout(testInterval));
-        sliderContainer.addEventListener('mouseleave', () => testInterval = setTimeout(showTestimonials, 4000));
-
     </script>
 </body>
 </html>
