@@ -73,6 +73,11 @@
 
         .icons-peek { position: absolute; right: 5%; opacity: 0; transform: translateX(8px); transition: 0.4s; display: flex; gap: 20px; }
         header.scrolled .icons-peek { opacity: 1; transform: translateX(0); }
+        
+        header.scrolled .icons-peek i {
+    font-size: 0.8rem; /* This forces the icons to a smaller, specific size on scroll */
+        }
+        
 
         /* --- SEARCH DRAWER --- */
         .search-drawer {
