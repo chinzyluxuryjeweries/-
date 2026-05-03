@@ -14,119 +14,62 @@
             --text-dark: #1A1A1A;     
             --accent-gold: #C5A059;   
             --gold-glow: rgba(197, 160, 89, 0.15); 
-            --transition-speed: 0.5s;
+            --transition-speed: 0.4s;
         }
 
         * { box-sizing: border-box; }
-        body { 
-            font-family: 'Work Sans', sans-serif; 
-            margin: 0; padding: 0;
-            background-color: var(--bg-pearl);
-            overflow-x: hidden;
-        }
+        body { font-family: 'Work Sans', sans-serif; margin: 0; padding: 0; background-color: var(--bg-pearl); overflow-x: hidden; }
 
-        /* --- MORPHING HEADER (340 DPI Optimized) --- */
-        header {
-            background: var(--surface-white);
-            position: sticky; top: 0; z-index: 1000;
-            width: 100%;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.03);
-            transition: all var(--transition-speed) ease;
-        }
+        /* --- MORPHING HEADER --- */
+        header { background: var(--surface-white); position: sticky; top: 0; z-index: 1000; transition: all var(--transition-speed) ease; box-shadow: 0 2px 15px rgba(0,0,0,0.03); }
+        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 4%; height: 70px; transition: 0.4s; }
+        .header-left img { height: 45px; width: auto; }
+        .header-center img { height: 35px; width: auto; }
+        #datetime-display { font-size: 0.7rem; text-transform: uppercase; color: #888; }
 
-        .header-top {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 5%; height: 70px; transition: 0.4s;
-        }
-        .header-left img { height: 12vw; max-height: 45px; width: auto; }
-        .header-center img { height: 10vw; max-height: 35px; width: auto; }
-        #datetime-display { font-size: 2.2vw; text-transform: uppercase; color: #888; }
-
-        .header-bottom {
-            display: flex; align-items: center; padding: 10px 5%;
-            border-top: 1px solid #F0F0F0; transition: 0.4s;
-        }
-
+        .header-bottom { display: flex; align-items: center; padding: 10px 4%; border-top: 1px solid #F0F0F0; transition: 0.4s; position: relative; }
         .brand-scrolled { display: none; height: 22px; width: auto; margin-right: 15px; }
+        .nav-links { display: flex; gap: 20px; list-style: none; padding: 0; margin: 0 auto; text-transform: uppercase; white-space: nowrap; transition: 0.4s; }
+        .nav-links li a { text-decoration: none; color: var(--text-dark); font-size: 0.85rem; font-weight: 300; letter-spacing: 1px; }
 
-        .nav-links {
-            display: flex; gap: 4vw; list-style: none; padding: 0; margin: 0 auto;
-            text-transform: uppercase; white-space: nowrap;
-        }
-        .nav-links li a { text-decoration: none; color: var(--text-dark); font-size: 2.8vw; font-weight: 300; }
-        .nav-links li a.active { color: var(--accent-gold); font-weight: 500; }
+        .action-icons { display: flex; gap: 15px; align-items: center; position: relative; }
+        .search-container { display: flex; align-items: center; }
+        .search-bar-wrap { position: absolute; right: 0; top: 100%; width: 250px; background: white; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 4px; display: none; z-index: 2000; }
+        .search-bar-wrap.active { display: block; }
+        #live-search-input { width: 100%; padding: 8px; border: 1px solid #eee; border-radius: 4px; outline: none; font-family: 'Work Sans'; }
+        #search-results { max-height: 200px; overflow-y: auto; margin-top: 10px; font-size: 0.8rem; }
+        .result-item { padding: 8px; border-bottom: 1px solid #f9f9f9; cursor: pointer; display: flex; justify-content: space-between; }
+        .result-item:hover { background: #fdfaf4; color: var(--accent-gold); }
 
-        .action-icons { display: flex; gap: 15px; align-items: center; }
-        .action-icons i { font-size: 0.95rem; cursor: pointer; }
-
-        /* SCROLLED HEADER */
         header.scrolled .header-top { height: 0; padding: 0; opacity: 0; overflow: hidden; }
-        header.scrolled .header-bottom { border-top: none; padding: 8px 5%; justify-content: space-between; }
+        header.scrolled .header-bottom { border: none; justify-content: space-between; }
         header.scrolled .brand-scrolled { display: block; }
-        header.scrolled .nav-links { margin: 0; gap: 3vw; }
-        header.scrolled .nav-links li a { font-size: 2.5vw; }
+        header.scrolled .nav-links { margin: 0; gap: 12px; }
 
-        /* --- MAIN CONTENT --- */
-        main { padding: 15px; }
-        .section-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4%; margin: 40px 0 15px; }
-        .section-header h2 { font-family: 'Playfair Display'; font-weight: 400; font-size: 1.6rem; margin: 0; }
-        .view-all { font-size: 0.65rem; text-transform: uppercase; color: var(--accent-gold); text-decoration: none; border-bottom: 1px solid var(--accent-gold); }
+        /* --- CAROUSEL (HALF-FULL-HALF) --- */
+        .carousel-outer { width: 100%; overflow: hidden; position: relative; padding: 20px 0; }
+        .carousel-track { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); align-items: center; }
+        /* 340dpi measure: 70% width for center image leaves 15% for each side peek */
+        .carousel-track img { width: 70vw; max-width: 300px; height: auto; aspect-ratio: 4/5; object-fit: cover; margin: 0 15px; border-radius: 4px; box-shadow: 0 8px 20px var(--gold-glow); flex-shrink: 0; opacity: 0.5; transition: opacity 0.4s; }
+        .carousel-track img.active { opacity: 1; transform: scale(1.05); }
 
-        /* New Arrivals: The Peek Effect */
-        .carousel-container { width: 100%; overflow: hidden; padding: 10px 0; }
-        .carousel-track { display: flex; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); gap: 15px; padding-left: 4%; }
-        .carousel-track img {
-            width: 80vw; max-width: 280px; height: auto; aspect-ratio: 4/5;
-            object-fit: cover; border-radius: 4px; box-shadow: 0 10px 25px var(--gold-glow);
-            flex-shrink: 0;
-        }
+        /* --- VIDEO (FIXED 250px HEIGHT) --- */
+        .video-section { width: 100%; max-width: 1200px; margin: 40px auto; height: 250px; border-radius: 4px; overflow: hidden; background: #000; position: relative; }
+        .video-section video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- THE TRIMMING VIDEO --- */
-        .video-wrapper { 
-            width: 100%; padding: 40px 0; 
-            display: flex; justify-content: center; 
-        }
-        .video-container { 
-            width: 100%; 
-            max-width: 1200px; 
-            height: 500px; /* Default height */
-            background: #000; 
-            position: relative; 
-            border-radius: 4px; 
-            overflow: hidden; 
-            transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        /* The "Trimmed" State when scrolling */
-        .video-container.trimmed {
-            height: 280px; /* Trims the view window as requested */
-        }
+        /* --- TESTIMONIALS (CYCLE >7 IMAGES) --- */
+        .testimony-grid { display: grid; grid-template-columns: 1fr; gap: 25px; justify-items: center; margin: 40px 0; }
+        .testimony-box { width: 350px; height: 500px; border-radius: 4px; overflow: hidden; position: relative; box-shadow: 0 10px 25px var(--gold-glow); background: #fff; }
+        .testimony-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; opacity: 0; transition: opacity 1.5s ease-in-out; }
+        .testimony-box img.active { opacity: 1; z-index: 2; }
 
-        .video-container video { 
-            width: 100%; height: 100%; 
-            object-fit: cover; /* Ensures video stays full width and centered */
-        }
-        
-        .mute-btn { 
-            position: absolute; bottom: 20px; right: 20px; 
-            background: rgba(255,255,255,0.8); width: 40px; height: 40px; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            z-index: 5; cursor: pointer;
-        }
-
-        /* Testimonials */
-        .testimony-grid { display: grid; grid-template-columns: 1fr; gap: 20px; justify-items: center; margin: 40px 0; }
-        .testimony-box { width: 90vw; max-width: 350px; height: 500px; border-radius: 4px; overflow: hidden; position: relative; box-shadow: 0 10px 25px var(--gold-glow); }
-        .testimony-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0; transition: 1.5s; }
-        .testimony-box img.visible { opacity: 1; }
-
-        @media (min-width: 800px) {
+        @media (min-width: 1000px) {
             .testimony-grid { grid-template-columns: repeat(3, 1fr); }
-            .carousel-track img { width: calc(25% - 15px); }
+            .carousel-track img { width: 400px; }
         }
 
-        footer { text-align: center; padding: 60px 20px; border-top: 1px solid #eee; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; color: #888; }
-        .whatsapp-link { display: inline-flex; width: 55px; height: 55px; background: #25D366; color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 1.8rem; margin-top: 20px; text-decoration: none; }
+        footer { text-align: center; padding: 60px 20px; border-top: 1px solid #eee; text-transform: uppercase; font-size: 0.7rem; color: #888; }
+        .whatsapp-float { position: fixed; bottom: 20px; left: 20px; width: 50px; height: 50px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; text-decoration: none; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -140,107 +83,141 @@
         <div class="header-bottom">
             <img class="brand-scrolled" src="brand/brandname.jpg" alt="Brand">
             <ul class="nav-links">
-                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
             <div class="action-icons">
-                <i class="fas fa-magnifying-glass"></i>
+                <div class="search-container">
+                    <i class="fas fa-magnifying-glass" onclick="toggleSearch()" id="search-trigger"></i>
+                    <div class="search-bar-wrap" id="search-panel">
+                        <input type="text" id="live-search-input" placeholder="Search products..." oninput="doSearch()">
+                        <div id="search-results"></div>
+                    </div>
+                </div>
                 <i class="fas fa-shopping-cart" onclick="window.location.href='shop.html'"></i>
             </div>
         </div>
     </header>
 
     <main>
-        <div class="section-header">
-            <h2>New Arrivals</h2>
-            <a href="shop.html" class="view-all">Explore All</a>
-        </div>
-        <div class="carousel-container">
-            <div class="carousel-track" id="product-track">
+        <h2 style="text-align: center; font-family: 'Playfair Display'; font-weight: 400; margin-top:40px;">New Arrivals</h2>
+        <div class="carousel-outer">
+            <div class="carousel-track" id="arrival-track">
                 <script>
-                    for(let i=1; i<=10; i++) document.write(`<img src="products/prod${i}.jpg" onerror="this.style.display='none'">`);
-                    for(let i=1; i<=10; i++) document.write(`<img src="products/prod${i}.jpg" onerror="this.style.display='none'">`);
+                    for(let i=1; i<=10; i++) document.write(`<img src="products/prod${i}.jpg" class="${i===1?'active':''}" onerror="this.style.display='none'">`);
                 </script>
             </div>
         </div>
 
-        <div class="section-header">
-            <h2>Experience Luxury</h2>
-        </div>
-        <div class="video-wrapper">
-            <div class="video-container" id="video-box">
-                <video id="vid" autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
-                <div class="mute-btn" onclick="toggleMute()"><i id="muteIcon" class="fas fa-volume-xmark"></i></div>
-            </div>
+        <div class="video-section">
+            <video autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
         </div>
 
-        <div class="section-header">
-            <h2>Client Stories</h2>
-        </div>
+        <h2 style="text-align: center; font-family: 'Playfair Display'; font-weight: 400;">Client Feedback</h2>
         <div class="testimony-grid">
-            <div class="testimony-box"><img src="test/test1.jpg" class="visible" id="t1"><img src="test/test2.jpg" id="t2"></div>
-            <div class="testimony-box"><img src="test/test3.jpg" class="visible" id="t3"><img src="test/test4.jpg" id="t4"></div>
-            <div class="testimony-box"><img src="test/test5.jpg" class="visible" id="t5"><img src="test/test6.jpg" id="t6"></div>
+            <div class="testimony-box" id="box-1"></div>
+            <div class="testimony-box" id="box-2"></div>
+            <div class="testimony-box" id="box-3"></div>
         </div>
     </main>
 
-    <footer>
-        <div>&copy; 2026 CHINZY LUXURY JEWERIES.</div>
-        <a href="https://wa.me/2349057835662" class="whatsapp-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
-    </footer>
+    <footer>&copy; 2026 CHINZY LUXURY JEWERIES</footer>
+    <a href="https://wa.me/2349057835662" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <script>
-        // 1. Time Update
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('datetime-display').innerText = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
-        }, 1000);
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv';
+        let allProducts = [];
 
-        // 2. Morphing Logic (Header & Video Trim)
-        const head = document.getElementById('main-header');
-        const vBox = document.getElementById('video-box');
+        // 1. Live Search Data Fetch
+        async function fetchProducts() {
+            const resp = await fetch(SHEET_URL);
+            const csv = await resp.text();
+            const rows = csv.split('\n').slice(1);
+            allProducts = rows.map(r => {
+                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                return (c.length > 1) ? { name: c[1].replace(/"/g, ''), price: c[3] } : null;
+            }).filter(p => p);
+        }
+        fetchProducts();
 
+        function doSearch() {
+            const query = document.getElementById('live-search-input').value.toLowerCase();
+            const resDiv = document.getElementById('search-results');
+            resDiv.innerHTML = '';
+            if(!query) return;
+            const matches = allProducts.filter(p => p.name.toLowerCase().includes(query));
+            matches.forEach(m => {
+                resDiv.innerHTML += `<div class="result-item" onclick="window.location.href='shop.html'">
+                    <span>${m.name}</span> <span style="color:var(--accent-gold)">₦${Number(m.price).toLocaleString()}</span>
+                </div>`;
+            });
+        }
+
+        function toggleSearch() { 
+            const panel = document.getElementById('search-panel');
+            panel.classList.toggle('active');
+            if(panel.classList.contains('active')) document.getElementById('live-search-input').focus();
+        }
+
+        // 2. Carousel Half-Full-Half Math
+        const track = document.getElementById('arrival-track');
+        const imgs = track.getElementsByTagName('img');
+        let idx = 0;
+
+        function updateCarousel() {
+            const winW = window.innerWidth;
+            const imgW = imgs[0].offsetWidth + 30; // Image + margins
+            // Center the active image
+            const offset = (winW / 2) - (imgW / 2) - (idx * imgW);
+            track.style.transform = `translateX(${offset}px)`;
+            
+            for(let i=0; i<imgs.length; i++) {
+                imgs[i].classList.toggle('active', i === idx);
+            }
+            idx = (idx + 1) % imgs.length;
+        }
+        setInterval(updateCarousel, 4000);
+        window.addEventListener('load', updateCarousel);
+
+        // 3. Testimonial Cycling (>7 images)
+        const testimonyImages = [
+            'test/test1.jpg','test/test2.jpg','test/test3.jpg','test/test4.jpg',
+            'test/test5.jpg','test/test6.jpg','test/test7.jpg','test/test8.jpg',
+            'test/test9.jpg','test/test10.jpg','test/test11.jpg','test/test12.jpg'
+        ];
+
+        function setupBox(boxId, startIdx, endIdx) {
+            const box = document.getElementById(boxId);
+            let current = startIdx;
+            // Create images
+            for(let i=startIdx; i<=endIdx; i++) {
+                const img = document.createElement('img');
+                img.src = testimonyImages[i] || testimonyImages[0];
+                if(i === startIdx) img.classList.add('active');
+                box.appendChild(img);
+            }
+            // Rotate logic
+            setInterval(() => {
+                const boxImgs = box.getElementsByTagName('img');
+                boxImgs[current - startIdx].classList.remove('active');
+                current = (current + 1 > endIdx) ? startIdx : current + 1;
+                boxImgs[current - startIdx].classList.add('active');
+            }, 3000 + (startIdx * 500)); // Staggered start
+        }
+
+        setupBox('box-1', 0, 3); setupBox('box-2', 4, 7); setupBox('box-3', 8, 11);
+
+        // Header Morph
         window.addEventListener('scroll', () => {
-            // Header Morph
-            if (window.scrollY > 60) head.classList.add('scrolled');
-            else head.classList.remove('scrolled');
-
-            // Video Trim Morph
-            // Trims the video when you scroll down 200px or more
-            if (window.scrollY > 200) vBox.classList.add('trimmed');
-            else vBox.classList.remove('trimmed');
+            const h = document.getElementById('main-header');
+            h.classList.toggle('scrolled', window.scrollY > 50);
         });
 
-        // 3. Carousel Math (Peek Logic)
-        const tr = document.getElementById('product-track');
-        let slide = 0;
+        // Time
         setInterval(() => {
-            slide++;
-            const firstImg = document.querySelector('.carousel-track img');
-            if (!firstImg) return;
-            const moveWidth = firstImg.offsetWidth + 15;
-            tr.style.transform = `translateX(-${slide * moveWidth}px)`;
-            if (slide === 10) {
-                setTimeout(() => { tr.style.transition = 'none'; slide = 0; tr.style.transform = 'translateX(0)'; setTimeout(()=>tr.style.transition='transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)', 50); }, 800);
-            }
-        }, 5000);
-
-        // 4. Mute Logic
-        function toggleMute() {
-            const v = document.getElementById('vid'); const i = document.getElementById('muteIcon');
-            v.muted = !v.muted; i.classList.toggle('fa-volume-xmark'); i.classList.toggle('fa-volume-high');
-        }
-
-        // 5. Testimonial Fades
-        function rotate(aID, bID) {
-            const a = document.getElementById(aID); const b = document.getElementById(bID);
-            if (a.classList.contains('visible')) { a.classList.remove('visible'); b.classList.add('visible'); }
-            else { b.classList.remove('visible'); a.classList.add('visible'); }
-        }
-        setInterval(() => rotate('t1', 't2'), 4000);
-        setInterval(() => rotate('t3', 't4'), 5500);
-        setInterval(() => rotate('t5', 't6'), 7000);
+            document.getElementById('datetime-display').innerText = new Date().toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+        }, 1000);
     </script>
 </body>
 </html>
