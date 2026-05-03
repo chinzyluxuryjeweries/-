@@ -57,9 +57,10 @@
             transition: font-size var(--transition-speed) ease;
         }
 
+        /* CHANGED: justify-content to center, added gap to space nav and icons */
         .header-bottom {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 40px; border-top: 1px solid #F0F0F0;
+            display: flex; justify-content: center; align-items: center; gap: 50px;
+            padding: 15px 40px; border-top: 1px solid #F0F0F0; position: relative;
             transition: all var(--transition-speed) ease; text-transform: uppercase;
         }
 
@@ -85,21 +86,18 @@
         /* Dropdown Styles */
         .dropdown-parent { position: relative; }
         .dropdown {
-            display: none; position: absolute; top: 100%; left: 0;
+            display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
             background: var(--surface-white); box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             list-style: none; padding: 15px 0; margin: 0; min-width: 180px; z-index: 100;
             border: 1px solid #F0F0F0; border-radius: 4px;
         }
         
-        /* Triggers on hover for desktop, tap for mobile */
         .dropdown-parent:hover .dropdown, 
-        .dropdown-parent:active .dropdown { 
-            display: block; animation: fadeUp 0.3s ease; 
-        }
+        .dropdown-parent:active .dropdown { display: block; animation: fadeUp 0.3s ease; }
         
-        .dropdown li { padding: 0; }
+        .dropdown li { padding: 0; text-align: center; }
         .dropdown li a { display: block; padding: 10px 20px; font-size: 0.85rem; letter-spacing: 1.5px; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
 
         .action-icons { display: flex; align-items: center; gap: 25px; position: relative; }
 
@@ -140,31 +138,32 @@
         header.scrolled .header-bottom { padding: 5px 40px; }
         header.scrolled .nav-links li a { font-size: 0.8rem; letter-spacing: 1.5px; }
 
-        /* --- FLUID MOBILE RESPONSIVENESS (NO HAMBURGER MENU) --- */
+        /* Scrolled Brand Image Fixed to Left */
+        .scrolled-brand {
+            display: none; height: 35px; position: absolute; left: 40px;
+        }
+        header.scrolled .scrolled-brand { display: block; }
+
+        /* --- FLUID MOBILE RESPONSIVENESS --- */
         @media (max-width: 800px) {
             .header-top { padding: 15px 3vw; }
-            .header-bottom { padding: 15px 3vw; }
+            .header-bottom { padding: 15px 3vw; gap: 4vw; } /* Centers and tightens gap on mobile */
             
-            /* Fluid Images */
             .header-left img { height: 6vw; min-height: 20px; }
             .header-center img { height: 6.5vw; min-height: 22px; }
             .header-right { min-width: auto; }
             
-            /* Fluid Fonts using Viewport Width (vw) */
             #datetime-display { font-size: 2vw; letter-spacing: 0.5px; }
             
-            .nav-links { gap: 3vw; }
+            .nav-links { gap: 4vw; }
             .nav-links li a { font-size: 2.8vw; letter-spacing: 1px; }
             
             .action-icons { gap: 3vw; }
             .search-icon, .cart-icon { font-size: 3.5vw; }
             .cart-wrapper { font-size: 2.8vw; gap: 2px; }
             
-            /* Shrink search bar so it doesn't overflow mobile screen */
             .search-container.active .search-input { width: 45vw; font-size: 2.5vw; }
-
-            /* Center the dropdown so it doesn't bleed off the screen edge */
-            .dropdown { left: 50%; transform: translateX(-50%); min-width: 140px; }
+            .dropdown { min-width: 140px; }
             .dropdown li a { font-size: 3vw; }
 
             /* Scrolled State for Mobile */
@@ -174,9 +173,9 @@
             header.scrolled .header-center img { height: 5vw; }
             header.scrolled #datetime-display { font-size: 1.8vw; }
             header.scrolled .nav-links li a { font-size: 2.5vw; }
+            .scrolled-brand { left: 3vw; height: 5vw; }
         }
 
-        /* Extremely small screens (e.g. old iPhones) */
         @media (max-width: 400px) {
             .nav-links li a { letter-spacing: 0; }
             #datetime-display { letter-spacing: 0; }
@@ -258,6 +257,9 @@
         </div>
 
         <div class="header-bottom">
+            <!-- This image only shows when you scroll down -->
+            <img class="scrolled-brand" src="brand/brandname.jpg" alt="Company Name" onerror="this.src='https://via.placeholder.com/150x30?text=BRAND'">
+            
             <ul class="nav-links" id="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="shop.html">Shop</a></li>
