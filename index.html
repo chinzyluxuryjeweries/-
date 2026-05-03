@@ -19,7 +19,7 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
 
-        /* --- THE BOUTIQUE RIBBON HEADER --- */
+        /* --- THE BOUTIQUE RIBBON --- */
         header {
             background: var(--surface-white);
             position: sticky; top: 0; z-index: 2000;
@@ -28,53 +28,92 @@
             transition: var(--transition-main);
         }
 
-        /* ROW 1: Branding Area */
+        /* ROW 1: Branding Area - Fixed to prevent stacking */
         .branding-row {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            padding: 15px 5%;
-            height: 80px;
+            padding: 10px 5%;
+            height: 85px;
             transition: var(--transition-main);
+            gap: 10px;
         }
-        .date-box { font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
-        .logo-center { text-align: center; display: flex; flex-direction: column; align-items: center; }
-        .logo-center .main-logo { height: 40px; margin-bottom: 5px; transition: 0.3s; }
-        .logo-center .brand-name { height: 18px; transition: 0.3s; }
-        .icons-right { display: flex; justify-content: flex-end; gap: 20px; font-size: 1rem; }
 
-        /* ROW 2: Navigation Area */
+        .date-box { 
+            flex: 1;
+            font-size: 0.6rem; 
+            color: #999; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        /* The Fix: logo-center now forces a single horizontal line */
+        .logo-center { 
+            flex: 3;
+            display: flex; 
+            flex-direction: row; /* Forces Brand Name next to Logo */
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .logo-center .main-logo { height: 35px; width: auto; flex-shrink: 1; }
+        .logo-center .brand-name { height: 14px; width: auto; flex-shrink: 1; }
+
+        .icons-right { 
+            flex: 1;
+            display: flex; 
+            justify-content: flex-end; 
+            gap: 15px; 
+            font-size: 0.9rem; 
+        }
+
+        /* ROW 2: Navigation */
         .nav-row {
             padding: 12px 5%;
             border-top: 1px solid #F0F0F0;
             display: flex;
             justify-content: center;
             transition: var(--transition-main);
+            position: relative;
         }
         .nav-links {
-            display: flex; gap: 30px; list-style: none; padding: 0; margin: 0;
-            text-transform: uppercase; letter-spacing: 2px;
+            display: flex; gap: 25px; list-style: none; padding: 0; margin: 0;
+            text-transform: uppercase; letter-spacing: 1.5px;
         }
-        .nav-links a { text-decoration: none; color: var(--text-dark); font-size: 0.85rem; font-weight: 300; }
-        .nav-links a.active { color: var(--accent-gold); font-weight: 500; }
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--text-dark); 
+            font-size: 0.8rem; /* Base size */
+            font-weight: 300; 
+            transition: font-size 0.3s ease;
+        }
 
-        /* --- THE MORPH (SCROLLED STATE) --- */
-        header.scrolled { transform: translateY(-80px); } /* Hides Branding Row */
-        
-        /* Elements that "Peek" back into the Nav Row when scrolled */
+        /* --- THE MORPH (SCROLLED) --- */
+        header.scrolled { transform: translateY(-85px); } 
+
+        header.scrolled .nav-links a { 
+            font-size: calc(0.8rem - 2px); /* THE 2PX SHRINK YOU REQUESTED */
+            letter-spacing: 1px;
+        }
+
+        /* Brand Peek on left */
         .scroll-brand-peek {
             position: absolute; left: 5%; 
-            opacity: 0; transform: translateX(-20px);
+            opacity: 0; transform: translateX(-15px);
             transition: 0.4s; pointer-events: none;
+            display: flex; align-items: center; gap: 5px;
         }
         header.scrolled .scroll-brand-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
-        .scroll-brand-peek img { height: 20px; }
+        .scroll-brand-peek img { height: 18px; }
 
+        /* Icons Peek on right */
         .scroll-icons-peek {
             position: absolute; right: 5%;
-            opacity: 0; transform: translateX(20px);
+            opacity: 0; transform: translateX(15px);
             transition: 0.4s; pointer-events: none;
-            display: flex; gap: 20px;
+            display: flex; gap: 15px; font-size: 0.8rem;
         }
         header.scrolled .scroll-icons-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
 
@@ -89,31 +128,28 @@
         .search-drawer.open { transform: translateY(0); opacity: 1; }
         .search-input {
             width: 100%; border: none; border-bottom: 1px solid var(--accent-gold);
-            padding: 10px; font-family: 'Work Sans'; font-size: 1.1rem; outline: none;
+            padding: 10px; font-family: 'Work Sans'; font-size: 1rem; outline: none;
             text-align: center; text-transform: uppercase;
         }
-        #results-area { max-height: 300px; overflow-y: auto; padding-top: 15px; }
-        .result-row { padding: 10px; display: flex; justify-content: space-between; border-bottom: 1px solid #f9f9f9; }
 
-        /* --- MOBILE TWEAKS (340 DPI) --- */
-        @media (max-width: 400px) {
-            .branding-row { grid-template-columns: 1fr 1fr; padding: 10px 5%; height: 60px; }
-            .date-box { display: none; } /* Clear space for the brand */
-            .logo-center { align-items: flex-start; }
-            .logo-center .main-logo { height: 30px; }
-            .logo-center .brand-name { height: 12px; }
+        /* --- 340 DPI PORTRAIT SPECIFIC --- */
+        @media (max-width: 360px) {
+            .branding-row { padding: 10px 3%; height: 75px; }
+            .logo-center { gap: 5px; }
+            .logo-center .main-logo { height: 28px; }
+            .logo-center .brand-name { height: 11px; }
             
-            .nav-links { gap: 15px; }
-            .nav-links a { font-size: 0.7rem; letter-spacing: 1px; }
-
-            header.scrolled { transform: translateY(-60px); }
-            header.scrolled .nav-row { justify-content: flex-end; padding-right: 35%; } /* Pushes Nav to make room for Icons */
+            .nav-links { gap: 12px; }
+            .nav-links a { font-size: 0.7rem; }
+            header.scrolled .nav-links a { font-size: calc(0.7rem - 2px); }
+            
+            header.scrolled { transform: translateY(-75px); }
+            header.scrolled .nav-row { justify-content: center; padding-left: 15%; padding-right: 15%; }
         }
 
-        /* Content Placeholders */
-        .hero { height: 300px; display: flex; align-items: center; justify-content: center; background: #f4f4f4; margin: 20px; border-radius: 8px; }
-        .video-box { width: 100%; height: 250px; background: #000; overflow: hidden; margin-bottom: 40px; }
-        .video-box video { width: 100%; height: 100%; object-fit: cover; }
+        /* Content Placeholder */
+        .hero { height: 250px; background: #eee; margin: 15px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display'; }
+        .spacer { height: 1200px; padding: 20px; color: #ccc; text-align: center; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -133,6 +169,7 @@
 
         <nav class="nav-row">
             <div class="scroll-brand-peek">
+                <img src="logo/logo.jpg" style="height:20px;" alt="L">
                 <img src="brand/brandname.jpg" alt="Brand">
             </div>
 
@@ -149,76 +186,40 @@
         </nav>
 
         <div class="search-drawer" id="search-drawer">
-            <input type="text" class="search-input" id="search-field" placeholder="Search our collection..." oninput="searchData()">
-            <div id="results-area"></div>
-            <div style="text-align: center; margin-top: 15px;">
-                <i class="fas fa-times" onclick="toggleSearch()" style="cursor:pointer; color:#ccc;"></i>
+            <input type="text" class="search-input" id="search-field" placeholder="SEARCH PIECES...">
+            <div id="results-area" style="max-height:200px; overflow-y:auto; padding-top:10px;"></div>
+            <div style="text-align: center; margin-top: 10px;">
+                <i class="fas fa-times" onclick="toggleSearch()" style="color:#ddd; font-size:0.8rem;"></i>
             </div>
         </div>
     </header>
 
     <main>
-        <div class="hero">
-            <h1 style="font-family: 'Playfair Display'; font-weight: 400;">Timeless Elegance</h1>
-        </div>
-
-        <div class="video-box">
-            <video autoplay muted loop playsinline>
-                <source src="video/office_tour.mp4" type="video/mp4">
-            </video>
-        </div>
-        
-        <div style="height: 1000px; padding: 5%;">
-            <p>Scroll down to see the header morph...</p>
-        </div>
+        <div class="hero"><h1>Chinzy Luxury</h1></div>
+        <div class="spacer">Scroll down to see the navigation text shrink by 2px...</div>
     </main>
 
     <script>
-        // 1. Time Display
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('live-date').innerText = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+        // Update Date
+        function updateDate() {
+            const options = { weekday: 'short', month: 'short', day: 'numeric' };
+            document.getElementById('live-date').innerText = new Date().toLocaleDateString('en-US', options);
         }
-        setInterval(updateTime, 1000); updateTime();
+        setInterval(updateDate, 1000); updateDate();
 
-        // 2. Morphing Logic
-        const head = document.getElementById('main-header');
+        // Header Morph
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) head.classList.add('scrolled');
-            else head.classList.remove('scrolled');
+            const h = document.getElementById('main-header');
+            if (window.scrollY > 80) h.classList.add('scrolled');
+            else h.classList.remove('scrolled');
         });
 
-        // 3. Search Logic
+        // Search Toggle
         function toggleSearch() {
             document.getElementById('search-drawer').classList.toggle('open');
             if(document.getElementById('search-drawer').classList.contains('open')) {
                 document.getElementById('search-field').focus();
             }
-        }
-
-        // 4. Live Search Simulator (Replace with your Sheet fetch)
-        const mockProducts = [
-            {name: "Diamond Ring", price: "250,000"},
-            {name: "Gold Necklace", price: "180,000"},
-            {name: "Luxury Watch", price: "450,000"},
-            {name: "Pearl Earrings", price: "95,000"}
-        ];
-
-        function searchData() {
-            const val = document.getElementById('search-field').value.toLowerCase();
-            const area = document.getElementById('results-area');
-            area.innerHTML = '';
-            if(!val) return;
-
-            const filtered = mockProducts.filter(p => p.name.toLowerCase().includes(val));
-            filtered.forEach(p => {
-                area.innerHTML += `
-                    <div class="result-row" onclick="window.location.href='shop.html'">
-                        <span>${p.name}</span>
-                        <span style="color:var(--accent-gold)">₦${p.price}</span>
-                    </div>
-                `;
-            });
         }
     </script>
 </body>
