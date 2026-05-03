@@ -7,7 +7,14 @@
     <style>
         :root { --gold: #D4AF37; --dark: #1a1a1a; --light: #f9f9f9; }
         body { font-family: 'Playfair Display', serif; margin: 0; background: var(--light); color: var(--dark); }
-        header { text-align: center; padding: 50px 20px; background: white; border-bottom: 1px solid #eee; }
+        header { text-align: center; padding: 40px 20px 20px; background: white; }
+        header h1 { margin: 0 0 10px 0; }
+        
+        /* Category Filter Styles */
+        .category-filters { display: flex; justify-content: center; gap: 15px; padding: 20px; background: white; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+        .filter-btn { background: transparent; border: 2px solid var(--gold); color: var(--dark); padding: 8px 20px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .filter-btn.active, .filter-btn:hover { background: var(--gold); color: white; }
+
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; padding: 40px; max-width: 1200px; margin: auto; }
         .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
         .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 4px; background: #eee; }
@@ -32,10 +39,17 @@
     <p>Elegant Scented Adornments</p>
 </header>
 
+<div class="category-filters">
+    <button class="filter-btn active" onclick="filterProducts('All')">All</button>
+    <button class="filter-btn" onclick="filterProducts('Necklaces')">Necklaces</button>
+    <button class="filter-btn" onclick="filterProducts('Bracelets')">Bracelets</button>
+    <button class="filter-btn" onclick="filterProducts('Watches')">Watches</button>
+</div>
+
 <div class="cart-count" onclick="openCheckout()">Cart: <span id="count">0</span></div>
 
 <div class="product-grid" id="product-container">
-    <!-- Products will load here from Google Sheets -->
+    <!-- Products will load here dynamically -->
 </div>
 
 <div id="checkout-modal">
@@ -63,51 +77,79 @@
     // ------------------------------------------------
 
     let cart = [];
+    let allProducts = []; // We will store all products here to filter them easily
 
     async function loadProducts() {
         try {
             const response = await fetch(SHEET_URL);
             const data = await response.text();
             
-            // Split by lines and remove the first header row
             const rows = data.split('\n').slice(1); 
-            const container = document.getElementById('product-container');
             
             rows.forEach(row => {
-                const cols = row.split(','); 
-                // Ensure we have enough columns to read
-                if(cols.length < 5) return;
+                // Handle commas inside quotes properly if your descriptions have them
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                if(cols.length < 7) return; 
                 
-                // Extracting based on your Sheet columns: A=ID, B=Name, C=Desc, D=Price, E=Qty
-                const id = cols[0].trim();
-                const name = cols[1].trim();
-                const desc = cols[2].trim();
-                const price = parseFloat(cols[3].trim());
-                const qty = parseInt(cols[4].trim());
+                // Extract columns based on your sheet structure
+                const product = {
+                    id: cols[0].trim(),
+                    name: cols[1].replace(/^"|"$/g, '').trim(),
+                    desc: cols[2].replace(/^"|"$/g, '').trim(),
+                    price: parseFloat(cols[3].trim()),
+                    qty: parseInt(cols[4].trim()),
+                    img: cols[5].replace(/^"|"$/g, '').trim(), // Now pulls directly from Column F
+                    category: cols[6].replace(/^"|"$/g, '').trim() // Pulls from Column G
+                };
                 
-                const isOutOfStock = qty <= 0;
-                const priceNaira = price.toLocaleString(); 
-
-                // Looking for the image dynamically on GitHub using the ID!
-                const imagePath = `images/${id}.jpg`;
-
-                container.innerHTML += `
-                    <div class="card">
-                        <img src="${imagePath}" alt="${name}" onerror="this.src='https://via.placeholder.com/250?text=${id}+Missing'">
-                        <h3>${name}</h3>
-                        <p>${desc}</p>
-                        <p class="price">₦${priceNaira}</p>
-                        <button class="btn" ${isOutOfStock ? 'disabled' : ''} 
-                            onclick="addToCart('${name}', ${price})">
-                            ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
-                        </button>
-                    </div>
-                `;
+                allProducts.push(product);
             });
+
+            // Initially show all products
+            filterProducts('All');
+
         } catch (error) {
             console.error("Error loading products:", error);
-            document.getElementById('product-container').innerHTML = "<p style='text-align:center;'>Error loading products. Please check your sheet link.</p>";
+            document.getElementById('product-container').innerHTML = "<p style='text-align:center;'>Error loading products.</p>";
         }
+    }
+
+    function filterProducts(category) {
+        // Update active button styling
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        const container = document.getElementById('product-container');
+        container.innerHTML = ""; // Clear current products
+
+        // Filter the array
+        const filteredProducts = category === 'All' 
+            ? allProducts 
+            : allProducts.filter(p => p.category.toLowerCase() === category.toLowerCase());
+
+        if (filteredProducts.length === 0) {
+            container.innerHTML = `<p style="grid-column: 1 / -1; text-align: center;">No ${category} found in catalogue.</p>`;
+            return;
+        }
+
+        // Render the filtered products
+        filteredProducts.forEach(p => {
+            const isOutOfStock = p.qty <= 0;
+            const priceNaira = p.price.toLocaleString(); 
+
+            container.innerHTML += `
+                <div class="card">
+                    <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/250?text=Image+Missing'">
+                    <h3>${p.name}</h3>
+                    <p style="font-size: 0.9em; color: #666;">${p.desc}</p>
+                    <p class="price">₦${priceNaira}</p>
+                    <button class="btn" ${isOutOfStock ? 'disabled' : ''} 
+                        onclick="addToCart('${p.name}', ${p.price})">
+                        ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+                    </button>
+                </div>
+            `;
+        });
     }
 
     function addToCart(name, price) {
@@ -117,7 +159,6 @@
         } else {
             cart.push({ name: name, price: price, qty: 1 });
         }
-        
         updateCartCount();
         alert(name + " added to cart!");
     }
@@ -167,12 +208,8 @@
         const originalBtnText = event.target.innerText;
         const btn = event.target;
         
-        if(!name || !email) {
-            alert("Please fill in your name and email.");
-            return;
-        }
+        if(!name || !email) return alert("Please fill in your name and email.");
 
-        // Show loading state
         btn.innerText = "Processing...";
         btn.disabled = true;
 
@@ -184,13 +221,11 @@
         let fullOrderString = `${orderList}\n\n*Total: ₦${total.toLocaleString()}*`;
 
         try {
-            // Save to Google Sheet
             await fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
                 body: JSON.stringify({ name: name, email: email, order: fullOrderString })
             });
 
-            // Redirect to WhatsApp
             const message = `Hi, my name is ${name}. I want to purchase the following items:\n\n${fullOrderString}\n\nCan you please reach out so we can talk?`;
             window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
             
@@ -201,7 +236,7 @@
         }
     }
 
-    // Initialize the shop
+    // Start everything
     loadProducts();
 </script>
 </body>
