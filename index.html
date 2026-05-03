@@ -13,211 +13,213 @@
             --surface-white: #FFFFFF; 
             --text-dark: #1A1A1A;     
             --accent-gold: #C5A059;   
-            --gold-glow: rgba(197, 160, 89, 0.15); 
-            --transition-speed: 0.4s;
+            --transition-main: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { box-sizing: border-box; }
-        body { font-family: 'Work Sans', sans-serif; margin: 0; padding: 0; background-color: var(--bg-pearl); overflow-x: hidden; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
 
-        /* --- MORPHING HEADER --- */
-        header { background: var(--surface-white); position: sticky; top: 0; z-index: 1000; transition: all var(--transition-speed) ease; box-shadow: 0 2px 15px rgba(0,0,0,0.03); }
-        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 4%; height: 70px; transition: 0.4s; }
-        .header-left img { height: 45px; width: auto; }
-        .header-center img { height: 35px; width: auto; }
-        #datetime-display { font-size: 0.7rem; text-transform: uppercase; color: #888; }
-
-        .header-bottom { display: flex; align-items: center; padding: 10px 4%; border-top: 1px solid #F0F0F0; transition: 0.4s; position: relative; }
-        .brand-scrolled { display: none; height: 22px; width: auto; margin-right: 15px; }
-        .nav-links { display: flex; gap: 20px; list-style: none; padding: 0; margin: 0 auto; text-transform: uppercase; white-space: nowrap; transition: 0.4s; }
-        .nav-links li a { text-decoration: none; color: var(--text-dark); font-size: 0.85rem; font-weight: 300; letter-spacing: 1px; }
-
-        .action-icons { display: flex; gap: 15px; align-items: center; position: relative; }
-        .search-container { display: flex; align-items: center; }
-        .search-bar-wrap { position: absolute; right: 0; top: 100%; width: 250px; background: white; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 4px; display: none; z-index: 2000; }
-        .search-bar-wrap.active { display: block; }
-        #live-search-input { width: 100%; padding: 8px; border: 1px solid #eee; border-radius: 4px; outline: none; font-family: 'Work Sans'; }
-        #search-results { max-height: 200px; overflow-y: auto; margin-top: 10px; font-size: 0.8rem; }
-        .result-item { padding: 8px; border-bottom: 1px solid #f9f9f9; cursor: pointer; display: flex; justify-content: space-between; }
-        .result-item:hover { background: #fdfaf4; color: var(--accent-gold); }
-
-        header.scrolled .header-top { height: 0; padding: 0; opacity: 0; overflow: hidden; }
-        header.scrolled .header-bottom { border: none; justify-content: space-between; }
-        header.scrolled .brand-scrolled { display: block; }
-        header.scrolled .nav-links { margin: 0; gap: 12px; }
-
-        /* --- CAROUSEL (HALF-FULL-HALF) --- */
-        .carousel-outer { width: 100%; overflow: hidden; position: relative; padding: 20px 0; }
-        .carousel-track { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); align-items: center; }
-        /* 340dpi measure: 70% width for center image leaves 15% for each side peek */
-        .carousel-track img { width: 70vw; max-width: 300px; height: auto; aspect-ratio: 4/5; object-fit: cover; margin: 0 15px; border-radius: 4px; box-shadow: 0 8px 20px var(--gold-glow); flex-shrink: 0; opacity: 0.5; transition: opacity 0.4s; }
-        .carousel-track img.active { opacity: 1; transform: scale(1.05); }
-
-        /* --- VIDEO (FIXED 250px HEIGHT) --- */
-        .video-section { width: 100%; max-width: 1200px; margin: 40px auto; height: 250px; border-radius: 4px; overflow: hidden; background: #000; position: relative; }
-        .video-section video { width: 100%; height: 100%; object-fit: cover; }
-
-        /* --- TESTIMONIALS (CYCLE >7 IMAGES) --- */
-        .testimony-grid { display: grid; grid-template-columns: 1fr; gap: 25px; justify-items: center; margin: 40px 0; }
-        .testimony-box { width: 350px; height: 500px; border-radius: 4px; overflow: hidden; position: relative; box-shadow: 0 10px 25px var(--gold-glow); background: #fff; }
-        .testimony-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; opacity: 0; transition: opacity 1.5s ease-in-out; }
-        .testimony-box img.active { opacity: 1; z-index: 2; }
-
-        @media (min-width: 1000px) {
-            .testimony-grid { grid-template-columns: repeat(3, 1fr); }
-            .carousel-track img { width: 400px; }
+        /* --- THE BOUTIQUE RIBBON HEADER --- */
+        header {
+            background: var(--surface-white);
+            position: sticky; top: 0; z-index: 2000;
+            width: 100%;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.02);
+            transition: var(--transition-main);
         }
 
-        footer { text-align: center; padding: 60px 20px; border-top: 1px solid #eee; text-transform: uppercase; font-size: 0.7rem; color: #888; }
-        .whatsapp-float { position: fixed; bottom: 20px; left: 20px; width: 50px; height: 50px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; text-decoration: none; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        /* ROW 1: Branding Area */
+        .branding-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            align-items: center;
+            padding: 15px 5%;
+            height: 80px;
+            transition: var(--transition-main);
+        }
+        .date-box { font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+        .logo-center { text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .logo-center .main-logo { height: 40px; margin-bottom: 5px; transition: 0.3s; }
+        .logo-center .brand-name { height: 18px; transition: 0.3s; }
+        .icons-right { display: flex; justify-content: flex-end; gap: 20px; font-size: 1rem; }
+
+        /* ROW 2: Navigation Area */
+        .nav-row {
+            padding: 12px 5%;
+            border-top: 1px solid #F0F0F0;
+            display: flex;
+            justify-content: center;
+            transition: var(--transition-main);
+        }
+        .nav-links {
+            display: flex; gap: 30px; list-style: none; padding: 0; margin: 0;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .nav-links a { text-decoration: none; color: var(--text-dark); font-size: 0.85rem; font-weight: 300; }
+        .nav-links a.active { color: var(--accent-gold); font-weight: 500; }
+
+        /* --- THE MORPH (SCROLLED STATE) --- */
+        header.scrolled { transform: translateY(-80px); } /* Hides Branding Row */
+        
+        /* Elements that "Peek" back into the Nav Row when scrolled */
+        .scroll-brand-peek {
+            position: absolute; left: 5%; 
+            opacity: 0; transform: translateX(-20px);
+            transition: 0.4s; pointer-events: none;
+        }
+        header.scrolled .scroll-brand-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
+        .scroll-brand-peek img { height: 20px; }
+
+        .scroll-icons-peek {
+            position: absolute; right: 5%;
+            opacity: 0; transform: translateX(20px);
+            transition: 0.4s; pointer-events: none;
+            display: flex; gap: 20px;
+        }
+        header.scrolled .scroll-icons-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
+
+        /* --- SEARCH DRAWER --- */
+        .search-drawer {
+            position: absolute; top: 100%; left: 0; width: 100%;
+            background: white; border-top: 1px solid #eee;
+            padding: 20px; transform: translateY(-100%);
+            opacity: 0; transition: 0.4s; z-index: -1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .search-drawer.open { transform: translateY(0); opacity: 1; }
+        .search-input {
+            width: 100%; border: none; border-bottom: 1px solid var(--accent-gold);
+            padding: 10px; font-family: 'Work Sans'; font-size: 1.1rem; outline: none;
+            text-align: center; text-transform: uppercase;
+        }
+        #results-area { max-height: 300px; overflow-y: auto; padding-top: 15px; }
+        .result-row { padding: 10px; display: flex; justify-content: space-between; border-bottom: 1px solid #f9f9f9; }
+
+        /* --- MOBILE TWEAKS (340 DPI) --- */
+        @media (max-width: 400px) {
+            .branding-row { grid-template-columns: 1fr 1fr; padding: 10px 5%; height: 60px; }
+            .date-box { display: none; } /* Clear space for the brand */
+            .logo-center { align-items: flex-start; }
+            .logo-center .main-logo { height: 30px; }
+            .logo-center .brand-name { height: 12px; }
+            
+            .nav-links { gap: 15px; }
+            .nav-links a { font-size: 0.7rem; letter-spacing: 1px; }
+
+            header.scrolled { transform: translateY(-60px); }
+            header.scrolled .nav-row { justify-content: flex-end; padding-right: 35%; } /* Pushes Nav to make room for Icons */
+        }
+
+        /* Content Placeholders */
+        .hero { height: 300px; display: flex; align-items: center; justify-content: center; background: #f4f4f4; margin: 20px; border-radius: 8px; }
+        .video-box { width: 100%; height: 250px; background: #000; overflow: hidden; margin-bottom: 40px; }
+        .video-box video { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body>
 
     <header id="main-header">
-        <div class="header-top">
-            <div class="header-left"><img src="logo/logo.jpg" alt="Logo"></div>
-            <div class="header-center"><img src="brand/brandname.jpg" alt="Brand"></div>
-            <div class="header-right" id="datetime-display"></div>
-        </div>
-        <div class="header-bottom">
-            <img class="brand-scrolled" src="brand/brandname.jpg" alt="Brand">
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="shop.html">Shop</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="action-icons">
-                <div class="search-container">
-                    <i class="fas fa-magnifying-glass" onclick="toggleSearch()" id="search-trigger"></i>
-                    <div class="search-bar-wrap" id="search-panel">
-                        <input type="text" id="live-search-input" placeholder="Search products..." oninput="doSearch()">
-                        <div id="search-results"></div>
-                    </div>
-                </div>
+        <div class="branding-row">
+            <div class="date-box" id="live-date"></div>
+            <div class="logo-center">
+                <img src="logo/logo.jpg" class="main-logo" alt="Logo">
+                <img src="brand/brandname.jpg" class="brand-name" alt="Chinzy Luxury">
+            </div>
+            <div class="icons-right">
+                <i class="fas fa-magnifying-glass" onclick="toggleSearch()"></i>
                 <i class="fas fa-shopping-cart" onclick="window.location.href='shop.html'"></i>
+            </div>
+        </div>
+
+        <nav class="nav-row">
+            <div class="scroll-brand-peek">
+                <img src="brand/brandname.jpg" alt="Brand">
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+
+            <div class="scroll-icons-peek">
+                <i class="fas fa-magnifying-glass" onclick="toggleSearch()"></i>
+                <i class="fas fa-shopping-cart" onclick="window.location.href='shop.html'"></i>
+            </div>
+        </nav>
+
+        <div class="search-drawer" id="search-drawer">
+            <input type="text" class="search-input" id="search-field" placeholder="Search our collection..." oninput="searchData()">
+            <div id="results-area"></div>
+            <div style="text-align: center; margin-top: 15px;">
+                <i class="fas fa-times" onclick="toggleSearch()" style="cursor:pointer; color:#ccc;"></i>
             </div>
         </div>
     </header>
 
     <main>
-        <h2 style="text-align: center; font-family: 'Playfair Display'; font-weight: 400; margin-top:40px;">New Arrivals</h2>
-        <div class="carousel-outer">
-            <div class="carousel-track" id="arrival-track">
-                <script>
-                    for(let i=1; i<=10; i++) document.write(`<img src="products/prod${i}.jpg" class="${i===1?'active':''}" onerror="this.style.display='none'">`);
-                </script>
-            </div>
+        <div class="hero">
+            <h1 style="font-family: 'Playfair Display'; font-weight: 400;">Timeless Elegance</h1>
         </div>
 
-        <div class="video-section">
-            <video autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
+        <div class="video-box">
+            <video autoplay muted loop playsinline>
+                <source src="video/office_tour.mp4" type="video/mp4">
+            </video>
         </div>
-
-        <h2 style="text-align: center; font-family: 'Playfair Display'; font-weight: 400;">Client Feedback</h2>
-        <div class="testimony-grid">
-            <div class="testimony-box" id="box-1"></div>
-            <div class="testimony-box" id="box-2"></div>
-            <div class="testimony-box" id="box-3"></div>
+        
+        <div style="height: 1000px; padding: 5%;">
+            <p>Scroll down to see the header morph...</p>
         </div>
     </main>
 
-    <footer>&copy; 2026 CHINZY LUXURY JEWERIES</footer>
-    <a href="https://wa.me/2349057835662" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-
     <script>
-        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv';
-        let allProducts = [];
-
-        // 1. Live Search Data Fetch
-        async function fetchProducts() {
-            const resp = await fetch(SHEET_URL);
-            const csv = await resp.text();
-            const rows = csv.split('\n').slice(1);
-            allProducts = rows.map(r => {
-                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                return (c.length > 1) ? { name: c[1].replace(/"/g, ''), price: c[3] } : null;
-            }).filter(p => p);
+        // 1. Time Display
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('live-date').innerText = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
         }
-        fetchProducts();
+        setInterval(updateTime, 1000); updateTime();
 
-        function doSearch() {
-            const query = document.getElementById('live-search-input').value.toLowerCase();
-            const resDiv = document.getElementById('search-results');
-            resDiv.innerHTML = '';
-            if(!query) return;
-            const matches = allProducts.filter(p => p.name.toLowerCase().includes(query));
-            matches.forEach(m => {
-                resDiv.innerHTML += `<div class="result-item" onclick="window.location.href='shop.html'">
-                    <span>${m.name}</span> <span style="color:var(--accent-gold)">₦${Number(m.price).toLocaleString()}</span>
-                </div>`;
-            });
-        }
-
-        function toggleSearch() { 
-            const panel = document.getElementById('search-panel');
-            panel.classList.toggle('active');
-            if(panel.classList.contains('active')) document.getElementById('live-search-input').focus();
-        }
-
-        // 2. Carousel Half-Full-Half Math
-        const track = document.getElementById('arrival-track');
-        const imgs = track.getElementsByTagName('img');
-        let idx = 0;
-
-        function updateCarousel() {
-            const winW = window.innerWidth;
-            const imgW = imgs[0].offsetWidth + 30; // Image + margins
-            // Center the active image
-            const offset = (winW / 2) - (imgW / 2) - (idx * imgW);
-            track.style.transform = `translateX(${offset}px)`;
-            
-            for(let i=0; i<imgs.length; i++) {
-                imgs[i].classList.toggle('active', i === idx);
-            }
-            idx = (idx + 1) % imgs.length;
-        }
-        setInterval(updateCarousel, 4000);
-        window.addEventListener('load', updateCarousel);
-
-        // 3. Testimonial Cycling (>7 images)
-        const testimonyImages = [
-            'test/test1.jpg','test/test2.jpg','test/test3.jpg','test/test4.jpg',
-            'test/test5.jpg','test/test6.jpg','test/test7.jpg','test/test8.jpg',
-            'test/test9.jpg','test/test10.jpg','test/test11.jpg','test/test12.jpg'
-        ];
-
-        function setupBox(boxId, startIdx, endIdx) {
-            const box = document.getElementById(boxId);
-            let current = startIdx;
-            // Create images
-            for(let i=startIdx; i<=endIdx; i++) {
-                const img = document.createElement('img');
-                img.src = testimonyImages[i] || testimonyImages[0];
-                if(i === startIdx) img.classList.add('active');
-                box.appendChild(img);
-            }
-            // Rotate logic
-            setInterval(() => {
-                const boxImgs = box.getElementsByTagName('img');
-                boxImgs[current - startIdx].classList.remove('active');
-                current = (current + 1 > endIdx) ? startIdx : current + 1;
-                boxImgs[current - startIdx].classList.add('active');
-            }, 3000 + (startIdx * 500)); // Staggered start
-        }
-
-        setupBox('box-1', 0, 3); setupBox('box-2', 4, 7); setupBox('box-3', 8, 11);
-
-        // Header Morph
+        // 2. Morphing Logic
+        const head = document.getElementById('main-header');
         window.addEventListener('scroll', () => {
-            const h = document.getElementById('main-header');
-            h.classList.toggle('scrolled', window.scrollY > 50);
+            if (window.scrollY > 100) head.classList.add('scrolled');
+            else head.classList.remove('scrolled');
         });
 
-        // Time
-        setInterval(() => {
-            document.getElementById('datetime-display').innerText = new Date().toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
-        }, 1000);
+        // 3. Search Logic
+        function toggleSearch() {
+            document.getElementById('search-drawer').classList.toggle('open');
+            if(document.getElementById('search-drawer').classList.contains('open')) {
+                document.getElementById('search-field').focus();
+            }
+        }
+
+        // 4. Live Search Simulator (Replace with your Sheet fetch)
+        const mockProducts = [
+            {name: "Diamond Ring", price: "250,000"},
+            {name: "Gold Necklace", price: "180,000"},
+            {name: "Luxury Watch", price: "450,000"},
+            {name: "Pearl Earrings", price: "95,000"}
+        ];
+
+        function searchData() {
+            const val = document.getElementById('search-field').value.toLowerCase();
+            const area = document.getElementById('results-area');
+            area.innerHTML = '';
+            if(!val) return;
+
+            const filtered = mockProducts.filter(p => p.name.toLowerCase().includes(val));
+            filtered.forEach(p => {
+                area.innerHTML += `
+                    <div class="result-row" onclick="window.location.href='shop.html'">
+                        <span>${p.name}</span>
+                        <span style="color:var(--accent-gold)">₦${p.price}</span>
+                    </div>
+                `;
+            });
+        }
     </script>
 </body>
 </html>
