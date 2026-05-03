@@ -13,111 +13,98 @@
             --surface-white: #FFFFFF; 
             --text-dark: #1A1A1A;     
             --accent-gold: #C5A059;   
-            --transition-main: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-speed: 0.5s;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
 
-        /* --- THE BOUTIQUE RIBBON --- */
+        /* --- MASTER HEADER --- */
         header {
             background: var(--surface-white);
             position: sticky; top: 0; z-index: 2000;
             width: 100%;
             box-shadow: 0 2px 20px rgba(0,0,0,0.02);
-            transition: var(--transition-main);
+            transition: var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ROW 1: Branding Area - Fixed to prevent stacking */
+        /* ROW 1: Brand Focus (Logo Removed here) */
         .branding-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 5%;
-            height: 85px;
-            transition: var(--transition-main);
-            gap: 10px;
+            padding: 15px 5%;
+            height: 90px;
+            transition: var(--transition-speed);
         }
 
         .date-box { 
-            flex: 1;
-            font-size: 0.6rem; 
-            color: #999; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
-            white-space: nowrap;
+            flex: 1; font-size: 0.65rem; color: #999; 
+            text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* The Fix: logo-center now forces a single horizontal line */
-        .logo-center { 
-            flex: 3;
-            display: flex; 
-            flex-direction: row; /* Forces Brand Name next to Logo */
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            white-space: nowrap;
+        .brand-center { 
+            flex: 2; text-align: center; 
         }
-        .logo-center .main-logo { height: 35px; width: auto; flex-shrink: 1; }
-        .logo-center .brand-name { height: 14px; width: auto; flex-shrink: 1; }
+        .brand-center img { 
+            height: 22px; /* Large & Bold Brand Name */
+            width: auto;
+            transition: 0.3s;
+        }
 
         .icons-right { 
-            flex: 1;
-            display: flex; 
-            justify-content: flex-end; 
-            gap: 15px; 
-            font-size: 0.9rem; 
+            flex: 1; display: flex; justify-content: flex-end; 
+            gap: 20px; font-size: 1rem; color: var(--text-dark);
         }
 
-        /* ROW 2: Navigation */
+        /* ROW 2: Nav Row */
         .nav-row {
-            padding: 12px 5%;
+            padding: 15px 5%;
             border-top: 1px solid #F0F0F0;
             display: flex;
             justify-content: center;
-            transition: var(--transition-main);
+            transition: var(--transition-speed);
             position: relative;
         }
+
         .nav-links {
-            display: flex; gap: 25px; list-style: none; padding: 0; margin: 0;
-            text-transform: uppercase; letter-spacing: 1.5px;
+            display: flex; gap: 30px; list-style: none; padding: 0; margin: 0;
+            text-transform: uppercase; letter-spacing: 2px;
         }
         .nav-links a { 
-            text-decoration: none; 
-            color: var(--text-dark); 
-            font-size: 0.8rem; /* Base size */
-            font-weight: 300; 
-            transition: font-size 0.3s ease;
+            text-decoration: none; color: var(--text-dark); 
+            font-size: 0.85rem; font-weight: 300; 
+            transition: all 0.3s;
         }
 
-        /* --- THE MORPH (SCROLLED) --- */
-        header.scrolled { transform: translateY(-85px); } 
+        /* --- THE MORPH (SCROLLED STATE) --- */
+        header.scrolled { transform: translateY(-90px); } /* Slide top row out */
 
+        /* Logo appears on the LEFT of Nav when scrolled */
+        .logo-peek {
+            position: absolute; left: 5%;
+            opacity: 0; transform: translateX(-15px);
+            transition: 0.4s; pointer-events: none;
+        }
+        header.scrolled .logo-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
+        .logo-peek img { height: 24px; } /* The elegant small Logo alone */
+
+        /* Navigation Shrink Logic */
         header.scrolled .nav-links a { 
-            font-size: calc(0.8rem - 2px); /* THE 2PX SHRINK YOU REQUESTED */
+            font-size: calc(0.85rem - 2px); /* 2px Micro-Shrink */
             letter-spacing: 1px;
         }
 
-        /* Brand Peek on left */
-        .scroll-brand-peek {
-            position: absolute; left: 5%; 
-            opacity: 0; transform: translateX(-15px);
-            transition: 0.4s; pointer-events: none;
-            display: flex; align-items: center; gap: 5px;
-        }
-        header.scrolled .scroll-brand-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
-        .scroll-brand-peek img { height: 18px; }
-
-        /* Icons Peek on right */
-        .scroll-icons-peek {
+        /* Icons Peek on the RIGHT of Nav when scrolled */
+        .icons-peek {
             position: absolute; right: 5%;
             opacity: 0; transform: translateX(15px);
             transition: 0.4s; pointer-events: none;
-            display: flex; gap: 15px; font-size: 0.8rem;
+            display: flex; gap: 20px; font-size: 0.9rem;
         }
-        header.scrolled .scroll-icons-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
+        header.scrolled .icons-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
 
-        /* --- SEARCH DRAWER --- */
+        /* --- SEARCH DRAWER (Drawer Logic preserved) --- */
         .search-drawer {
             position: absolute; top: 100%; left: 0; width: 100%;
             background: white; border-top: 1px solid #eee;
@@ -128,39 +115,37 @@
         .search-drawer.open { transform: translateY(0); opacity: 1; }
         .search-input {
             width: 100%; border: none; border-bottom: 1px solid var(--accent-gold);
-            padding: 10px; font-family: 'Work Sans'; font-size: 1rem; outline: none;
+            padding: 10px; font-family: 'Work Sans'; font-size: 1.1rem; outline: none;
             text-align: center; text-transform: uppercase;
         }
 
-        /* --- 340 DPI PORTRAIT SPECIFIC --- */
-        @media (max-width: 360px) {
-            .branding-row { padding: 10px 3%; height: 75px; }
-            .logo-center { gap: 5px; }
-            .logo-center .main-logo { height: 28px; }
-            .logo-center .brand-name { height: 11px; }
-            
-            .nav-links { gap: 12px; }
-            .nav-links a { font-size: 0.7rem; }
-            header.scrolled .nav-links a { font-size: calc(0.7rem - 2px); }
-            
-            header.scrolled { transform: translateY(-75px); }
-            header.scrolled .nav-row { justify-content: center; padding-left: 15%; padding-right: 15%; }
+        /* --- 340 DPI PORTRAIT CORRECTIONS --- */
+        @media (max-width: 380px) {
+            .branding-row { height: 80px; padding: 10px 4%; }
+            .brand-center img { height: 18px; } /* Shrinks brand slightly for date safety */
+            .nav-links { gap: 15px; }
+            .nav-links a { font-size: 0.75rem; }
+            header.scrolled { transform: translateY(-80px); }
+            header.scrolled .nav-links a { font-size: calc(0.75rem - 2px); }
+            .icons-right { gap: 15px; }
         }
 
-        /* Content Placeholder */
-        .hero { height: 250px; background: #eee; margin: 15px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display'; }
-        .spacer { height: 1200px; padding: 20px; color: #ccc; text-align: center; font-size: 0.8rem; }
+        /* Page Content */
+        .page-content { padding: 40px 5%; min-height: 1500px; }
+        .video-box { width: 100%; height: 250px; background: #000; overflow: hidden; border-radius: 4px; margin: 40px 0; }
+        .video-box video { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body>
 
     <header id="main-header">
         <div class="branding-row">
-            <div class="date-box" id="live-date"></div>
-            <div class="logo-center">
-                <img src="logo/logo.jpg" class="main-logo" alt="Logo">
-                <img src="brand/brandname.jpg" class="brand-name" alt="Chinzy Luxury">
+            <div class="date-box" id="current-date"></div>
+            
+            <div class="brand-center">
+                <img src="brand/brandname.jpg" alt="Chinzy Luxury">
             </div>
+
             <div class="icons-right">
                 <i class="fas fa-magnifying-glass" onclick="toggleSearch()"></i>
                 <i class="fas fa-shopping-cart" onclick="window.location.href='shop.html'"></i>
@@ -168,9 +153,8 @@
         </div>
 
         <nav class="nav-row">
-            <div class="scroll-brand-peek">
-                <img src="logo/logo.jpg" style="height:20px;" alt="L">
-                <img src="brand/brandname.jpg" alt="Brand">
+            <div class="logo-peek">
+                <img src="logo/logo.jpg" alt="Logo Icon">
             </div>
 
             <ul class="nav-links">
@@ -179,47 +163,62 @@
                 <li><a href="about.html">About</a></li>
             </ul>
 
-            <div class="scroll-icons-peek">
+            <div class="icons-peek">
                 <i class="fas fa-magnifying-glass" onclick="toggleSearch()"></i>
                 <i class="fas fa-shopping-cart" onclick="window.location.href='shop.html'"></i>
             </div>
         </nav>
 
         <div class="search-drawer" id="search-drawer">
-            <input type="text" class="search-input" id="search-field" placeholder="SEARCH PIECES...">
-            <div id="results-area" style="max-height:200px; overflow-y:auto; padding-top:10px;"></div>
-            <div style="text-align: center; margin-top: 10px;">
-                <i class="fas fa-times" onclick="toggleSearch()" style="color:#ddd; font-size:0.8rem;"></i>
-            </div>
+            <input type="text" class="search-input" id="search-field" placeholder="Search our pieces..." oninput="runSearch()">
+            <div id="results-list" style="max-height:250px; overflow-y:auto; margin-top:15px;"></div>
         </div>
     </header>
 
-    <main>
-        <div class="hero"><h1>Chinzy Luxury</h1></div>
-        <div class="spacer">Scroll down to see the navigation text shrink by 2px...</div>
+    <main class="page-content">
+        <h2 style="font-family:'Playfair Display'; font-weight:400; text-align:center;">The Collection</h2>
+        <div class="video-box">
+            <video autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
+        </div>
+        <p style="text-align:center; color:#999;">Scroll to see the Logo-switch morph...</p>
     </main>
 
     <script>
         // Update Date
-        function updateDate() {
+        function setDate() {
             const options = { weekday: 'short', month: 'short', day: 'numeric' };
-            document.getElementById('live-date').innerText = new Date().toLocaleDateString('en-US', options);
+            document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', options);
         }
-        setInterval(updateDate, 1000); updateDate();
+        setInterval(setDate, 1000); setDate();
 
-        // Header Morph
+        // Search Drawer Toggle
+        function toggleSearch() {
+            const drawer = document.getElementById('search-drawer');
+            drawer.classList.toggle('open');
+            if(drawer.classList.contains('open')) document.getElementById('search-field').focus();
+        }
+
+        // Morph Logic
         window.addEventListener('scroll', () => {
-            const h = document.getElementById('main-header');
-            if (window.scrollY > 80) h.classList.add('scrolled');
-            else h.classList.remove('scrolled');
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 80) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
         });
 
-        // Search Toggle
-        function toggleSearch() {
-            document.getElementById('search-drawer').classList.toggle('open');
-            if(document.getElementById('search-drawer').classList.contains('open')) {
-                document.getElementById('search-field').focus();
-            }
+        // Search Engine Simulation
+        function runSearch() {
+            const val = document.getElementById('search-field').value.toLowerCase();
+            const list = document.getElementById('results-list');
+            list.innerHTML = '';
+            if(!val) return;
+
+            // Mock Data - this would be your Google Sheet fetch
+            const products = ["Gold Watch", "Diamond Ring", "Pearl Necklace", "Gold Bracelet"];
+            products.filter(p => p.toLowerCase().includes(val)).forEach(p => {
+                list.innerHTML += `<div style="padding:10px; border-bottom:1px solid #f9f9f9; display:flex; justify-content:space-between;">
+                    <span>${p}</span><i class="fas fa-chevron-right" style="font-size:0.7rem; color:var(--accent-gold);"></i>
+                </div>`;
+            });
         }
     </script>
 </body>
