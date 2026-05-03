@@ -10,15 +10,19 @@
         header { text-align: center; padding: 50px 20px; background: white; border-bottom: 1px solid #eee; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; padding: 40px; max-width: 1200px; margin: auto; }
         .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
-        .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 4px; }
+        .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 4px; background: #eee; }
         .price { font-weight: bold; color: var(--gold); font-size: 1.2rem; }
-        .btn { background: var(--dark); color: white; border: none; padding: 12px 25px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn { background: var(--dark); color: white; border: none; padding: 12px 25px; cursor: pointer; transition: 0.3s; margin-top: 10px; width: 100%; font-size: 1rem; }
+        .btn:hover:not(:disabled) { background: var(--gold); }
         .btn:disabled { background: #ccc; cursor: not-allowed; }
-        .cart-count { position: fixed; top: 20px; right: 20px; background: var(--gold); color: white; padding: 10px 20px; border-radius: 30px; cursor: pointer; }
-        /* Simple Modal */
-        #checkout-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; }
+        .cart-count { position: fixed; top: 20px; right: 20px; background: var(--gold); color: white; padding: 10px 20px; border-radius: 30px; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 100; font-weight: bold; }
+        
+        /* Modal Styling */
+        #checkout-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; box-sizing: border-box; border-radius: 4px; }
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px; font-size: 0.95rem; }
+        #cart-total-display { text-align: right; color: var(--gold); font-size: 1.3em; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -36,56 +40,120 @@
 
 <div id="checkout-modal">
     <div class="modal-content">
-        <h3>Finalize Interest</h3>
-        <input type="text" id="visitor-name" placeholder="Your Full Name" required>
-        <input type="email" id="visitor-email" placeholder="Your Email Address" required>
-        <button class="btn" onclick="sendToWhatsApp()">Submit & Chat on WhatsApp</button>
-        <button onclick="closeModal()" style="border:none; background:none; color:red; cursor:pointer; margin-top:10px;">Cancel</button>
+        <h3>Your Cart</h3>
+        <div id="cart-items-display"></div>
+        <h3 id="cart-total-display"></h3>
+        
+        <div id="checkout-form" style="display:none;">
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            <h3>Finalize Interest</h3>
+            <input type="text" id="visitor-name" placeholder="Your Full Name" required>
+            <input type="email" id="visitor-email" placeholder="Your Email Address" required>
+            <button class="btn" onclick="sendToWhatsApp()">Submit & Chat on WhatsApp</button>
+        </div>
+        <button class="btn" onclick="closeModal()" style="background:#eee; color:#333; margin-top:15px;">Close / Keep Shopping</button>
     </div>
 </div>
 
 <script>
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv'; // From Step 2
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZquSe37kjZGZuzy3KUINu7tFn41CMoHa0r5_0T_tHS18BsCQ-p85dDDcpcYITN-F7/exec'; // From Step 1
+    // --- IMPORTANT: PASTE YOUR ACTUAL LINKS BELOW ---
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv'; // E.g., https://docs.google.com/spreadsheets/d/.../pub?output=csv
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZquSe37kjZGZuzy3KUINu7tFn41CMoHa0r5_0T_tHS18BsCQ-p85dDDcpcYITN-F7/exec'; // E.g., https://script.google.com/macros/s/.../exec
+    const WHATSAPP_NUMBER = '2349057835662'; // E.g., 2348012345678 (No + or 0 at the start)
+    // ------------------------------------------------
+
     let cart = [];
 
-    // 1. Fetch Products from Tab 1
     async function loadProducts() {
-        const response = await fetch(SHEET_URL);
-        const data = await response.text();
-        const rows = data.split('\n').slice(1); // Skip header
-        
-        const container = document.getElementById('product-container');
-        rows.forEach(row => {
-            const cols = row.split(','); 
-            if(cols.length < 5) return;
+        try {
+            const response = await fetch(SHEET_URL);
+            const data = await response.text();
             
-            const [id, name, desc, price, qty, img] = cols; // Matches your sheet structure
-            const isOutOfStock = parseInt(qty) <= 0;
+            // Split by lines and remove the first header row
+            const rows = data.split('\n').slice(1); 
+            const container = document.getElementById('product-container');
+            
+            rows.forEach(row => {
+                const cols = row.split(','); 
+                // Ensure we have enough columns to read
+                if(cols.length < 5) return;
+                
+                // Extracting based on your Sheet columns: A=ID, B=Name, C=Desc, D=Price, E=Qty
+                const id = cols[0].trim();
+                const name = cols[1].trim();
+                const desc = cols[2].trim();
+                const price = parseFloat(cols[3].trim());
+                const qty = parseInt(cols[4].trim());
+                
+                const isOutOfStock = qty <= 0;
+                const priceNaira = price.toLocaleString(); 
 
-            container.innerHTML += `
-                <div class="card">
-                    <img src="${img}" alt="${name}">
-                    <h3>${name}</h3>
-                    <p>${desc}</p>
-                    <p class="price">$${price}</p>
-                    <button class="btn" ${isOutOfStock ? 'disabled' : ''} 
-                        onclick="addToCart('${name}', ${price})">
-                        ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
-                    </button>
-                </div>
-            `;
-        });
+                // Magic step: Looking for the image dynamically on GitHub using the ID!
+                const imagePath = `images/${id}.jpg`;
+
+                container.innerHTML += `
+                    <div class="card">
+                        <img src="${imagePath}" alt="${name}" onerror="this.src='https://via.placeholder.com/250?text=${id}+Missing'">
+                        <h3>${name}</h3>
+                        <p>${desc}</p>
+                        <p class="price">₦${priceNaira}</p>
+                        <button class="btn" ${isOutOfStock ? 'disabled' : ''} 
+                            onclick="addToCart('${name}', ${price})">
+                            ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+                        </button>
+                    </div>
+                `;
+            });
+        } catch (error) {
+            console.error("Error loading products:", error);
+            document.getElementById('product-container').innerHTML = "<p style='text-align:center;'>Error loading products. Please check your sheet link.</p>";
+        }
     }
 
     function addToCart(name, price) {
-        cart.push({name, price});
-        document.getElementById('count').innerText = cart.length;
+        let existingItem = cart.find(item => item.name === name);
+        if (existingItem) {
+            existingItem.qty += 1;
+        } else {
+            cart.push({ name: name, price: price, qty: 1 });
+        }
+        
+        updateCartCount();
         alert(name + " added to cart!");
     }
 
+    function updateCartCount() {
+        let totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+        document.getElementById('count').innerText = totalItems;
+    }
+
     function openCheckout() {
-        if(cart.length === 0) return alert("Cart is empty!");
+        const cartDisplay = document.getElementById('cart-items-display');
+        const totalDisplay = document.getElementById('cart-total-display');
+        const checkoutForm = document.getElementById('checkout-form');
+
+        if(cart.length === 0) {
+            cartDisplay.innerHTML = "<p style='color:red;'>No product or item added yet.</p>";
+            totalDisplay.innerText = "";
+            checkoutForm.style.display = 'none';
+        } else {
+            let html = "";
+            let grandTotal = 0;
+            
+            cart.forEach(item => {
+                let itemTotal = item.price * item.qty;
+                grandTotal += itemTotal;
+                html += `
+                <div class="cart-item">
+                    <div><b>${item.name}</b> <br><small>Qty: ${item.qty} x ₦${item.price.toLocaleString()}</small></div>
+                    <div>₦${itemTotal.toLocaleString()}</div>
+                </div>`;
+            });
+            
+            cartDisplay.innerHTML = html;
+            totalDisplay.innerText = `Total: ₦${grandTotal.toLocaleString()}`;
+            checkoutForm.style.display = 'block'; 
+        }
         document.getElementById('checkout-modal').style.display = 'flex';
     }
 
@@ -93,29 +161,47 @@
         document.getElementById('checkout-modal').style.display = 'none';
     }
 
-    // 2. Send Data to Tab 2 and Open WhatsApp
     async function sendToWhatsApp() {
         const name = document.getElementById('visitor-name').value;
         const email = document.getElementById('visitor-email').value;
+        const originalBtnText = event.target.innerText;
+        const btn = event.target;
         
-        if(!name || !email) return alert("Please fill details");
+        if(!name || !email) {
+            alert("Please fill in your name and email.");
+            return;
+        }
 
-        let orderList = cart.map((item, index) => `${index + 1}. ${item.name} - $${item.price}`).join('\n');
-        let total = cart.reduce((sum, item) => sum + item.price, 0);
-        let fullOrderString = `${orderList}\nTotal: $${total}`;
+        // Show loading state
+        btn.innerText = "Processing...";
+        btn.disabled = true;
 
-        // Save to Google Sheet Tab 2
-        await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({ name, email, order: fullOrderString })
-        });
+        let orderList = cart.map((item, index) => 
+            `${index + 1}. ${item.name} (Qty: ${item.qty}) - ₦${(item.price * item.qty).toLocaleString()}`
+        ).join('\n');
+        
+        let total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        let fullOrderString = `${orderList}\n\n*Total: ₦${total.toLocaleString()}*`;
 
-        // Redirect to WhatsApp
-        const myPhone = "2349057835662"; // Replace with your phone number
-        const message = `Hi, My name is ${name}. I want to purchase the following items:\n\n${fullOrderString}\n\nCan you please reach out so we can talk?`;
-        window.location.href = `https://wa.me/${myPhone}?text=${encodeURIComponent(message)}`;
+        try {
+            // Save to Google Sheet
+            await fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({ name: name, email: email, order: fullOrderString })
+            });
+
+            // Redirect to WhatsApp
+            const message = `Hi, my name is ${name}. I want to purchase the following items:\n\n${fullOrderString}\n\nCan you please reach out so we can talk?`;
+            window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+            
+        } catch (error) {
+            alert("There was an error submitting your order. Please try again.");
+            btn.innerText = originalBtnText;
+            btn.disabled = false;
+        }
     }
 
+    // Initialize the shop
     loadProducts();
 </script>
 </body>
