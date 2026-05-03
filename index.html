@@ -27,170 +27,147 @@
             overflow-x: hidden;
         }
 
-        /* --- HEADER STYLES --- */
+        /* --- MORPHING HEADER --- */
         header {
             background-color: var(--surface-white);
             box-shadow: 0 2px 20px rgba(0,0,0,0.03);
             position: sticky; top: 0; z-index: 1000;
-            transition: all var(--transition-speed) ease;
+            transition: all var(--transition-speed) ease-in-out;
         }
 
+        /* Top Row: Logo | Brand | Date */
         .header-top {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 40px; transition: all var(--transition-speed) ease;
+            padding: 20px 40px; 
+            transition: all var(--transition-speed) ease;
         }
-
         .header-left img { height: 55px; width: auto; }
-        .header-center { text-align: center; flex-grow: 1; }
         .header-center img { height: 45px; width: auto; }
         .header-right { text-align: right; min-width: 150px; }
-
         #datetime-display {
-            font-size: 0.8rem; color: var(--text-muted); display: block;
-            font-weight: 400; text-transform: uppercase; letter-spacing: 1.5px;
+            font-size: 0.8rem; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1.5px;
         }
 
+        /* Bottom Row: Initially Centered Nav | Icons Right */
         .header-bottom {
-            display: flex; justify-content: flex-end; align-items: center; 
-            padding: 15px 40px; border-top: 1px solid #F0F0F0; position: relative;
-            transition: all var(--transition-speed) ease; text-transform: uppercase;
+            display: flex; align-items: center; 
+            padding: 15px 40px; border-top: 1px solid #F0F0F0;
+            transition: all var(--transition-speed) ease;
+            text-transform: uppercase;
+        }
+
+        /* The Brand Image that appears only on scroll */
+        .scrolled-brand {
+            display: none; height: 30px; width: auto;
+            margin-right: 40px; /* Space between Brand and Nav */
         }
 
         .nav-links {
-            position: absolute; left: 50%; transform: translateX(-50%);
             display: flex; gap: 35px; list-style: none; padding: 0; margin: 0;
-            align-items: center; width: max-content;
+            align-items: center;
+            transition: all var(--transition-speed) ease;
+            /* Initially centered using auto margins */
+            margin-left: auto; margin-right: auto;
         }
 
         .nav-links li a {
             text-decoration: none; color: var(--text-dark);
-            font-weight: 300; font-size: 0.95rem; letter-spacing: 2px; 
-            position: relative; padding-bottom: 5px;
+            font-weight: 300; font-size: 0.95rem; letter-spacing: 2px;
         }
-
         .nav-links li a:hover, .nav-links li a.active { color: var(--accent-gold); }
-        .nav-links li a.active::after {
-            content: ''; position: absolute; bottom: 0; left: 0;
-            width: 100%; height: 1px; background-color: var(--accent-gold);
-        }
 
         .dropdown-parent { position: relative; }
         .dropdown {
-            display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            display: none; position: absolute; top: 100%; left: 0;
             background: var(--surface-white); box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            list-style: none; padding: 15px 0; margin: 0; min-width: 180px; z-index: 100;
+            list-style: none; padding: 15px 0; min-width: 180px; z-index: 100;
             border: 1px solid #F0F0F0; border-radius: 4px;
         }
         .dropdown-parent:hover .dropdown { display: block; }
-        .dropdown li a { display: block; padding: 10px 20px; font-size: 0.85rem; letter-spacing: 1.5px; }
+        .dropdown li a { display: block; padding: 10px 20px; font-size: 0.85rem; letter-spacing: 1px; }
 
-        .action-icons { display: flex; align-items: center; gap: 25px; position: relative; }
+        .action-icons { 
+            display: flex; align-items: center; gap: 25px; 
+            margin-left: 0; /* Keeps icons right-aligned */
+        }
 
-        .search-container { position: relative; display: flex; align-items: center; justify-content: flex-end; }
+        /* --- SCROLLED STATE LOGIC --- */
+        header.scrolled .header-top {
+            display: none; /* Top row disappears */
+        }
+        header.scrolled .header-bottom {
+            border-top: none;
+            padding: 10px 40px;
+            justify-content: flex-start; /* Aligns items to the left */
+        }
+        header.scrolled .scrolled-brand {
+            display: block; /* Brand takes logo spot on the left */
+        }
+        header.scrolled .nav-links {
+            margin-left: 0; /* Nav pane follows the brand */
+            margin-right: auto; /* Pushes icons to the far right */
+            gap: 25px;
+        }
+        header.scrolled .nav-links li a {
+            font-size: 0.85rem;
+        }
+
+        /* Search & Cart Icons */
+        .search-container { position: relative; display: flex; align-items: center; }
         .search-input {
-            position: absolute; right: 0; width: 0; padding: 0;
-            border: none; outline: none; background: var(--surface-white);
-            transition: width 0.4s ease, opacity 0.4s ease;
-            font-family: 'Work Sans', sans-serif; font-weight: 300;
-            text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
-            z-index: 10; opacity: 0; pointer-events: none; 
+            position: absolute; right: 30px; width: 0; padding: 0; border: none; outline: none; 
+            background: white; transition: width 0.4s, opacity 0.4s; opacity: 0;
+            font-family: 'Work Sans'; font-size: 0.85rem; z-index: 9;
         }
-        .search-container.active .search-input {
-            width: 200px; padding: 8px 35px 8px 10px; border-bottom: 1px solid var(--accent-gold);
-            opacity: 1; pointer-events: auto; box-shadow: -15px 0 15px var(--surface-white); 
-        }
-        .search-icon { cursor: pointer; font-size: 0.95rem; color: var(--text-dark); position: relative; z-index: 11; font-weight: 300; }
+        .search-container.active .search-input { width: 180px; padding: 5px 10px; opacity: 1; border-bottom: 1px solid var(--accent-gold); }
+        .search-icon { cursor: pointer; font-size: 1rem; color: var(--text-dark); position: relative; z-index: 10; }
 
-        /* --- SCROLLED STATE --- */
-        header.scrolled .header-top { padding: 5px 40px; }
-        header.scrolled .header-center img { height: 28px; }
-        header.scrolled .header-left img { height: 35px; }
-        header.scrolled .header-bottom { padding: 5px 40px; }
-        header.scrolled .nav-links li a { font-size: 0.8rem; }
-        .scrolled-brand { display: none; height: 35px; position: absolute; left: 40px; }
-        header.scrolled .scrolled-brand { display: block; }
-
-        /* --- MAIN CONTENT --- */
-        main { padding: 50px 40px; max-width: 1400px; margin: auto; }
-
-        h2.section-title {
-            text-align: center; color: var(--text-dark); font-size: 2.5rem;
-            margin-bottom: 40px; margin-top: 60px; font-family: 'Playfair Display', serif; 
-            font-weight: 400; letter-spacing: 1px;
-        }
-        h2.section-title::after {
-            content: ''; display: block; width: 60px; height: 1px;
-            background-color: var(--accent-gold); margin: 15px auto 0;
+        /* --- MOBILE ADJUSTMENTS --- */
+        @media (max-width: 800px) {
+            .header-top { display: none; } /* Mobile usually starts condensed */
+            .header-bottom { padding: 10px 15px; justify-content: space-between; }
+            .scrolled-brand { display: block; height: 25px; margin-right: 15px; }
+            .nav-links { margin-left: 0; gap: 12px; }
+            .nav-links li a { font-size: 0.75rem; letter-spacing: 0.5px; }
+            .action-icons { gap: 15px; }
         }
 
-        .carousel-container { width: 100%; overflow: hidden; position: relative; padding: 30px 0; }
-        .carousel-track { display: flex; transform: translateX(0); }
+        /* --- CONTENT --- */
+        main { padding: 40px 20px; max-width: 1400px; margin: auto; }
+        h2.section-title { text-align: center; color: var(--text-dark); font-family: 'Playfair Display', serif; font-weight: 400; margin: 50px 0 30px; }
+
+        /* New Arrivals */
+        .carousel-container { width: 100%; overflow: hidden; padding: 20px 0; }
+        .carousel-track { display: flex; }
         .carousel-track img {
             width: 280px; height: 350px; object-fit: cover; border-radius: var(--border-radius); 
-            margin: 0 20px; box-shadow: 0 10px 25px var(--gold-glow); background: var(--surface-white);
+            margin: 0 20px; box-shadow: 0 10px 25px var(--gold-glow);
         }
 
-        /* --- VIDEO WITH VOLUME TOGGLE --- */
+        /* Video Container */
         .video-container {
             width: 100%; max-width: 1200px; margin: 0 auto; height: 500px; 
-            border-radius: var(--border-radius); overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08); border: 1px solid #EAEAEA;
-            position: relative;
+            border-radius: var(--border-radius); overflow: hidden; position: relative;
+            background: #000;
         }
         .video-container video { width: 100%; height: 100%; object-fit: cover; }
-        
-        .mute-toggle {
-            position: absolute; bottom: 20px; right: 20px;
-            background: rgba(255, 255, 255, 0.7);
-            color: var(--text-dark);
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 10;
-            transition: background 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .mute-toggle:hover { background: var(--surface-white); }
-        .mute-toggle i { font-size: 1.1rem; }
+        .mute-toggle { position: absolute; bottom: 20px; right: 20px; background: rgba(255,255,255,0.7); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
 
-        /* --- TESTIMONIAL GRID --- */
-        .testimony-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 25px; margin: 40px 0;
-        }
-        .testimony-box {
-            height: 400px; border-radius: var(--border-radius);
-            overflow: hidden; box-shadow: 0 10px 25px var(--gold-glow);
-            background: var(--surface-white); position: relative;
-        }
-        .testimony-box img {
-            width: 100%; height: 100%; object-fit: cover;
-            position: absolute; top: 0; left: 0;
-            opacity: 0; transition: opacity 1.5s ease-in-out;
-        }
+        /* Testimonials */
+        .testimony-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin: 40px 0; }
+        .testimony-box { height: 400px; border-radius: var(--border-radius); overflow: hidden; box-shadow: 0 10px 25px var(--gold-glow); position: relative; background: #fff; }
+        .testimony-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0; transition: opacity 1.5s; }
         .testimony-box img.visible { opacity: 1; }
 
         @media (max-width: 800px) {
-            .testimony-grid { grid-template-columns: 1fr; }
-            .video-container { height: 300px; }
-            main { padding: 30px 20px; }
-            .nav-links { position: relative; left: 0; transform: none; gap: 15px; margin-right: auto; }
-            .header-top { display: none; }
-            .scrolled-brand { display: block; position: static; height: 25px; margin-right: 15px; }
-            .header-bottom { justify-content: space-between; padding: 10px 20px; }
+            .testimony-grid { grid-template-columns: 1fr; justify-items: center; }
+            .testimony-box { width: 350px; height: 500px; }
+            .video-container { height: 350px; }
         }
 
-        footer {
-            background-color: var(--surface-white); color: var(--text-dark); text-align: center;
-            padding: 50px 20px 30px; margin-top: 80px; border-top: 1px solid #F0F0F0;
-            display: flex; flex-direction: column; align-items: center; gap: 20px;
-            font-weight: 300; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .whatsapp-link {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 55px; height: 55px; background-color: #25D366; color: white;
-            border-radius: 50%; font-size: 1.8rem; text-decoration: none;
-        }
+        footer { background: var(--surface-white); text-align: center; padding: 40px 20px; border-top: 1px solid #F0F0F0; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+        .whatsapp-link { display: inline-flex; width: 50px; height: 50px; background: #25D366; color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 1.5rem; margin-top: 15px; text-decoration: none;}
     </style>
 </head>
 <body>
@@ -203,6 +180,7 @@
         </div>
         <div class="header-bottom">
             <img class="scrolled-brand" src="brand/brandname.jpg" alt="Brand">
+            
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="shop.html">Shop</a></li>
@@ -215,10 +193,11 @@
                     </ul>
                 </li>
             </ul>
+
             <div class="action-icons">
                 <div class="search-container" id="search-box">
                     <input type="text" class="search-input" id="search-input" placeholder="SEARCH...">
-                    <i class="fas fa-search search-icon" onclick="toggleSearch()"></i>
+                    <i class="fas fa-magnifying-glass search-icon" id="search-trigger" onclick="toggleSearch()"></i>
                 </div>
                 <div class="cart-wrapper" onclick="window.location.href='shop.html'">
                     <i class="fas fa-shopping-cart" style="font-size:0.95rem;"></i> (<span id="cart-count">0</span>)
@@ -232,41 +211,33 @@
         <div class="carousel-container">
             <div class="carousel-track" id="product-track">
                 <script>
-                    for(let i=1; i<=10; i++) document.write(`<img src="products/prod${i}.jpg" onerror="this.style.display='none'">`);
-                    for(let i=1; i<=10; i++) document.write(`<img src="products/prod${i}.jpg" onerror="this.style.display='none'">`);
+                    for(let j=0; j<2; j++) {
+                        for(let i=1; i<=10; i++) {
+                            document.write(`<img src="products/prod${i}.jpg" onerror="this.style.display='none'">`);
+                        }
+                    }
                 </script>
             </div>
         </div>
 
         <h2 class="section-title">Experience Luxury</h2>
         <div class="video-container">
-            <video id="office-video" autoplay muted loop playsinline poster="video/video_thumb.jpg">
+            <video id="office-video" autoplay muted loop playsinline>
                 <source src="video/office_tour.mp4" type="video/mp4">
             </video>
-            <div class="mute-toggle" onclick="toggleMute()">
-                <i id="mute-icon" class="fas fa-volume-mute"></i>
-            </div>
+            <div class="mute-toggle" onclick="toggleMute()"><i id="mute-icon" class="fas fa-volume-xmark"></i></div>
         </div>
 
         <h2 class="section-title">What Our Clients Say</h2>
         <div class="testimony-grid">
-            <div class="testimony-box">
-                <img src="test/test1.jpg" class="visible" id="img-1">
-                <img src="test/test2.jpg" id="img-2">
-            </div>
-            <div class="testimony-box">
-                <img src="test/test3.jpg" class="visible" id="img-3">
-                <img src="test/test4.jpg" id="img-4">
-            </div>
-            <div class="testimony-box">
-                <img src="test/test5.jpg" class="visible" id="img-5">
-                <img src="test/test6.jpg" id="img-6">
-            </div>
+            <div class="testimony-box"><img src="test/test1.jpg" class="visible" id="img-1"><img src="test/test2.jpg" id="img-2"></div>
+            <div class="testimony-box"><img src="test/test3.jpg" class="visible" id="img-3"><img src="test/test4.jpg" id="img-4"></div>
+            <div class="testimony-box"><img src="test/test5.jpg" class="visible" id="img-5"><img src="test/test6.jpg" id="img-6"></div>
         </div>
     </main>
 
     <footer>
-        <div>&copy; <span id="current-year"></span> CHINZY LUXURY JEWERIES.</div>
+        <div>&copy; 2026 CHINZY LUXURY JEWERIES. ALL RIGHTS RESERVED.</div>
         <a href="https://wa.me/2349057835662" class="whatsapp-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
     </footer>
 
@@ -276,18 +247,20 @@
             const now = new Date();
             const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
             document.getElementById('datetime-display').innerText = now.toLocaleDateString('en-US', options);
-            document.getElementById('current-year').innerText = now.getFullYear();
         }
         setInterval(updateTime, 1000); updateTime();
 
-        // 2. Sticky Header
+        // 2. Morphing Header Logic
+        const header = document.getElementById('main-header');
         window.addEventListener('scroll', () => {
-            const head = document.getElementById('main-header');
-            if (window.scrollY > 50) head.classList.add('scrolled');
-            else head.classList.remove('scrolled');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
 
-        // 3. New Arrivals Snap Scroll
+        // 3. New Arrivals Snap Scroll (5s)
         const track = document.getElementById('product-track');
         let currentSlide = 0;
         setInterval(() => {
@@ -299,38 +272,37 @@
             }
         }, 5000);
 
-        // 4. Volume Toggle Logic
-        function toggleMute() {
-            const video = document.getElementById('office-video');
-            const icon = document.getElementById('mute-icon');
-            if (video.muted) {
-                video.muted = false;
-                icon.classList.replace('fa-volume-mute', 'fa-volume-up');
-            } else {
-                video.muted = true;
-                icon.classList.replace('fa-volume-up', 'fa-volume-mute');
-            }
-        }
-
-        // 5. Staggered Testimonials
-        function rotateBox(imgA_Id, imgB_Id) {
-            const a = document.getElementById(imgA_Id);
-            const b = document.getElementById(imgB_Id);
-            if (a.classList.contains('visible')) {
-                a.classList.remove('visible'); b.classList.add('visible');
-            } else {
-                b.classList.remove('visible'); a.classList.add('visible');
-            }
-        }
-        setInterval(() => rotateBox('img-1', 'img-2'), 4000);
-        setInterval(() => rotateBox('img-3', 'img-4'), 5500);
-        setInterval(() => rotateBox('img-5', 'img-6'), 7000);
-
+        // 4. Search Toggle (Magnifying Glass to X)
         function toggleSearch() {
-            document.getElementById('search-box').classList.toggle('active');
-            document.getElementById('search-input').focus();
+            const box = document.getElementById('search-box');
+            const icon = document.getElementById('search-trigger');
+            box.classList.toggle('active');
+            if(box.classList.contains('active')) {
+                icon.classList.replace('fa-magnifying-glass', 'fa-xmark');
+                document.getElementById('search-input').focus();
+            } else {
+                icon.classList.replace('fa-xmark', 'fa-magnifying-glass');
+            }
         }
+
+        // 5. Video Sound Toggle
+        function toggleMute() {
+            const v = document.getElementById('office-video');
+            const i = document.getElementById('mute-icon');
+            v.muted = !v.muted;
+            i.classList.toggle('fa-volume-xmark'); i.classList.toggle('fa-volume-high');
+        }
+
+        // 6. Testimonial Staggered Fades
+        function rotate(aID, bID) {
+            const a = document.getElementById(aID); const b = document.getElementById(bID);
+            if (!a || !b) return;
+            if (a.classList.contains('visible')) { a.classList.remove('visible'); b.classList.add('visible'); }
+            else { b.classList.remove('visible'); a.classList.add('visible'); }
+        }
+        setInterval(() => rotate('img-1', 'img-2'), 4500);
+        setInterval(() => rotate('img-3', 'img-4'), 6000);
+        setInterval(() => rotate('img-5', 'img-6'), 7500);
     </script>
 </body>
-                        </html>
-                        
+</html>
