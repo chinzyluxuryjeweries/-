@@ -14,12 +14,15 @@
             --text-dark: #1A1A1A;     
             --accent-gold: #C5A059;   
             --transition-speed: 0.5s;
+            
+            /* SIZING HIERARCHY (Luxury Math) */
+            --brand-h-mobile: 22px; /* The King */
+            --sub-h-mobile: 21px;   /* 1px Smaller than King */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
 
-        /* --- MASTER HEADER --- */
         header {
             background: var(--surface-white);
             position: sticky; top: 0; z-index: 2000;
@@ -28,36 +31,53 @@
             transition: var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ROW 1: Brand Focus (Logo Removed here) */
+        /* --- ROW 1: BRAND DOMINANCE --- */
         .branding-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 5%;
+            padding: 10px 5%;
             height: 90px;
             transition: var(--transition-speed);
         }
 
         .date-box { 
-            flex: 1; font-size: 0.65rem; color: #999; 
-            text-transform: uppercase; letter-spacing: 1px;
+            flex: 1; 
+            font-size: 0.65rem; 
+            color: #999; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            height: var(--sub-h-mobile); /* 1px smaller than brand */
         }
 
         .brand-center { 
-            flex: 2; text-align: center; 
+            flex: 2; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .brand-center img { 
-            height: 22px; /* Large & Bold Brand Name */
+            height: var(--brand-h-mobile); /* THE BIGGEST ELEMENT */
             width: auto;
             transition: 0.3s;
         }
 
         .icons-right { 
-            flex: 1; display: flex; justify-content: flex-end; 
-            gap: 20px; font-size: 1rem; color: var(--text-dark);
+            flex: 1; 
+            display: flex; 
+            justify-content: flex-end; 
+            gap: 20px; 
+            color: var(--text-dark);
+            height: var(--sub-h-mobile); /* 1px smaller than brand container */
+            align-items: center;
+        }
+        .icons-right i {
+            font-size: 0.95rem; /* Visually matches the sub-height */
         }
 
-        /* ROW 2: Nav Row */
+        /* --- ROW 2: NAVIGATION --- */
         .nav-row {
             padding: 15px 5%;
             border-top: 1px solid #F0F0F0;
@@ -77,34 +97,38 @@
             transition: all 0.3s;
         }
 
-        /* --- THE MORPH (SCROLLED STATE) --- */
-        header.scrolled { transform: translateY(-90px); } /* Slide top row out */
+        /* --- MORPH STATE (SCROLLED) --- */
+        header.scrolled { transform: translateY(-90px); } 
 
-        /* Logo appears on the LEFT of Nav when scrolled */
+        /* Logo Peek: Smaller on scroll to let Nav be "Bigger" */
         .logo-peek {
             position: absolute; left: 5%;
             opacity: 0; transform: translateX(-15px);
             transition: 0.4s; pointer-events: none;
+            display: flex; align-items: center;
         }
         header.scrolled .logo-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
-        .logo-peek img { height: 24px; } /* The elegant small Logo alone */
+        .logo-peek img { 
+            height: 18px; /* Specifically smaller than the Nav/Icons now */
+        }
 
-        /* Navigation Shrink Logic */
+        /* Nav links & Icons can be bigger than the logo icon here */
         header.scrolled .nav-links a { 
-            font-size: calc(0.85rem - 2px); /* 2px Micro-Shrink */
+            font-size: calc(0.85rem - 2px); 
             letter-spacing: 1px;
         }
 
-        /* Icons Peek on the RIGHT of Nav when scrolled */
         .icons-peek {
             position: absolute; right: 5%;
             opacity: 0; transform: translateX(15px);
             transition: 0.4s; pointer-events: none;
-            display: flex; gap: 20px; font-size: 0.9rem;
+            display: flex; gap: 20px;
+            align-items: center;
         }
         header.scrolled .icons-peek { opacity: 1; transform: translateX(0); pointer-events: auto; }
+        .icons-peek i { font-size: 1rem; } /* Larger than the 18px logo icon */
 
-        /* --- SEARCH DRAWER (Drawer Logic preserved) --- */
+        /* --- SEARCH DRAWER --- */
         .search-drawer {
             position: absolute; top: 100%; left: 0; width: 100%;
             background: white; border-top: 1px solid #eee;
@@ -119,19 +143,19 @@
             text-align: center; text-transform: uppercase;
         }
 
-        /* --- 340 DPI PORTRAIT CORRECTIONS --- */
+        /* --- 340 DPI RESPONSIVENESS --- */
         @media (max-width: 380px) {
-            .branding-row { height: 80px; padding: 10px 4%; }
-            .brand-center img { height: 18px; } /* Shrinks brand slightly for date safety */
+            :root {
+                --brand-h-mobile: 18px; /* Scaled for 340dpi */
+                --sub-h-mobile: 17px;
+            }
+            .branding-row { height: 80px; }
             .nav-links { gap: 15px; }
             .nav-links a { font-size: 0.75rem; }
             header.scrolled { transform: translateY(-80px); }
             header.scrolled .nav-links a { font-size: calc(0.75rem - 2px); }
-            .icons-right { gap: 15px; }
         }
 
-        /* Page Content */
-        .page-content { padding: 40px 5%; min-height: 1500px; }
         .video-box { width: 100%; height: 250px; background: #000; overflow: hidden; border-radius: 4px; margin: 40px 0; }
         .video-box video { width: 100%; height: 100%; object-fit: cover; }
     </style>
@@ -154,7 +178,7 @@
 
         <nav class="nav-row">
             <div class="logo-peek">
-                <img src="logo/logo.jpg" alt="Logo Icon">
+                <img src="logo/logo.jpg" alt="L">
             </div>
 
             <ul class="nav-links">
@@ -170,55 +194,43 @@
         </nav>
 
         <div class="search-drawer" id="search-drawer">
-            <input type="text" class="search-input" id="search-field" placeholder="Search our pieces..." oninput="runSearch()">
+            <input type="text" class="search-input" id="search-field" placeholder="SEARCH COLLECTION...">
             <div id="results-list" style="max-height:250px; overflow-y:auto; margin-top:15px;"></div>
         </div>
     </header>
 
-    <main class="page-content">
-        <h2 style="font-family:'Playfair Display'; font-weight:400; text-align:center;">The Collection</h2>
+    <main style="padding: 20px 5%; min-height: 2000px;">
         <div class="video-box">
             <video autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
         </div>
-        <p style="text-align:center; color:#999;">Scroll to see the Logo-switch morph...</p>
+        <p style="text-align:center; color:#ccc;">Scroll to experience the hierarchical morph...</p>
     </main>
 
     <script>
-        // Update Date
         function setDate() {
             const options = { weekday: 'short', month: 'short', day: 'numeric' };
             document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', options);
         }
         setInterval(setDate, 1000); setDate();
 
-        // Search Drawer Toggle
         function toggleSearch() {
-            const drawer = document.getElementById('search-drawer');
-            drawer.classList.toggle('open');
-            if(drawer.classList.contains('open')) document.getElementById('search-field').focus();
+            const dr = document.getElementById('search-drawer');
+            dr.classList.toggle('open');
+            if(dr.classList.contains('open')) document.getElementById('search-field').focus();
         }
 
-        // Morph Logic
         window.addEventListener('scroll', () => {
-            const header = document.getElementById('main-header');
-            if (window.scrollY > 80) header.classList.add('scrolled');
-            else header.classList.remove('scrolled');
+            const h = document.getElementById('main-header');
+            if (window.scrollY > 80) h.classList.add('scrolled');
+            else h.classList.remove('scrolled');
         });
 
-        // Search Engine Simulation
         function runSearch() {
             const val = document.getElementById('search-field').value.toLowerCase();
             const list = document.getElementById('results-list');
             list.innerHTML = '';
             if(!val) return;
-
-            // Mock Data - this would be your Google Sheet fetch
-            const products = ["Gold Watch", "Diamond Ring", "Pearl Necklace", "Gold Bracelet"];
-            products.filter(p => p.toLowerCase().includes(val)).forEach(p => {
-                list.innerHTML += `<div style="padding:10px; border-bottom:1px solid #f9f9f9; display:flex; justify-content:space-between;">
-                    <span>${p}</span><i class="fas fa-chevron-right" style="font-size:0.7rem; color:var(--accent-gold);"></i>
-                </div>`;
-            });
+            // Simulated search logic...
         }
     </script>
 </body>
