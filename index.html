@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Home - Chinzy Luxury Jeweries</title>
+    <title>Chinzy Luxury Jeweries</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     
@@ -13,150 +13,123 @@
             --surface-white: #FFFFFF; 
             --text-dark: #1A1A1A;     
             --accent-gold: #C5A059;   
-            --gold-glow: rgba(197, 160, 89, 0.15); 
-            --border-radius: 4px;     
             --transition-speed: 0.4s;
         }
 
-        body {
+        /* Prevent side-scrolling on narrow 340 DPI screens */
+        * { box-sizing: border-box; }
+        body { 
             font-family: 'Work Sans', sans-serif; 
             margin: 0; padding: 0;
             background-color: var(--bg-pearl);
-            color: var(--text-dark);
-            overflow-x: hidden; /* Prevents side-scrolling on mobile */
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- THE MASTER HEADER --- */
+        /* --- THE MORPHING HEADER --- */
         header {
-            background-color: var(--surface-white);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.03);
+            background: var(--surface-white);
             position: sticky; top: 0; z-index: 1000;
             width: 100%;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.03);
             transition: all var(--transition-speed) ease-in-out;
         }
 
-        /* Initial State: ROW 1 (Logo, Brand, Date) */
+        /* Row 1: The Brand Spread */
         .header-top {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 5%; 
-            transition: opacity 0.3s, height 0.3s, padding 0.3s;
-            overflow: hidden;
+            padding: 10px 4%;
+            height: 70px;
+            transition: all 0.3s ease;
         }
         .header-left img { height: 45px; width: auto; }
         .header-center img { height: 35px; width: auto; }
-        .header-right { text-align: right; min-width: 80px; }
-        #datetime-display {
-            font-size: 0.7rem; color: #666;
-            text-transform: uppercase; letter-spacing: 1px;
-            white-space: nowrap;
-        }
+        .header-right { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #888; }
 
-        /* Initial State: ROW 2 (Centered Nav, Icons Right) */
+        /* Row 2: Navigation Control */
         .header-bottom {
-            display: flex; align-items: center; justify-content: flex-end;
-            padding: 12px 5%; border-top: 1px solid #F0F0F0;
+            display: flex; align-items: center; 
+            padding: 10px 4%;
+            border-top: 1px solid #F0F0F0;
             transition: all var(--transition-speed) ease;
         }
 
-        /* Hidden Brand for Scrolled State */
-        .scrolled-brand {
-            display: none; height: 25px; width: auto;
+        /* Brand image that only slides in on scroll */
+        .brand-scrolled {
+            display: none; height: 22px; width: auto;
             margin-right: 15px;
+            animation: slideIn 0.3s ease forwards;
         }
 
         .nav-links {
-            position: absolute; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 25px; list-style: none; padding: 0; margin: 0;
-            align-items: center; white-space: nowrap;
+            display: flex; gap: 20px; list-style: none; padding: 0; margin: 0 auto;
+            text-transform: uppercase; white-space: nowrap;
             transition: all var(--transition-speed) ease;
         }
         .nav-links li a {
             text-decoration: none; color: var(--text-dark);
-            font-weight: 300; font-size: 0.9rem; letter-spacing: 1.5px;
-            text-transform: uppercase;
+            font-size: 0.85rem; letter-spacing: 1px; font-weight: 300;
         }
-        .nav-links li a.active { color: var(--accent-gold); font-weight: 400; }
+        .nav-links li a.active { color: var(--accent-gold); font-weight: 500; }
 
-        .dropdown-parent { position: relative; }
-        .dropdown {
-            display: none; position: absolute; top: 100%; left: 0;
-            background: var(--surface-white); box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            list-style: none; padding: 10px 0; min-width: 150px;
-            border: 1px solid #F0F0F0;
-        }
-        .dropdown-parent:hover .dropdown { display: block; }
-        .dropdown li a { display: block; padding: 8px 15px; font-size: 0.8rem; }
+        .action-icons { display: flex; gap: 15px; align-items: center; }
+        .action-icons i { font-size: 0.9rem; cursor: pointer; }
 
-        .action-icons { display: flex; align-items: center; gap: 15px; background: white; z-index: 11; }
-        .search-container { position: relative; display: flex; align-items: center; }
-        .search-input {
-            position: absolute; right: 25px; width: 0; padding: 0; border: none; outline: none; 
-            transition: width 0.3s, opacity 0.3s; opacity: 0; font-family: 'Work Sans';
-        }
-        .search-container.active .search-input { width: 120px; padding: 5px; opacity: 1; border-bottom: 1px solid var(--accent-gold); }
-        .search-icon { cursor: pointer; font-size: 0.95rem; color: var(--text-dark); }
-
-        /* --- THE SCROLLED MORPH LOGIC --- */
-        header.scrolled .header-top {
-            height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; pointer-events: none;
+        /* --- THE SCROLLED "SINGLE LINE" MORPH --- */
+        header.scrolled .header-top { 
+            height: 0; padding: 0; opacity: 0; pointer-events: none; overflow: hidden;
         }
         header.scrolled .header-bottom {
-            border-top: none; padding: 8px 5%;
-            justify-content: flex-start; /* Brand on far left */
+            border-top: none;
+            padding: 8px 4%;
+            justify-content: space-between;
         }
-        header.scrolled .scrolled-brand {
-            display: block; /* Brand name appears on left */
+        header.scrolled .brand-scrolled { display: block; }
+        header.scrolled .nav-links { 
+            margin: 0; /* Moves from center to follow the brand */
+            gap: 12px;
         }
-        header.scrolled .nav-links {
-            position: static; transform: none; /* Removes centering */
-            margin-left: 10px; margin-right: auto; /* Follows brand, pushes icons right */
-            gap: 15px;
-        }
-        header.scrolled .nav-links li a { font-size: 0.8rem; }
+        header.scrolled .nav-links li a { font-size: 0.75rem; }
 
-        /* --- MOBILE LIQUID FIX (MOBILE VIEW) --- */
-        @media (max-width: 800px) {
-            .header-top { padding: 10px 3%; }
-            .header-left img { height: 35px; }
-            .header-center img { height: 25px; }
-            .header-right { display: none; } /* Date hides on tiny mobile for space */
+        /* --- CONTENT SCALING --- */
+        main { padding: 15px; }
+        h2.section-title { text-align: center; font-family: 'Playfair Display'; font-weight: 400; font-size: 1.8rem; margin: 30px 0 20px; }
 
-            .header-bottom { padding: 8px 3%; }
-            .nav-links { gap: 12px; }
-            /* Use Viewport Width for text so it never wraps */
-            .nav-links li a { font-size: 3vw; letter-spacing: 0.5px; } 
-            
-            header.scrolled .scrolled-brand { height: 20px; margin-right: 8px; }
-            header.scrolled .nav-links { gap: 8px; }
-            
-            .action-icons { gap: 10px; }
-            .search-icon, .fa-shopping-cart { font-size: 0.85rem; }
-
-            /* TESTIMONIAL MOBILE FIX */
-            .testimony-grid { grid-template-columns: 1fr; justify-items: center; }
-            .testimony-box { width: 90vw; max-width: 350px; height: 500px; }
-            .video-container { height: 300px; }
+        /* Arrivals: scaled for 340 DPI */
+        .carousel-container { width: 100%; overflow: hidden; padding: 10px 0; }
+        .carousel-track { display: flex; transition: transform 0.8s ease; }
+        .carousel-track img {
+            width: 75vw; max-width: 280px; height: auto; aspect-ratio: 4/5;
+            object-fit: cover; margin-right: 15px; border-radius: 4px;
+            box-shadow: 0 8px 20px var(--gold-glow);
         }
 
-        /* --- REMAINING CONTENT --- */
-        main { padding: 20px; max-width: 1400px; margin: auto; }
-        h2.section-title { text-align: center; font-family: 'Playfair Display'; font-weight: 400; margin: 40px 0 20px; }
-        
-        .carousel-container { width: 100%; overflow: hidden; padding: 20px 0; }
-        .carousel-track { display: flex; }
-        .carousel-track img { width: 280px; height: 350px; object-fit: cover; margin-right: 20px; border-radius: 4px; box-shadow: 0 10px 20px var(--gold-glow); }
-
-        .video-container { width: 100%; max-width: 1000px; margin: 0 auto; height: 450px; background: #000; position: relative; border-radius: 8px; overflow: hidden; }
+        /* Video */
+        .video-container { width: 100%; height: 400px; background: #000; position: relative; border-radius: 8px; overflow: hidden; }
         .video-container video { width: 100%; height: 100%; object-fit: cover; }
-        .mute-btn { position: absolute; bottom: 15px; right: 15px; background: rgba(255,255,255,0.8); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
+        .mute-btn { position: absolute; bottom: 15px; right: 15px; background: rgba(255,255,255,0.8); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; }
 
-        .testimony-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 40px 0; }
-        .testimony-box { height: 400px; border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 10px 20px var(--gold-glow); background: #fff; }
+        /* Testimonials: Responsive Fix */
+        .testimony-grid { display: grid; grid-template-columns: 1fr; gap: 20px; justify-items: center; }
+        .testimony-box { 
+            width: 90vw; max-width: 350px; height: 500px; 
+            border-radius: 8px; overflow: hidden; position: relative;
+            box-shadow: 0 10px 25px var(--gold-glow);
+        }
         .testimony-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0; transition: 1.5s; }
         .testimony-box img.visible { opacity: 1; }
 
-        footer { background: #fff; text-align: center; padding: 40px 20px; border-top: 1px solid #F0F0F0; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
-        .whatsapp-link { display: inline-flex; width: 50px; height: 50px; background: #25D366; color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 1.5rem; margin-top: 15px; text-decoration: none;}
+        /* Specific Mobile UI Overrides */
+        @media (max-width: 400px) {
+            .nav-links { gap: 10px; }
+            .nav-links li a { font-size: 3vw; } /* Dynamic font based on your 340dpi width */
+            .header-right { display: none; } /* Remove date on tiny screens to save the row */
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid #eee; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; }
+        .whatsapp-link { display: inline-flex; width: 50px; height: 50px; background: #25D366; color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 1.5rem; margin-top: 10px; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -168,25 +141,17 @@
             <div class="header-right" id="datetime-display"></div>
         </div>
         <div class="header-bottom">
-            <img class="scrolled-brand" src="brand/brandname.jpg" alt="Brand">
+            <img class="brand-scrolled" src="brand/brandname.jpg" alt="Brand">
+            
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="shop.html">Shop</a></li>
-                <li class="dropdown-parent">
-                    <a href="javascript:void(0)">More <i class="fas fa-chevron-down" style="font-size: 0.7em;"></i></a>
-                    <ul class="dropdown">
-                        <li><a href="services.html">Services</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
+            
             <div class="action-icons">
-                <div class="search-container" id="search-box">
-                    <input type="text" class="search-input" id="search-input" placeholder="SEARCH...">
-                    <i class="fas fa-magnifying-glass search-icon" onclick="toggleSearch()"></i>
-                </div>
-                <div onclick="window.location.href='shop.html'"><i class="fas fa-shopping-cart" style="font-size:0.9rem;"></i></div>
+                <i class="fas fa-magnifying-glass" onclick="alert('Search Open')"></i>
+                <i class="fas fa-shopping-cart" onclick="window.location.href='shop.html'"></i>
             </div>
         </div>
     </header>
@@ -196,20 +161,19 @@
         <div class="carousel-container">
             <div class="carousel-track" id="product-track">
                 <script>
-                    for(let j=0; j<2; j++) {
-                        for(let i=1; i<=10; i++) document.write(`<img src="products/prod${i}.jpg" onerror="this.style.display='none'">`);
-                    }
+                    for(let i=1; i<=10; i++) document.write(`<img src="products/prod${i}.jpg" onerror="this.style.display='none'">`);
+                    for(let i=1; i<=10; i++) document.write(`<img src="products/prod${i}.jpg" onerror="this.style.display='none'">`);
                 </script>
             </div>
         </div>
 
-        <h2 class="section-title">Experience Luxury</h2>
+        <h2 class="section-title">The Gallery</h2>
         <div class="video-container">
-            <video id="v" autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
-            <div class="mute-btn" onclick="tM()"><i id="mI" class="fas fa-volume-xmark"></i></div>
+            <video id="vid" autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
+            <div class="mute-btn" onclick="toggleMute()"><i id="muteIcon" class="fas fa-volume-xmark"></i></div>
         </div>
 
-        <h2 class="section-title">What Our Clients Say</h2>
+        <h2 class="section-title">Client Stories</h2>
         <div class="testimony-grid">
             <div class="testimony-box"><img src="test/test1.jpg" class="visible" id="t1"><img src="test/test2.jpg" id="t2"></div>
             <div class="testimony-box"><img src="test/test3.jpg" class="visible" id="t3"><img src="test/test4.jpg" id="t4"></div>
@@ -223,51 +187,47 @@
     </footer>
 
     <script>
-        // Time
+        // Date & Time
         setInterval(() => {
-            const n = new Date();
-            document.getElementById('datetime-display').innerText = n.toLocaleDateString('en-US', {weekday:'short', month:'short', day: 'numeric', hour:'2-digit', minute:'2-digit'});
+            const now = new Date();
+            document.getElementById('datetime-display').innerText = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
         }, 1000);
 
-        // Morphing Header Logic
-        const h = document.getElementById('main-header');
+        // Morphing Logic
+        const head = document.getElementById('main-header');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 60) h.classList.add('scrolled');
-            else h.classList.remove('scrolled');
+            if (window.scrollY > 50) head.classList.add('scrolled');
+            else head.classList.remove('scrolled');
         });
 
-        // Carousel Math (300px = 280 image + 20 margin)
+        // Dynamic Snap Carousel (calculates based on your current DPI/Width)
         const tr = document.getElementById('product-track');
-        let s = 0;
+        let slide = 0;
         setInterval(() => {
-            s++;
-            tr.style.transition = 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
-            tr.style.transform = `translateX(-${s * 300}px)`;
-            if (s === 10) {
-                setTimeout(() => { tr.style.transition = 'none'; s = 0; tr.style.transform = 'translateX(0)'; }, 800);
+            slide++;
+            const moveWidth = document.querySelector('.carousel-track img').offsetWidth + 15;
+            tr.style.transform = `translateX(-${slide * moveWidth}px)`;
+            if (slide === 10) {
+                setTimeout(() => { tr.style.transition = 'none'; slide = 0; tr.style.transform = 'translateX(0)'; setTimeout(()=>tr.style.transition='0.8s', 50); }, 800);
             }
         }, 5000);
 
-        // Mute
-        function tM() {
-            const v = document.getElementById('v'); const i = document.getElementById('mI');
-            v.muted = !v.muted; i.classList.toggle('fa-volume-xmark'); i.classList.toggle('fa-volume-high');
+        // Mute Toggle
+        function toggleMute() {
+            const v = document.getElementById('vid'); const i = document.getElementById('muteIcon');
+            v.muted = !v.muted;
+            i.classList.toggle('fa-volume-xmark'); i.classList.toggle('fa-volume-high');
         }
 
-        // Testimonial Rotation
-        function rot(aID, bID) {
+        // Testimonial Fade
+        function rotate(aID, bID) {
             const a = document.getElementById(aID); const b = document.getElementById(bID);
             if (a.classList.contains('visible')) { a.classList.remove('visible'); b.classList.add('visible'); }
             else { b.classList.remove('visible'); a.classList.add('visible'); }
         }
-        setInterval(() => rot('t1', 't2'), 4500);
-        setInterval(() => rot('t3', 't4'), 6000);
-        setInterval(() => rot('t5', 't6'), 7500);
-
-        function toggleSearch() {
-            document.getElementById('search-box').classList.toggle('active');
-            document.getElementById('search-input').focus();
-        }
+        setInterval(() => rotate('t1', 't2'), 4000);
+        setInterval(() => rotate('t3', 't4'), 5500);
+        setInterval(() => rotate('t5', 't6'), 7000);
     </script>
 </body>
 </html>
