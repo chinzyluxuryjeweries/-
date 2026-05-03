@@ -14,6 +14,7 @@
             --bg-pearl: #FCFCFC;     
             --surface-white: #FFFFFF; 
             --text-dark: #1A1A1A;     
+            --text-muted: #666666;
             --accent-gold: #C5A059;   
             --gold-glow: rgba(197, 160, 89, 0.15); 
             --border-radius: 4px;     
@@ -22,60 +23,110 @@
 
         body { font-family: 'Work Sans', sans-serif; margin: 0; background-color: var(--bg-pearl); color: var(--text-dark); overflow-x: hidden; }
 
-        /* --- SHARED HEADER STYLES --- */
+        /* --- HEADER STYLES --- */
         header { background-color: var(--surface-white); box-shadow: 0 2px 20px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 1000; transition: all var(--transition-speed) ease; }
+        
         .header-top { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; transition: all var(--transition-speed) ease; }
         .header-left img { height: 55px; width: auto; transition: height var(--transition-speed) ease; }
         .header-center { text-align: center; flex-grow: 1; }
         .header-center img { height: 45px; width: auto; transition: height var(--transition-speed) ease; }
         .header-right { text-align: right; min-width: 150px; }
-        #datetime-display { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 1.5px; }
-
-        .header-bottom { display: flex; justify-content: flex-end; align-items: center; padding: 15px 40px; border-top: 1px solid #F0F0F0; position: relative; text-transform: uppercase; }
-        .nav-links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 35px; list-style: none; padding: 0; margin: 0; align-items: center; }
-        .nav-links li a { text-decoration: none; color: var(--text-dark); font-weight: 300; font-size: 0.95rem; letter-spacing: 2px; transition: color 0.3s; }
-        .nav-links li a:hover, .nav-links li a.active { color: var(--accent-gold); }
         
-        /* Dropdown */
-        .dropdown-parent { position: relative; }
-        .dropdown { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: var(--surface-white); box-shadow: 0 10px 25px rgba(0,0,0,0.05); list-style: none; padding: 15px 0; border: 1px solid #F0F0F0; min-width: 180px; }
-        .dropdown-parent:hover .dropdown { display: block; }
-        .dropdown li a { display: block; padding: 10px 20px; font-size: 0.85rem; }
+        #datetime-display {
+            font-size: 0.8rem; color: var(--text-muted); display: block;
+            font-weight: 400; text-transform: uppercase; letter-spacing: 1.5px;
+            transition: font-size var(--transition-speed) ease;
+        }
 
-        .action-icons { display: flex; align-items: center; gap: 25px; }
-        .cart-wrapper { cursor: pointer; font-weight: 300; letter-spacing: 1px; transition: color 0.3s; }
+        .header-bottom {
+            display: flex; justify-content: flex-end; align-items: center; 
+            padding: 15px 40px; border-top: 1px solid #F0F0F0; position: relative;
+            transition: all var(--transition-speed) ease; text-transform: uppercase;
+        }
+
+        .nav-links {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 35px; list-style: none; padding: 0; margin: 0;
+            transition: all var(--transition-speed) ease; align-items: center;
+        }
+
+        .nav-links li a {
+            text-decoration: none; color: var(--text-dark);
+            font-weight: 300; font-size: 0.95rem; letter-spacing: 2px; 
+            position: relative; padding-bottom: 5px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .nav-links li a:hover, .nav-links li a.active { color: var(--accent-gold); }
+        .nav-links li a.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 1px; background-color: var(--accent-gold);
+        }
+
+        /* Dropdown Styles */
+        .dropdown-parent { position: relative; }
+        .dropdown {
+            display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            background: var(--surface-white); box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            list-style: none; padding: 15px 0; margin: 0; min-width: 180px; z-index: 100;
+            border: 1px solid #F0F0F0; border-radius: 4px;
+        }
+        .dropdown-parent:hover .dropdown { display: block; }
+        .dropdown li a { display: block; padding: 10px 20px; font-size: 0.85rem; letter-spacing: 1.5px; }
+
+        .action-icons { display: flex; align-items: center; gap: 25px; position: relative; }
+
+        /* --- SEARCH OVERLAY --- */
+        .search-container { position: relative; display: flex; align-items: center; justify-content: flex-end; }
+        .search-input {
+            position: absolute; right: 0; width: 0; padding: 0;
+            border: none; outline: none; background: var(--surface-white);
+            transition: width 0.4s ease, padding 0.4s ease, opacity 0.4s ease;
+            font-family: 'Work Sans', sans-serif; font-weight: 300;
+            text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
+            z-index: 10; opacity: 0; pointer-events: none; 
+        }
+        .search-container.active .search-input {
+            width: 250px; padding: 8px 35px 8px 10px; border-bottom: 1px solid var(--accent-gold);
+            opacity: 1; pointer-events: auto; box-shadow: -15px 0 15px var(--surface-white); 
+        }
+        .search-icon { cursor: pointer; font-size: 1.1rem; color: var(--text-dark); transition: color 0.3s; position: relative; z-index: 11; }
+        .search-icon:hover { color: var(--accent-gold); }
+
+        .cart-wrapper { display: flex; align-items: center; gap: 5px; font-weight: 300; color: var(--text-dark); cursor: pointer; letter-spacing: 1px; }
         .cart-wrapper:hover { color: var(--accent-gold); }
+
+        /* --- SCROLLED STATE --- */
+        header.scrolled .header-top { padding: 5px 40px; }
+        header.scrolled .header-center img { height: 28px; }
+        header.scrolled .header-left img { height: 35px; }
+        header.scrolled #datetime-display { font-size: 0.7rem; }
+        header.scrolled .header-bottom { padding: 5px 40px; }
+        header.scrolled .nav-links li a { font-size: 0.8rem; letter-spacing: 1.5px; }
+        .scrolled-brand { display: none; height: 35px; position: absolute; left: 40px; }
+        header.scrolled .scrolled-brand { display: block; }
 
         /* --- SHOP CONTENT --- */
         .shop-container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
         .page-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 400; margin-bottom: 40px; }
         
-        .category-filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; flex-wrap: wrap; }
+        .category-filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; }
         .filter-btn { background: none; border: 1px solid #EAEAEA; padding: 10px 25px; cursor: pointer; font-family: 'Work Sans'; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 300; transition: 0.3s; }
         .filter-btn.active { background: var(--accent-gold); color: white; border-color: var(--accent-gold); }
 
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; }
         .product-card { background: var(--surface-white); padding: 15px; text-align: center; transition: 0.4s; border: 1px solid transparent; }
-        .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px var(--gold-glow); border-color: #F0F0F0; }
-        .product-card img { width: 100%; height: 350px; object-fit: cover; margin-bottom: 20px; transition: 0.4s; }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px var(--gold-glow); }
+        .product-card img { width: 100%; height: 350px; object-fit: cover; margin-bottom: 20px; }
         .product-card h3 { font-family: 'Playfair Display'; font-weight: 400; font-size: 1.4rem; margin: 10px 0; }
-        .price { color: var(--accent-gold); font-size: 1.2rem; font-weight: 400; margin-bottom: 20px; }
+        .price { color: var(--accent-gold); font-size: 1.2rem; margin-bottom: 20px; }
         
         .buy-btn { background: var(--text-dark); color: white; border: none; padding: 15px; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; transition: 0.3s; }
         .buy-btn:hover:not(:disabled) { background: var(--accent-gold); }
-        .buy-btn:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* --- MODAL --- */
+        /* Modal */
         #cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 40px; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; position: relative; }
-        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; font-size: 0.9rem; }
-        .modal-content input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; box-sizing: border-box; font-family: 'Work Sans'; }
-
-        /* Scrolled Header */
-        header.scrolled .header-top { display: none; }
-        header.scrolled .header-bottom { padding: 10px 40px; }
-        .scrolled-brand { display: none; height: 30px; position: absolute; left: 40px; }
-        header.scrolled .scrolled-brand { display: block; }
+        .modal-content { background: white; padding: 40px; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; }
     </style>
 </head>
 <body>
@@ -96,12 +147,17 @@
                     <ul class="dropdown">
                         <li><a href="services.html">Services</a></li>
                         <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
                     </ul>
                 </li>
             </ul>
             <div class="action-icons">
+                <div class="search-container" id="search-container">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search products..." onkeyup="searchProducts()">
+                    <i class="fas fa-search search-icon" onclick="toggleSearch()"></i>
+                </div>
                 <div class="cart-wrapper" onclick="openCart()">
-                    <i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)
+                    <i class="fas fa-shopping-cart cart-icon"></i> (<span id="cart-count">0</span>)
                 </div>
             </div>
         </div>
@@ -109,7 +165,7 @@
 
     <div class="shop-container">
         <h1 class="page-title">Our Collection</h1>
-        <div class="category-filters" id="filters">
+        <div class="category-filters">
             <button class="filter-btn active" onclick="filterBy('All')">All</button>
             <button class="filter-btn" onclick="filterBy('Necklaces')">Necklaces</button>
             <button class="filter-btn" onclick="filterBy('Bracelets')">Bracelets</button>
@@ -118,17 +174,18 @@
         <div class="product-grid" id="product-display"></div>
     </div>
 
+    <!-- Cart Modal -->
     <div id="cart-modal">
         <div class="modal-content">
             <h2 style="font-family: 'Playfair Display'; font-weight: 400;">Your Selection</h2>
             <div id="cart-items"></div>
             <h3 id="cart-total" style="text-align: right; color: var(--accent-gold);"></h3>
             <div id="checkout-form" style="display:none;">
-                <input type="text" id="cust-name" placeholder="Full Name" required>
-                <input type="email" id="cust-email" placeholder="Email Address" required>
-                <button class="buy-btn" onclick="checkout()">Submit & Chat on WhatsApp</button>
+                <input type="text" id="cust-name" placeholder="Full Name" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd;">
+                <input type="email" id="cust-email" placeholder="Email Address" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd;">
+                <button class="buy-btn" onclick="checkout()">WhatsApp Order</button>
             </div>
-            <button onclick="closeCart()" style="background:none; border:none; color:#999; cursor:pointer; margin-top:20px; text-transform:uppercase; font-size:0.7rem; letter-spacing:1px;">Close</button>
+            <button onclick="closeCart()" style="background:none; border:none; color:#999; cursor:pointer; margin-top:20px; text-transform:uppercase;">Close</button>
         </div>
     </div>
 
@@ -139,36 +196,30 @@
 
         let products = [];
         let cart = [];
+        let currentCategory = 'All';
 
         async function init() {
-            try {
-                const resp = await fetch(SHEET_URL);
-                const csv = await resp.text();
-                const rows = csv.split('\n').slice(1);
-                
-                products = rows.map(r => {
-                    const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    if(c.length < 7) return null;
-                    return { 
-                        id: c[0].trim(), 
-                        name: c[1].replace(/^"|"$/g, '').trim(), 
-                        price: parseFloat(c[3]), 
-                        qty: parseInt(c[4]), 
-                        category: c[6].replace(/^"|"$/g, '').trim() 
-                    };
-                }).filter(p => p !== null);
-
-                render('All');
-            } catch (e) { console.error("Error loading products", e); }
+            const resp = await fetch(SHEET_URL);
+            const csv = await resp.text();
+            const rows = csv.split('\n').slice(1);
+            products = rows.map(r => {
+                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                if(c.length < 7) return null;
+                return { id: c[0].trim(), name: c[1].replace(/^"|"$/g, '').trim(), price: parseFloat(c[3]), qty: parseInt(c[4]), category: c[6].replace(/^"|"$/g, '').trim() };
+            }).filter(p => p !== null);
+            render('All');
         }
 
-        function render(cat) {
+        function render(cat, searchTerm = "") {
             const display = document.getElementById('product-display');
             display.innerHTML = '';
-            const filtered = cat === 'All' ? products : products.filter(p => p.category.toLowerCase() === cat.toLowerCase());
+            let filtered = cat === 'All' ? products : products.filter(p => p.category.toLowerCase() === cat.toLowerCase());
+            
+            if(searchTerm) {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+            }
 
             filtered.forEach(p => {
-                // CORRECTED PATH: images/p001.jpg
                 const imgPath = `images/${p.id.toLowerCase()}.jpg`;
                 display.innerHTML += `
                     <div class="product-card">
@@ -178,38 +229,45 @@
                         <button class="buy-btn" ${p.qty <= 0 ? 'disabled' : ''} onclick="addToCart('${p.id}')">
                             ${p.qty <= 0 ? 'Out of Stock' : 'Add to Cart'}
                         </button>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
         function filterBy(cat) {
+            currentCategory = cat;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
             render(cat);
         }
 
+        function searchProducts() {
+            const term = document.getElementById('search-input').value;
+            render(currentCategory, term);
+        }
+
+        function toggleSearch() {
+            const container = document.getElementById('search-container');
+            const input = document.getElementById('search-input');
+            container.classList.toggle('active');
+            if(container.classList.contains('active')) input.focus();
+        }
+
         function addToCart(id) {
-            const p = products.find(item => item.id === id);
+            const p = products.find(i => i.id === id);
             cart.push(p);
             document.getElementById('cart-count').innerText = cart.length;
-            alert(p.name + " added to your cart!");
+            alert(p.name + " added!");
         }
 
         function openCart() {
+            if(cart.length === 0) return alert("Cart is empty!");
             const list = document.getElementById('cart-items');
             const total = document.getElementById('cart-total');
-            const modal = document.getElementById('cart-modal');
-            if(cart.length === 0) { alert("Your cart is empty!"); return; }
-            
             let sum = 0;
-            list.innerHTML = cart.map(i => {
-                sum += i.price;
-                return `<div class="cart-item"><span>${i.name}</span><span>₦${i.price.toLocaleString()}</span></div>`;
-            }).join('');
+            list.innerHTML = cart.map(i => { sum += i.price; return `<div class="cart-item"><span>${i.name}</span><span>₦${i.price.toLocaleString()}</span></div>`; }).join('');
             total.innerText = "Total: ₦" + sum.toLocaleString();
             document.getElementById('checkout-form').style.display = 'block';
-            modal.style.display = 'flex';
+            document.getElementById('cart-modal').style.display = 'flex';
         }
 
         function closeCart() { document.getElementById('cart-modal').style.display = 'none'; }
@@ -217,29 +275,23 @@
         async function checkout() {
             const name = document.getElementById('cust-name').value;
             const email = document.getElementById('cust-email').value;
-            if(!name || !email) return alert("Please provide your name and email.");
-
+            if(!name || !email) return alert("Details required");
             let order = cart.map(i => `- ${i.name}: ₦${i.price.toLocaleString()}`).join('\n');
-            let totalVal = cart.reduce((a, b) => a + b.price, 0);
-            let summary = `Order Summary:\n${order}\n\nTotal: ₦${totalVal.toLocaleString()}`;
-            let whatsappMsg = `Hi, I'm ${name}.\nI'm interested in purchasing:\n\n${summary}\n\nPlease reach out to me at ${email}.`;
-
-            try {
-                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ name, email, order: summary }) });
-                window.location.href = `https://wa.me/${PHONE}?text=${encodeURIComponent(whatsappMsg)}`;
-            } catch (e) { alert("Submission error, but you can still chat on WhatsApp!"); }
+            let total = cart.reduce((a, b) => a + b.price, 0);
+            let msg = `Hi, I'm ${name}. I want to buy:\n${order}\nTotal: ₦${total.toLocaleString()}`;
+            window.location.href = `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
         }
 
-        // Header and Time Logic
         function updateTime() {
             const now = new Date();
-            document.getElementById('datetime-display').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' | ' + now.toLocaleDateString();
+            const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('datetime-display').innerText = now.toLocaleDateString('en-US', options);
         }
         setInterval(updateTime, 1000); updateTime();
 
         window.addEventListener('scroll', () => {
             const head = document.getElementById('main-header');
-            if (window.scrollY > 50) head.classList.add('scrolled');
+            if (window.scrollY > 40) head.classList.add('scrolled');
             else head.classList.remove('scrolled');
         });
 
