@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Chinzy Luxury Jeweries</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Work+Sans:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-pearl: #FCFCFC;     
+            --surface-white: #FFFFFF; 
+            --text-dark: #1A1A1A;     
+            --accent-gold: #C5A059;   
+            --transition-speed: 0.4s;
+        }
+
+        body { font-family: 'Work Sans', sans-serif; margin: 0; background-color: var(--bg-pearl); color: var(--text-dark); }
+
+        /* --- HEADER (Consistent with Home/Shop) --- */
+        header { background-color: var(--surface-white); box-shadow: 0 2px 20px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 1000; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; }
+        .header-center img { height: 40px; }
+        #datetime-display { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .header-bottom { display: flex; justify-content: flex-end; align-items: center; padding: 15px 40px; border-top: 1px solid #F0F0F0; position: relative; text-transform: uppercase; }
+        .nav-links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 35px; list-style: none; padding: 0; margin: 0; }
+        .nav-links li a { text-decoration: none; color: var(--text-dark); font-weight: 300; font-size: 0.9rem; letter-spacing: 2px; }
+        .nav-links li a.active { color: var(--accent-gold); }
+
+        /* --- ABOUT CONTENT --- */
+        .about-section { display: flex; align-items: center; min-height: 80vh; max-width: 1200px; margin: 50px auto; gap: 60px; padding: 0 20px; }
+        
+        .about-image { flex: 1; position: relative; }
+        .about-image img { width: 100%; border-radius: 4px; box-shadow: 20px 20px 0px var(--accent-gold); }
+
+        .about-text { flex: 1; }
+        .about-text h1 { font-family: 'Playfair Display'; font-size: 3.5rem; font-weight: 400; margin-bottom: 20px; }
+        .about-text p { font-size: 1.1rem; line-height: 1.8; font-weight: 300; color: #444; margin-bottom: 25px; }
+        .gold-divider { width: 50px; height: 2px; background: var(--accent-gold); margin-bottom: 30px; }
+
+        @media (max-width: 900px) {
+            .about-section { flex-direction: column; text-align: center; }
+            .about-text h1 { font-size: 2.5rem; }
+            .gold-divider { margin: 0 auto 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-top">
+            <div class="header-left"><img src="logo/logo.jpg" alt="Logo" style="height:40px;"></div>
+            <div class="header-center"><img src="brand/brandname.jpg" alt="Brand"></div>
+            <div class="header-right"><span id="datetime-display"></span></div>
+        </div>
+        <div class="header-bottom">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="about.html" class="active">About Us</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="about-section">
+        <div class="about-image">
+            <img src="about/owner.jpg" alt="Chinzy Luxury" onerror="this.src='https://via.placeholder.com/600x800?text=Brand+Image'">
+        </div>
+        <div class="about-text">
+            <div class="gold-divider"></div>
+            <h1>The Essence of Luxury</h1>
+            <p>Welcome to Chinzy Luxury Jeweries, where elegance meets timelessness. Our journey began with a simple passion for pieces that don't just adorn the body, but speak to the soul.</p>
+            <p>Every piece in our collection is curated with an eye for detail and a heart for quality. From our signature perfumed jewelry to our precision-crafted watches, we believe luxury should be an experience, not just a purchase.</p>
+            <p>Thank you for letting us be a part of your story.</p>
+        </div>
+    </main>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('datetime-display').innerText = now.toLocaleDateString('en-US', options);
+        }
+        setInterval(updateTime, 1000); updateTime();
+    </script>
+</body>
+</html>
