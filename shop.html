@@ -13,6 +13,7 @@
             --surface-white: #FFFFFF; 
             --text-dark: #1A1A1A;     
             --accent-gold: #C5A059;   
+            --success-green: #2ecc71;
             --transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             --brand-sz: 22px; 
             --sub-sz: 21px; 
@@ -21,12 +22,14 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
 
-        /* --- IDENTICAL MORPHING HEADER --- */
+        /* --- SYNCED MORPHING HEADER --- */
         header { background: var(--surface-white); position: sticky; top: 0; z-index: 2000; width: 100%; box-shadow: 0 2px 20px rgba(0,0,0,0.02); transition: var(--transition); }
         .header-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 5%; height: 80px; transition: var(--transition); }
         .brand-center img { height: var(--brand-sz); width: auto; }
-        .date-box { flex: 1; font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 1px; height: var(--sub-sz); display: flex; align-items: center; }
-        .icons-right { flex: 1; display: flex; justify-content: flex-end; gap: 20px; align-items: center; height: var(--sub-sz); position: relative; }
+        .date-box { flex: 1; font-size: 0.65rem; color: #999; text-transform: uppercase; height: var(--sub-sz); display: flex; align-items: center; }
+        
+        /* Standard Icons */
+        .icons-right { flex: 1; display: flex; justify-content: flex-end; gap: 20px; align-items: center; height: var(--sub-sz); }
         .icons-right i { font-size: 1rem; color: var(--text-dark); cursor: pointer; }
 
         .nav-row { padding: 15px 5%; border-top: 1px solid #F0F0F0; display: flex; justify-content: center; align-items: center; transition: var(--transition); position: relative; }
@@ -34,49 +37,64 @@
         .nav-links a { text-decoration: none; color: var(--text-dark); font-size: 0.85rem; font-weight: 300; text-transform: uppercase; letter-spacing: 1.5px; }
         .nav-links a.active { color: var(--accent-gold); font-weight: 500; border-bottom: 1px solid var(--accent-gold); }
 
+        /* Morph Logic */
         header.scrolled { transform: translateY(-80px); }
         .logo-peek { position: absolute; left: 5%; opacity: 0; transform: translateX(-15px); transition: 0.4s; }
         header.scrolled .logo-peek { opacity: 1; transform: translateX(0); }
         .logo-peek img { height: 18px; }
         header.scrolled .nav-links a { font-size: calc(0.85rem - 2px); }
-        .icons-peek { position: absolute; right: 5%; opacity: 0; transform: translateX(15px); transition: 0.4s; display: flex; gap: 20px; }
-        header.scrolled .icons-peek { opacity: 1; transform: translateX(0); }
 
-        /* --- CATEGORY RIBBON --- */
-        .category-wrap { width: 100%; overflow-x: auto; white-space: nowrap; padding: 20px 5%; scrollbar-width: none; background: white; border-bottom: 1px solid #f4f4f4; }
-        .category-wrap::-webkit-scrollbar { display: none; }
-        .cat-btn { display: inline-block; padding: 8px 20px; margin-right: 10px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #eee; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        /* Peek Icons (Visible after Morph) */
+        .icons-peek { position: absolute; right: 5%; opacity: 0; transform: translateX(15px); transition: 0.4s; display: flex; gap: 20px; align-items: center; }
+        header.scrolled .icons-peek { opacity: 1; transform: translateX(0); }
+        header.scrolled .icons-peek i { font-size: 0.85rem; }
+
+        /* Shared Cart Badge Style */
+        .cart-btn-wrap { position: relative; cursor: pointer; display: flex; align-items: center; }
+        .cart-badge { 
+            position: absolute; top: -6px; right: -8px; 
+            background: var(--accent-gold); color: white; 
+            font-size: 0.6rem; padding: 1px 5px; border-radius: 10px; 
+            font-weight: 600; min-width: 15px; text-align: center;
+        }
+
+        /* --- CATEGORIES & SHOP --- */
+        .category-wrap { width: 100%; overflow-x: auto; white-space: nowrap; padding: 15px 5%; background: white; border-bottom: 1px solid #f0f0f0; }
+        .cat-btn { display: inline-block; padding: 7px 18px; margin-right: 8px; font-size: 0.7rem; text-transform: uppercase; border: 1px solid #eee; border-radius: 20px; cursor: pointer; }
         .cat-btn.active { background: var(--accent-gold); color: white; border-color: var(--accent-gold); }
 
-        /* --- SHOP GRID --- */
         .shop-container { padding: 20px 5%; max-width: 1200px; margin: auto; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        .product-card { background: white; border-radius: 4px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; text-align: center; padding-bottom: 15px; display: flex; flex-direction: column; }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .product-card { background: white; border-radius: 4px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.02); text-align: center; padding-bottom: 12px; display: flex; flex-direction: column; }
         .product-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .product-info { padding: 10px; flex-grow: 1; }
-        .product-info h3 { font-size: 0.8rem; font-weight: 400; margin: 5px 0; text-transform: uppercase; min-height: 40px; }
-        .product-info p { color: var(--accent-gold); font-weight: 500; font-size: 0.9rem; margin-bottom: 10px; }
-        
-        .add-btn { background: var(--text-dark); color: white; border: none; padding: 10px; width: 90%; margin: auto; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px; cursor: pointer; }
-        .add-btn:active { transform: scale(0.95); }
+        .product-info h3 { font-size: 0.75rem; font-weight: 400; margin: 10px 5px; text-transform: uppercase; min-height: 35px; }
+        .product-info p { color: var(--accent-gold); font-weight: 500; margin-bottom: 10px; font-size: 0.85rem; }
+        .add-btn { background: var(--text-dark); color: white; border: none; padding: 8px; width: 90%; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px; cursor: pointer; }
 
-        /* --- LUXURY CART SIDEBAR --- */
+        /* --- ADDED TO CART NOTIFICATION --- */
+        #toast {
+            position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%);
+            background: var(--success-green); color: white; padding: 12px 30px;
+            border-radius: 30px; font-size: 0.8rem; text-transform: uppercase;
+            letter-spacing: 1px; transition: 0.4s ease; z-index: 4000;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+        #toast.show { bottom: 30px; }
+
+        /* --- CART SIDEBAR --- */
         #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 350px; height: 100%; background: white; z-index: 3000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.5s; display: flex; flex-direction: column; }
         #cart-sidebar.open { right: 0; }
         .cart-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .cart-items { flex-grow: 1; overflow-y: auto; padding: 20px; }
-        .cart-item { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; }
-        .cart-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
-        .cart-item-info { flex-grow: 1; }
-        .cart-item-info h4 { font-size: 0.8rem; margin: 0; text-transform: uppercase; }
+        .cart-item { display: flex; gap: 12px; margin-bottom: 15px; align-items: center; border-bottom: 1px solid #f9f9f9; padding-bottom: 10px; }
+        .cart-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
         .cart-footer { padding: 20px; border-top: 1px solid #eee; }
-        .checkout-btn { width: 100%; background: #25D366; color: white; border: none; padding: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-
-        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--accent-gold); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 10px; }
+        .checkout-btn { width: 100%; background: #25D366; color: white; border: none; padding: 15px; font-weight: 600; text-transform: uppercase; cursor: pointer; }
 
         @media (max-width: 380px) {
-            :root { --brand-sz: 19px; --sub-sz: 18px; }
-            .product-grid { grid-template-columns: 1fr 1fr; }
+            :root { --brand-sz: 18px; --sub-sz: 17px; }
+            header.scrolled { transform: translateY(-70px); }
+            .header-top { height: 70px; }
         }
     </style>
 </head>
@@ -88,9 +106,9 @@
             <div class="brand-center"><img src="brand/brandname.jpg" alt="CHINZY"></div>
             <div class="icons-right">
                 <i class="fas fa-magnifying-glass" onclick="toggleSearch()"></i>
-                <div style="position:relative;" onclick="toggleCart()">
+                <div class="cart-btn-wrap" onclick="toggleCart()">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-badge" id="cart-count">0</span>
+                    <span class="cart-badge cart-count-sync">0</span>
                 </div>
             </div>
         </div>
@@ -103,22 +121,25 @@
             </ul>
             <div class="icons-peek">
                 <i class="fas fa-magnifying-glass" onclick="toggleSearch()"></i>
-                <i class="fas fa-shopping-cart" onclick="toggleCart()"></i>
+                <div class="cart-btn-wrap" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge cart-count-sync">0</span>
+                </div>
             </div>
         </nav>
     </header>
 
+    <div id="toast">Added to Cart</div>
+
     <div class="category-wrap" id="cat-bar">
-        <div class="cat-btn active" onclick="filterCat('All', this)">All Pieces</div>
+        <div class="cat-btn active" onclick="filterCat('All', this)">All</div>
         <div class="cat-btn" onclick="filterCat('Rings', this)">Rings</div>
         <div class="cat-btn" onclick="filterCat('Necklaces', this)">Necklaces</div>
         <div class="cat-btn" onclick="filterCat('Watches', this)">Watches</div>
-        <div class="cat-btn" onclick="filterCat('Bracelets', this)">Bracelets</div>
     </div>
 
     <main class="shop-container">
-        <div class="product-grid" id="shop-grid">
-            </div>
+        <div class="product-grid" id="shop-grid"></div>
     </main>
 
     <div id="cart-sidebar">
@@ -128,10 +149,10 @@
         </div>
         <div class="cart-items" id="cart-list"></div>
         <div class="cart-footer">
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:600;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
                 <span>Total:</span> <span id="cart-total">₦0</span>
             </div>
-            <button class="checkout-btn" onclick="checkout()"><i class="fab fa-whatsapp"></i> Checkout via WhatsApp</button>
+            <button class="checkout-btn" onclick="checkout()">Checkout via WhatsApp</button>
         </div>
     </div>
 
@@ -150,12 +171,11 @@
         }
 
         function renderShop(data) {
-            const grid = document.getElementById('shop-grid');
-            grid.innerHTML = '';
-            data.forEach((item, index) => {
+            const grid = document.getElementById('shop-grid'); grid.innerHTML = '';
+            data.forEach(item => {
                 grid.innerHTML += `
                     <div class="product-card">
-                        <img src="${item.img || 'products/prod1.jpg'}" onerror="this.src='products/prod1.jpg'">
+                        <img src="${item.img || 'products/prod1.jpg'}">
                         <div class="product-info">
                             <h3>${item.n}</h3>
                             <p>₦${Number(item.p).toLocaleString()}</p>
@@ -165,47 +185,44 @@
             });
         }
 
-        function filterCat(cat, btn) {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            if(cat === 'All') renderShop(inventory);
-            else renderShop(inventory.filter(i => i.cat === cat));
-        }
-
         function addToCart(n, p, img) {
             cart.push({ n, p, img });
             updateCartUI();
-            toggleCart(); // Show cart when item added
+            showToast(); // NEW: Silent green notification
+        }
+
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
         }
 
         function updateCartUI() {
             const list = document.getElementById('cart-list');
             const totalEl = document.getElementById('cart-total');
-            const countEl = document.getElementById('cart-count');
+            const syncBadges = document.querySelectorAll('.cart-count-sync'); // SYNC BOTH HEADERS
+            
             list.innerHTML = '';
             let total = 0;
             cart.forEach((item, idx) => {
                 total += Number(item.p);
-                list.innerHTML += `
-                    <div class="cart-item">
-                        <img src="${item.img || 'products/prod1.jpg'}">
-                        <div class="cart-item-info">
-                            <h4>${item.n}</h4>
-                            <span style="color:var(--accent-gold)">₦${Number(item.p).toLocaleString()}</span>
-                        </div>
-                        <i class="fas fa-trash" onclick="removeFromCart(${idx})" style="color:#ddd; font-size:0.8rem;"></i>
-                    </div>`;
+                list.innerHTML += `<div class="cart-item"><img src="${item.img}"><div><h4>${item.n}</h4><span>₦${Number(item.p).toLocaleString()}</span></div></div>`;
             });
+            
             totalEl.innerText = `₦${total.toLocaleString()}`;
-            countEl.innerText = cart.length;
+            syncBadges.forEach(badge => badge.innerText = cart.length); // UPDATES ALL HEADERS
         }
 
-        function removeFromCart(idx) { cart.splice(idx, 1); updateCartUI(); }
-        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
+        function filterCat(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderShop(cat === 'All' ? inventory : inventory.filter(i => i.cat === cat));
+        }
 
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
         function checkout() {
-            let msg = "Hello Chinzy Luxury, I want to order:\n";
-            cart.forEach(i => msg += `- ${i.n} (₦${Number(i.p).toLocaleString()})\n`);
+            let msg = "Order Request:\n";
+            cart.forEach(i => msg += `- ${i.n}\n`);
             window.open(`https://wa.me/2349057835662?text=${encodeURIComponent(msg)}`);
         }
 
