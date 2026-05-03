@@ -13,7 +13,8 @@
             --surface-white: #FFFFFF; 
             --text-dark: #1A1A1A;     
             --accent-gold: #C5A059;   
-            --transition-speed: 0.4s;
+            --gold-glow: rgba(197, 160, 89, 0.15); 
+            --transition-speed: 0.5s;
         }
 
         * { box-sizing: border-box; }
@@ -22,124 +23,110 @@
             margin: 0; padding: 0;
             background-color: var(--bg-pearl);
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- THE LIQUID MORPHING HEADER --- */
+        /* --- MORPHING HEADER (340 DPI Optimized) --- */
         header {
             background: var(--surface-white);
             position: sticky; top: 0; z-index: 1000;
             width: 100%;
             box-shadow: 0 2px 15px rgba(0,0,0,0.03);
-            transition: all var(--transition-speed) ease-in-out;
-        }
-
-        /* Row 1: Logo | Brand | Date */
-        .header-top {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 4%;
-            height: 70px;
-            transition: all 0.3s ease;
-        }
-        
-        /* Using vw (Viewport Width) ensures these shrink on narrow phones */
-        .header-left img { height: 12vw; max-height: 45px; width: auto; flex-shrink: 0; }
-        .header-center { flex-grow: 1; text-align: center; padding: 0 10px; }
-        .header-center img { height: 10vw; max-height: 35px; width: auto; max-width: 100%; }
-        
-        .header-right { 
-            flex-shrink: 0; 
-            text-align: right; 
-            min-width: 60px; 
-        }
-        #datetime-display {
-            font-size: 2.2vw; /* Scales perfectly with your 340dpi screen */
-            max-font-size: 0.7rem;
-            text-transform: uppercase; 
-            letter-spacing: 0.5px; 
-            color: #888;
-            white-space: nowrap;
-        }
-
-        /* Row 2: Nav | Icons */
-        .header-bottom {
-            display: flex; align-items: center; 
-            padding: 10px 4%;
-            border-top: 1px solid #F0F0F0;
             transition: all var(--transition-speed) ease;
         }
 
-        .brand-scrolled {
-            display: none; height: 25px; width: auto;
-            margin-right: 15px;
-            flex-shrink: 0;
+        .header-top {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 5%; height: 70px; transition: 0.4s;
         }
+        .header-left img { height: 12vw; max-height: 45px; width: auto; }
+        .header-center img { height: 10vw; max-height: 35px; width: auto; }
+        #datetime-display { font-size: 2.2vw; text-transform: uppercase; color: #888; }
+
+        .header-bottom {
+            display: flex; align-items: center; padding: 10px 5%;
+            border-top: 1px solid #F0F0F0; transition: 0.4s;
+        }
+
+        .brand-scrolled { display: none; height: 22px; width: auto; margin-right: 15px; }
 
         .nav-links {
             display: flex; gap: 4vw; list-style: none; padding: 0; margin: 0 auto;
             text-transform: uppercase; white-space: nowrap;
-            transition: all var(--transition-speed) ease;
         }
-        .nav-links li a {
-            text-decoration: none; color: var(--text-dark);
-            font-size: 2.8vw; max-font-size: 0.85rem; 
-            letter-spacing: 1px; font-weight: 300;
-        }
+        .nav-links li a { text-decoration: none; color: var(--text-dark); font-size: 2.8vw; font-weight: 300; }
         .nav-links li a.active { color: var(--accent-gold); font-weight: 500; }
 
-        .action-icons { display: flex; gap: 4vw; align-items: center; flex-shrink: 0; }
-        .action-icons i { font-size: 3.5vw; max-font-size: 0.9rem; cursor: pointer; }
+        .action-icons { display: flex; gap: 15px; align-items: center; }
+        .action-icons i { font-size: 0.95rem; cursor: pointer; }
 
-        /* --- SCROLLED MORPH --- */
-        header.scrolled .header-top { 
-            height: 0; padding: 0; opacity: 0; pointer-events: none; overflow: hidden;
-        }
-        header.scrolled .header-bottom {
-            border-top: none;
-            padding: 8px 4%;
-            justify-content: space-between;
-        }
-        header.scrolled .brand-scrolled { display: block; height: 6vw; max-height: 25px; }
-        header.scrolled .nav-links { 
-            margin: 0; 
-            gap: 3vw;
-        }
+        /* SCROLLED HEADER */
+        header.scrolled .header-top { height: 0; padding: 0; opacity: 0; overflow: hidden; }
+        header.scrolled .header-bottom { border-top: none; padding: 8px 5%; justify-content: space-between; }
+        header.scrolled .brand-scrolled { display: block; }
+        header.scrolled .nav-links { margin: 0; gap: 3vw; }
         header.scrolled .nav-links li a { font-size: 2.5vw; }
 
-        /* --- CONTENT --- */
+        /* --- MAIN CONTENT --- */
         main { padding: 15px; }
-        h2.section-title { text-align: center; font-family: 'Playfair Display'; font-weight: 400; font-size: 1.8rem; margin: 30px 0 20px; }
+        .section-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4%; margin: 40px 0 15px; }
+        .section-header h2 { font-family: 'Playfair Display'; font-weight: 400; font-size: 1.6rem; margin: 0; }
+        .view-all { font-size: 0.65rem; text-transform: uppercase; color: var(--accent-gold); text-decoration: none; border-bottom: 1px solid var(--accent-gold); }
 
+        /* New Arrivals: The Peek Effect */
         .carousel-container { width: 100%; overflow: hidden; padding: 10px 0; }
-        .carousel-track { display: flex; transition: transform 0.8s ease; }
+        .carousel-track { display: flex; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); gap: 15px; padding-left: 4%; }
         .carousel-track img {
-            width: 75vw; max-width: 280px; height: auto; aspect-ratio: 4/5;
-            object-fit: cover; margin-right: 15px; border-radius: 4px;
-            box-shadow: 0 8px 20px rgba(197, 160, 89, 0.2);
+            width: 80vw; max-width: 280px; height: auto; aspect-ratio: 4/5;
+            object-fit: cover; border-radius: 4px; box-shadow: 0 10px 25px var(--gold-glow);
+            flex-shrink: 0;
         }
 
-        .video-container { width: 100%; height: 400px; background: #000; position: relative; border-radius: 8px; overflow: hidden; }
-        .video-container video { width: 100%; height: 100%; object-fit: cover; }
-        .mute-btn { position: absolute; bottom: 15px; right: 15px; background: rgba(255,255,255,0.8); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; }
+        /* --- THE TRIMMING VIDEO --- */
+        .video-wrapper { 
+            width: 100%; padding: 40px 0; 
+            display: flex; justify-content: center; 
+        }
+        .video-container { 
+            width: 100%; 
+            max-width: 1200px; 
+            height: 500px; /* Default height */
+            background: #000; 
+            position: relative; 
+            border-radius: 4px; 
+            overflow: hidden; 
+            transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* The "Trimmed" State when scrolling */
+        .video-container.trimmed {
+            height: 280px; /* Trims the view window as requested */
+        }
 
-        .testimony-grid { display: grid; grid-template-columns: 1fr; gap: 20px; justify-items: center; }
-        .testimony-box { width: 90vw; max-width: 350px; height: 500px; border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(197, 160, 89, 0.2); }
+        .video-container video { 
+            width: 100%; height: 100%; 
+            object-fit: cover; /* Ensures video stays full width and centered */
+        }
+        
+        .mute-btn { 
+            position: absolute; bottom: 20px; right: 20px; 
+            background: rgba(255,255,255,0.8); width: 40px; height: 40px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            z-index: 5; cursor: pointer;
+        }
+
+        /* Testimonials */
+        .testimony-grid { display: grid; grid-template-columns: 1fr; gap: 20px; justify-items: center; margin: 40px 0; }
+        .testimony-box { width: 90vw; max-width: 350px; height: 500px; border-radius: 4px; overflow: hidden; position: relative; box-shadow: 0 10px 25px var(--gold-glow); }
         .testimony-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0; transition: 1.5s; }
         .testimony-box img.visible { opacity: 1; }
 
-        footer { text-align: center; padding: 40px 20px; border-top: 1px solid #eee; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; }
-        .whatsapp-link { display: inline-flex; width: 50px; height: 50px; background: #25D366; color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 1.5rem; margin-top: 10px; text-decoration: none; }
-
-        /* Desktop specific tweaks */
         @media (min-width: 800px) {
-            .header-left img { height: 45px; }
-            .header-center img { height: 35px; }
-            #datetime-display { font-size: 0.7rem; }
-            .nav-links li a { font-size: 0.85rem; }
-            .action-icons i { font-size: 0.9rem; }
-            .nav-links { gap: 30px; }
             .testimony-grid { grid-template-columns: repeat(3, 1fr); }
+            .carousel-track img { width: calc(25% - 15px); }
         }
+
+        footer { text-align: center; padding: 60px 20px; border-top: 1px solid #eee; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; color: #888; }
+        .whatsapp-link { display: inline-flex; width: 55px; height: 55px; background: #25D366; color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 1.8rem; margin-top: 20px; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -165,7 +152,10 @@
     </header>
 
     <main>
-        <h2 class="section-title">New Arrivals</h2>
+        <div class="section-header">
+            <h2>New Arrivals</h2>
+            <a href="shop.html" class="view-all">Explore All</a>
+        </div>
         <div class="carousel-container">
             <div class="carousel-track" id="product-track">
                 <script>
@@ -175,13 +165,19 @@
             </div>
         </div>
 
-        <h2 class="section-title">Experience Luxury</h2>
-        <div class="video-container">
-            <video id="vid" autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
-            <div class="mute-btn" onclick="toggleMute()"><i id="muteIcon" class="fas fa-volume-xmark"></i></div>
+        <div class="section-header">
+            <h2>Experience Luxury</h2>
+        </div>
+        <div class="video-wrapper">
+            <div class="video-container" id="video-box">
+                <video id="vid" autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
+                <div class="mute-btn" onclick="toggleMute()"><i id="muteIcon" class="fas fa-volume-xmark"></i></div>
+            </div>
         </div>
 
-        <h2 class="section-title">Client Stories</h2>
+        <div class="section-header">
+            <h2>Client Stories</h2>
+        </div>
         <div class="testimony-grid">
             <div class="testimony-box"><img src="test/test1.jpg" class="visible" id="t1"><img src="test/test2.jpg" id="t2"></div>
             <div class="testimony-box"><img src="test/test3.jpg" class="visible" id="t3"><img src="test/test4.jpg" id="t4"></div>
@@ -195,36 +191,50 @@
     </footer>
 
     <script>
+        // 1. Time Update
         setInterval(() => {
             const now = new Date();
             document.getElementById('datetime-display').innerText = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
         }, 1000);
 
+        // 2. Morphing Logic (Header & Video Trim)
         const head = document.getElementById('main-header');
+        const vBox = document.getElementById('video-box');
+
         window.addEventListener('scroll', () => {
+            // Header Morph
             if (window.scrollY > 60) head.classList.add('scrolled');
             else head.classList.remove('scrolled');
+
+            // Video Trim Morph
+            // Trims the video when you scroll down 200px or more
+            if (window.scrollY > 200) vBox.classList.add('trimmed');
+            else vBox.classList.remove('trimmed');
         });
 
+        // 3. Carousel Math (Peek Logic)
         const tr = document.getElementById('product-track');
         let slide = 0;
         setInterval(() => {
             slide++;
-            const moveWidth = document.querySelector('.carousel-track img').offsetWidth + 15;
+            const firstImg = document.querySelector('.carousel-track img');
+            if (!firstImg) return;
+            const moveWidth = firstImg.offsetWidth + 15;
             tr.style.transform = `translateX(-${slide * moveWidth}px)`;
             if (slide === 10) {
-                setTimeout(() => { tr.style.transition = 'none'; slide = 0; tr.style.transform = 'translateX(0)'; setTimeout(()=>tr.style.transition='0.8s', 50); }, 800);
+                setTimeout(() => { tr.style.transition = 'none'; slide = 0; tr.style.transform = 'translateX(0)'; setTimeout(()=>tr.style.transition='transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)', 50); }, 800);
             }
         }, 5000);
 
+        // 4. Mute Logic
         function toggleMute() {
             const v = document.getElementById('vid'); const i = document.getElementById('muteIcon');
             v.muted = !v.muted; i.classList.toggle('fa-volume-xmark'); i.classList.toggle('fa-volume-high');
         }
 
+        // 5. Testimonial Fades
         function rotate(aID, bID) {
             const a = document.getElementById(aID); const b = document.getElementById(bID);
-            if (!a || !b) return;
             if (a.classList.contains('visible')) { a.classList.remove('visible'); b.classList.add('visible'); }
             else { b.classList.remove('visible'); a.classList.add('visible'); }
         }
