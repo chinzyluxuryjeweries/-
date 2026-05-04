@@ -13,76 +13,70 @@
             --accent: #C5A059; --success: #2ecc71; --warning: #e67e22; --danger: #95a5a6;
             --transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             --brand-sz: 28px;
+            --glow: 0 0 10px rgba(197, 160, 89, 0.4);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
 
-        /* --- EDITORIAL HEADER --- */
+        /* --- HEADER --- */
         header { background: var(--surface); position: sticky; top: 0; z-index: 2000; width: 100%; transition: var(--transition); box-shadow: 0 2px 20px rgba(0,0,0,0.02); }
         .branding-area { display: flex; align-items: center; justify-content: center; padding: 5px 5%; height: 70px; transition: var(--transition); }
         .brand-text { font-family: 'Modak', cursive; font-size: var(--brand-sz); color: var(--text); white-space: nowrap; transition: var(--transition); letter-spacing: 1px; text-decoration: none; }
-
         .nav-hub { padding: 10px 5%; border-top: 1px solid #F0F0F0; display: flex; flex-direction: column; align-items: center; transition: var(--transition); }
         .nav-main-line { display: flex; justify-content: space-between; align-items: center; width: 100%; transition: var(--transition); }
         .nav-links { display: flex; gap: 20px; list-style: none; padding: 0; margin: 0; }
         .nav-links a { text-decoration: none; color: var(--text); font-size: 0.8rem; font-weight: 300; text-transform: uppercase; letter-spacing: 1px; }
         .nav-links a.active { color: var(--accent); font-weight: 500; border-bottom: 1px solid var(--accent); }
-        
         .hub-icon-wrap { position: relative; cursor: pointer; }
         .cart-count { position: absolute; top: -8px; right: -10px; background: var(--accent); color: white; font-size: 0.6rem; padding: 2px 5px; border-radius: 10px; font-weight: 600; }
         .icon-stack-line { display: flex; gap: 30px; height: 0; opacity: 0; overflow: hidden; transition: var(--transition); }
 
-        /* HEADER MORPH */
         header.scrolled .branding-area { height: 0; padding: 0; opacity: 0; pointer-events: none; }
-        header.scrolled .nav-main-line .hub-icon-wrap, 
-        header.scrolled .nav-main-line .fa-magnifying-glass { display: none; }
+        header.scrolled .nav-main-line .hub-icon-wrap, header.scrolled .nav-main-line .fa-magnifying-glass { display: none; }
         header.scrolled .nav-main-line { justify-content: center; }
         header.scrolled .icon-stack-line { height: 35px; opacity: 1; margin-top: 5px; overflow: visible; justify-content: center; align-items: center; }
 
-        /* --- SEARCH PANEL --- */
-        #search-panel { position: fixed; top: -100%; left: 0; width: 100%; background: white; z-index: 3000; padding: 40px 5%; transition: 0.5s; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        #search-panel.active { top: 0; }
-        .search-input { width: 100%; border: none; border-bottom: 2px solid var(--accent); font-size: 1.2rem; padding: 10px; outline: none; font-family: 'Work Sans'; text-align: center; text-transform: uppercase; }
-        #search-results { max-height: 300px; overflow-y: auto; margin-top: 20px; }
-        .search-res-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; cursor: pointer; }
-
-        /* --- CATEGORY RIBBON --- */
-        .category-wrap { width: 100%; overflow-x: auto; white-space: nowrap; padding: 12px 5%; background: white; border-bottom: 1px solid #f0f0f0; }
-        .cat-btn { display: inline-block; padding: 7px 18px; margin-right: 8px; font-size: 0.7rem; text-transform: uppercase; border: 1px solid #eee; border-radius: 20px; cursor: pointer; transition: 0.3s; }
-        .cat-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-
         /* --- SHOP GRID --- */
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 20px 5%; }
-        .card { background: white; border-radius: 4px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.02); text-align: center; padding-bottom: 12px; position: relative; }
-        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .card h3 { font-size: 0.7rem; margin: 10px 5px; text-transform: uppercase; min-height: 30px; font-weight: 400; }
-        .card p { color: var(--accent); font-weight: 500; font-size: 0.85rem; margin-bottom: 5px; }
+        .card { background: white; border-radius: 4px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.02); text-align: center; padding-bottom: 12px; }
+        
+        .img-container { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; }
+        .img-container img { width: 100%; height: 100%; object-fit: cover; }
 
-        .stock-tag { font-size: 0.6rem; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; display: block; }
-        .few { color: var(--warning); }
-        .instock { color: var(--success); }
-        .out { color: var(--danger); }
+        /* Floating Stock Tag */
+        .stock-overlay {
+            position: absolute; bottom: 8px; right: 8px;
+            background: rgba(255,255,255,0.9);
+            padding: 4px 8px; border-radius: 4px;
+            font-size: 0.55rem; font-weight: 600; text-transform: uppercase;
+            box-shadow: var(--glow); border: 1px solid rgba(197, 160, 89, 0.2);
+        }
 
+        .card h3 { font-size: 0.7rem; margin: 10px 5px; text-transform: uppercase; min-height: 30px; font-weight: 400; color: #444; }
+        .card p { color: var(--accent); font-weight: 500; font-size: 0.85rem; margin-bottom: 8px; }
         .add-btn { background: var(--text); color: white; border: none; padding: 10px; width: 90%; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px; cursor: pointer; }
         .add-btn:disabled { background: #eee; color: #aaa; cursor: not-allowed; }
 
-        #toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 12px 30px; border-radius: 30px; font-size: 0.8rem; transition: 0.4s; z-index: 4000; }
-        #toast.show { bottom: 30px; }
-
-        /* --- SIDEBAR --- */
+        /* --- CART SIDEBAR --- */
         #cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 350px; height: 100%; background: white; z-index: 3000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.5s; display: flex; flex-direction: column; }
         #cart-sidebar.open { right: 0; }
+        .cart-item { display: flex; align-items: center; gap: 12px; padding: 15px; border-bottom: 1px solid #f9f9f9; }
+        .cart-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+        .cart-item-info { flex-grow: 1; }
+        .remove-item { color: #ff7675; cursor: pointer; font-size: 0.8rem; padding: 5px; transition: 0.2s; }
+        .remove-item:hover { color: #d63031; }
+
+        /* Category Ribbon */
+        .category-wrap { width: 100%; overflow-x: auto; white-space: nowrap; padding: 12px 5%; background: white; border-bottom: 1px solid #f0f0f0; }
+        .cat-btn { display: inline-block; padding: 7px 18px; margin-right: 8px; font-size: 0.7rem; text-transform: uppercase; border: 1px solid #eee; border-radius: 20px; cursor: pointer; }
+        .cat-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        #toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 12px 30px; border-radius: 30px; font-size: 0.8rem; transition: 0.4s; z-index: 4000; }
+        #toast.show { bottom: 30px; }
     </style>
 </head>
 <body>
-
-    <!-- Persistent Search -->
-    <div id="search-panel">
-        <input type="text" class="search-input" id="s-in" placeholder="Find your piece..." oninput="doSearch()">
-        <div id="search-results"></div>
-        <div style="text-align:center; margin-top:20px; cursor:pointer;" onclick="toggleSearch()"><i class="fas fa-times"></i> CLOSE</div>
-    </div>
 
     <header id="main-header">
         <div class="branding-area"><a href="index.html" class="brand-text">CHINZY JEWERIES</a></div>
@@ -100,9 +94,9 @@
                 </div>
             </div>
             <div class="icon-stack-line">
-                <i class="fas fa-magnifying-glass" onclick="toggleSearch()" style="font-size:1.1rem"></i>
+                <i class="fas fa-magnifying-glass" onclick="toggleSearch()"></i>
                 <div class="hub-icon-wrap" onclick="toggleCart()">
-                    <i class="fas fa-shopping-cart" style="font-size:1.1rem"></i>
+                    <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count sync-cart">0</span>
                 </div>
             </div>
@@ -117,18 +111,17 @@
 
     <main class="grid" id="shop-grid"></main>
 
-    <!-- Persistent Cart Sidebar -->
     <div id="cart-sidebar">
-        <div style="padding:20px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
-            <h3 style="font-family:'Playfair Display'; margin:0;">Your Bag</h3>
-            <i class="fas fa-times" onclick="toggleCart()" style="cursor:pointer;"></i>
+        <div style="padding:20px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="font-family:'Playfair Display'; margin:0;">Shopping Cart</h3>
+            <i class="fas fa-times" onclick="toggleCart()" style="cursor:pointer; font-size: 1.2rem;"></i>
         </div>
-        <div id="cart-list" style="flex-grow:1; overflow-y:auto; padding:10px;"></div>
+        <div id="cart-list" style="flex-grow:1; overflow-y:auto;"></div>
         <div style="padding:20px; border-top:1px solid #eee;">
             <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-weight:600;">
-                <span>Total:</span> <span id="cart-total">₦0</span>
+                <span>Subtotal:</span> <span id="cart-total">₦0</span>
             </div>
-            <button style="width:100%; background:#25D366; color:white; border:none; padding:15px; font-weight:600; text-transform:uppercase;" onclick="checkout()">Checkout via WhatsApp</button>
+            <button style="width:100%; background:#25D366; color:white; border:none; padding:15px; font-weight:600; text-transform:uppercase; border-radius: 4px;" onclick="checkout()">Checkout via WhatsApp</button>
         </div>
     </div>
 
@@ -143,11 +136,7 @@
                 const p = l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 if (p.length < 7) return null;
                 return {
-                    n: p[1].replace(/"/g, ''),
-                    cat: p[6].trim(),   // Column G
-                    p: p[3].trim(),     // Column D
-                    img: p[4].trim(),   // Column E
-                    stock: parseInt(p[5]) // Column F
+                    n: p[1].replace(/"/g, ''), cat: p[6].trim(), p: p[3].trim(), img: p[4].trim(), stock: parseInt(p[5])
                 };
             }).filter(x => x);
 
@@ -161,42 +150,44 @@
         }
 
         function renderShop(data) {
-            const grid = document.getElementById('shop-grid'); grid.innerHTML = '';
-            data.forEach(item => {
-                let status = item.stock === 0 ? '<span class="stock-tag out">Out of Stock</span>' : 
-                             item.stock <= 5 ? '<span class="stock-tag few">Few remaining</span>' : 
-                             '<span class="stock-tag instock">In Stock</span>';
-                let btn = item.stock === 0 ? '<button class="add-btn" disabled>Out of Stock</button>' : 
-                          `<button class="add-btn" onclick="addToCart('${item.n}', '${item.p}', '${item.img}')">Add to Bag</button>`;
+            const grid = document.getElementById('shop-grid');
+            grid.innerHTML = '';
+            data.forEach((item, index) => {
+                let statusText = item.stock === 0 ? "Out of Stock" : (item.stock <= 5 ? "Few Remaining" : "In Stock");
+                let statusColor = item.stock === 0 ? "#95a5a6" : (item.stock <= 5 ? "#e67e22" : "#2ecc71");
+                let btnDisabled = item.stock === 0 ? "disabled" : "";
+                let btnText = item.stock === 0 ? "Unavailable" : "Add to Cart";
 
-                grid.innerHTML += `<div class="card"><img src="${item.img}"><h3>${item.n}</h3><p>₦${Number(item.p).toLocaleString()}</p>${status}${btn}</div>`;
+                grid.innerHTML += `
+                    <div class="card">
+                        <div class="img-container">
+                            <img src="${item.img}">
+                            <div class="stock-overlay" style="color: ${statusColor}">${statusText}</div>
+                        </div>
+                        <h3>${item.n}</h3>
+                        <p>₦${Number(item.p).toLocaleString()}</p>
+                        <button class="add-btn" ${btnDisabled} onclick="addToCart(${index})">${btnText}</button>
+                    </div>`;
             });
         }
 
-        // --- CORE LOGICS ---
-        function toggleSearch() { document.getElementById('search-panel').classList.toggle('active'); }
-        function doSearch() {
-            const q = document.getElementById('s-in').value.toLowerCase();
-            const res = document.getElementById('search-results');
-            res.innerHTML = '';
-            if(!q) return;
-            inventory.filter(i => i.n.toLowerCase().includes(q)).forEach(i => {
-                const div = document.createElement('div');
-                div.className = 'search-res-item';
-                div.innerHTML = `<span>${i.n}</span><b>₦${Number(i.p).toLocaleString()}</b>`;
-                div.onclick = () => { toggleSearch(); renderShop(inventory.filter(item => item.n === i.n)); };
-                res.appendChild(div);
-            });
+        function addToCart(index) {
+            const item = inventory[index];
+            cart.push(item);
+            saveCart();
+            const t = document.getElementById('toast'); t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
         }
 
-        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
-        function addToCart(n, p, img) {
-            cart.push({ n, p, img });
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+        }
+
+        function saveCart() {
             localStorage.setItem('chinzyCart', JSON.stringify(cart));
             localStorage.setItem('cartCount', cart.length);
             updateCartUI();
-            const t = document.getElementById('toast'); t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2000);
         }
 
         function updateCartUI() {
@@ -204,10 +195,23 @@
             const totalEl = document.getElementById('cart-total');
             list.innerHTML = '';
             let total = 0;
-            cart.forEach(item => {
-                total += Number(item.p);
-                list.innerHTML += `<div style="display:flex; gap:10px; padding:10px; border-bottom:1px solid #f9f9f9;"><img src="${item.img}" style="width:40px;height:40px;object-fit:cover;"><div><h4 style="font-size:0.7rem;margin:0;">${item.n}</h4><span>₦${Number(item.p).toLocaleString()}</span></div></div>`;
-            });
+            
+            if (cart.length === 0) {
+                list.innerHTML = `<div style="text-align:center; padding:40px; color:#999;">Your cart is empty</div>`;
+            } else {
+                cart.forEach((item, idx) => {
+                    total += Number(item.p);
+                    list.innerHTML += `
+                        <div class="cart-item">
+                            <img src="${item.img}">
+                            <div class="cart-item-info">
+                                <h4 style="font-size:0.75rem; margin:0;">${item.n}</h4>
+                                <span style="font-size:0.8rem; color:var(--accent);">₦${Number(item.p).toLocaleString()}</span>
+                            </div>
+                            <i class="fas fa-trash-can remove-item" onclick="removeFromCart(${idx})"></i>
+                        </div>`;
+                });
+            }
             totalEl.innerText = `₦${total.toLocaleString()}`;
             document.querySelectorAll('.sync-cart').forEach(e => e.innerText = cart.length);
         }
@@ -218,9 +222,12 @@
             renderShop(cat === 'All' ? inventory : inventory.filter(i => i.cat === cat));
         }
 
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
         function checkout() {
-            let msg = "Hello Chinzy, I want to order:\n";
-            cart.forEach(i => msg += `- ${i.n}\n`);
+            if(cart.length === 0) return alert("Your cart is empty!");
+            let msg = "Hello Chinzy Luxury, I'd like to purchase:\n\n";
+            cart.forEach(i => msg += `• ${i.n} - ₦${Number(i.p).toLocaleString()}\n`);
+            msg += `\nTotal: ${document.getElementById('cart-total').innerText}`;
             window.open(`https://wa.me/2349057835662?text=${encodeURIComponent(msg)}`);
         }
 
