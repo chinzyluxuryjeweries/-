@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Chinzy Luxury Jeweries</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Import Modak + Work Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Modak&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
@@ -14,16 +13,17 @@
             --surface-white: #FFFFFF; 
             --text-dark: #1A1A1A;     
             --accent-gold: #C5A059;   
-            --transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             
-            /* HIERARCHY (Optimized for Modak) */
-            --brand-sz: 24px;   /* Modak needs a bit more height to show its curves */
-            --sub-sz: 23px;     /* Exactly 1px smaller */
+            /* HIERARCHY */
+            --brand-sz: 26px;   
+            --sub-sz: 25px;     /* 1px smaller rule */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
 
+        /* --- THE EDITORIAL HEADER --- */
         header {
             background: var(--surface-white);
             position: sticky; top: 0; z-index: 2000;
@@ -31,44 +31,35 @@
             transition: var(--transition);
         }
 
-        /* --- ROW 1: BRAND DOMINANCE --- */
-        .header-top {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 5%; height: 85px; transition: var(--transition);
-            gap: 10px;
+        /* ROW 1: BRANDING ONLY */
+        .branding-area {
+            display: flex; align-items: center; justify-content: center;
+            padding: 15px 5%; height: 80px; transition: var(--transition);
+            position: relative;
         }
-
         .date-box { 
-            flex: 1; font-size: 0.65rem; color: #999; text-transform: uppercase; 
+            position: absolute; left: 5%;
+            font-size: 0.65rem; color: #999; text-transform: uppercase; 
             letter-spacing: 1px; height: var(--sub-sz); display: flex; align-items: center;
         }
-
-        /* The New Modak Brand Style */
-        .brand-center { 
-            flex: 3; display: flex; justify-content: center; align-items: center; 
-        }
         .brand-text { 
-            font-family: 'Modak', display;
-            font-size: var(--brand-sz);
-            color: var(--text-dark); /* Or var(--accent-gold) if you prefer */
-            letter-spacing: 1px;
-            line-height: 1;
-            white-space: nowrap;
+            font-family: 'Modak', cursive; font-size: var(--brand-sz);
+            color: var(--text-dark); white-space: nowrap; transition: var(--transition);
+        }
+
+        /* ROW 2: INTERACTION HUB */
+        .nav-hub {
+            padding: 12px 5%; border-top: 1px solid #F0F0F0;
+            display: flex; flex-direction: column; align-items: center;
             transition: var(--transition);
         }
-
-        .icons-right { 
-            flex: 1; display: flex; justify-content: flex-end; gap: 18px; 
-            align-items: center; height: var(--sub-sz);
+        
+        /* The container that holds Icons and Links on one line initially */
+        .nav-main-line {
+            display: flex; justify-content: space-between; align-items: center;
+            width: 100%; transition: var(--transition);
         }
-        .icons-right i { font-size: 1rem; color: var(--text-dark); }
 
-        /* --- ROW 2: NAVIGATION --- */
-        .nav-row {
-            padding: 12px 5%; border-top: 1px solid #F0F0F0;
-            display: flex; justify-content: center; align-items: center;
-            transition: var(--transition); position: relative;
-        }
         .nav-links { display: flex; gap: 25px; list-style: none; padding: 0; margin: 0; }
         .nav-links a { 
             text-decoration: none; color: var(--text-dark); 
@@ -76,86 +67,92 @@
             letter-spacing: 1.5px; transition: 0.3s;
         }
 
-        /* --- THE MORPH (SCROLLED) --- */
-        header.scrolled { transform: translateY(-85px); }
+        .hub-icon { font-size: 1.1rem; color: var(--text-dark); cursor: pointer; transition: var(--transition); }
 
-        /* Logo Peek (Uses an icon font or small C for Modak feel) */
-        .logo-peek {
-            position: absolute; left: 5%; opacity: 0; transform: translateX(-15px);
-            transition: 0.4s; font-family: 'Modak'; color: var(--accent-gold);
-            font-size: 1.2rem;
+        /* Hidden line for the Morph state */
+        .icon-stack-line {
+            display: flex; gap: 30px; margin-top: 0;
+            height: 0; opacity: 0; overflow: hidden;
+            transition: var(--transition);
         }
-        header.scrolled .logo-peek { opacity: 1; transform: translateX(0); }
 
-        /* Nav Micro-Shrink */
+        /* --- THE MORPH (SCROLLED STATE) --- */
+        header.scrolled .branding-area { height: 0; padding: 0; opacity: 0; pointer-events: none; }
+        
+        header.scrolled .nav-hub { padding: 10px 5%; }
+
+        /* Step 1: Hide the flanking icons from the main line */
+        header.scrolled .nav-main-line .hub-icon { opacity: 0; pointer-events: none; width: 0; }
+        header.scrolled .nav-main-line { justify-content: center; }
+
+        /* Step 2: Shrink nav links */
         header.scrolled .nav-links a { font-size: calc(0.85rem - 2px); letter-spacing: 1px; }
 
-        .icons-peek {
-            position: absolute; right: 5%; opacity: 0; transform: translateX(15px);
-            transition: 0.4s; display: flex; gap: 18px;
+        /* Step 3: Show the centered icon stack below the links */
+        header.scrolled .icon-stack-line {
+            height: 30px; opacity: 1; margin-top: 8px;
+            overflow: visible; justify-content: center;
         }
-        header.scrolled .icons-peek { opacity: 1; transform: translateX(0); }
-        header.scrolled .icons-peek i { font-size: 0.9rem; }
+        header.scrolled .icon-stack-line .hub-icon { font-size: 0.9rem; } /* Slightly smaller after morph */
 
-        /* --- 340 DPI PORTRAIT TWEAKS --- */
+        /* --- 340 DPI RESPONSIVENESS --- */
         @media (max-width: 380px) {
-            :root { 
-                --brand-sz: 20px; /* Shrunk for narrow screens */
-                --sub-sz: 19px; 
-            }
-            .header-top { height: 75px; }
-            header.scrolled { transform: translateY(-75px); }
+            :root { --brand-sz: 22px; --sub-sz: 21px; }
             .nav-links { gap: 15px; }
             .nav-links a { font-size: 0.75rem; }
+            header.scrolled .nav-links a { font-size: calc(0.75rem - 2px); }
+            .branding-area { height: 70px; }
         }
     </style>
 </head>
 <body>
 
     <header id="main-header">
-        <div class="header-top">
+        <!-- ROW 1: Static Branding -->
+        <div class="branding-area">
             <div class="date-box" id="live-date"></div>
-            
-            <div class="brand-center">
-                <span class="brand-text">CHINZY JEWERIES</span>
-            </div>
-
-            <div class="icons-right">
-                <i class="fas fa-magnifying-glass"></i>
-                <i class="fas fa-shopping-cart"></i>
-            </div>
+            <div class="brand-text">CHINZY JEWERIES</div>
         </div>
 
-        <nav class="nav-row">
-            <div class="logo-peek">C</div> <!-- Small Modak 'C' as logo icon -->
-            
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="shop.html">Shop</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
+        <!-- ROW 2: Responsive Hub -->
+        <nav class="nav-hub">
+            <div class="nav-main-line">
+                <!-- Search on Left (Flanking) -->
+                <i class="fas fa-magnifying-glass hub-icon" onclick="alert('Search')"></i>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
 
-            <div class="icons-peek">
-                <i class="fas fa-magnifying-glass"></i>
-                <i class="fas fa-shopping-cart"></i>
+                <!-- Cart on Right (Flanking) -->
+                <i class="fas fa-shopping-cart hub-icon" onclick="alert('Cart')"></i>
+            </div>
+
+            <!-- The Centered Stack (Visible only after Morph) -->
+            <div class="icon-stack-line">
+                <i class="fas fa-magnifying-glass hub-icon" onclick="alert('Search')"></i>
+                <i class="fas fa-shopping-cart hub-icon" onclick="alert('Cart')"></i>
             </div>
         </nav>
     </header>
 
-    <main style="padding: 50px 5%; text-align: center; min-height: 2000px;">
-        <h1 style="font-family: 'Playfair Display'; font-weight: 400;">Bespoke Elegance</h1>
-        <p style="color: #999;">Scroll down to see the header transform...</p>
+    <main style="padding: 15% 5%; text-align: center; min-height: 2000px;">
+        <h1 style="font-family: 'Playfair Display'; font-weight: 400; font-size: 2rem;">Luxury Reimagined</h1>
+        <p style="color: #bbb; line-height: 1.6;">Scroll down to witness the "Editorial Stack" transition. Notice how the icons smoothly migrate from the sides to a centered pair beneath your links.</p>
     </main>
 
     <script>
-        // Header Scroll Logic
+        // Smooth Header Morph Trigger
         window.addEventListener('scroll', () => {
             const h = document.getElementById('main-header');
+            // We trigger the morph at 60px of scroll
             if (window.scrollY > 60) h.classList.add('scrolled');
             else h.classList.remove('scrolled');
         });
 
-        // Date Logic
+        // Real-time Date
         setInterval(() => {
             const opt = { weekday: 'short', month: 'short', day: 'numeric' };
             document.getElementById('live-date').innerText = new Date().toLocaleDateString('en-US', opt);
