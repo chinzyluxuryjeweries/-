@@ -19,19 +19,22 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
 
-        /* --- HEADER --- */
+        /* --- EDITORIAL HEADER --- */
         header { background: var(--surface); position: sticky; top: 0; z-index: 2000; width: 100%; transition: var(--transition); box-shadow: 0 2px 20px rgba(0,0,0,0.02); }
         .branding-area { display: flex; align-items: center; justify-content: center; padding: 5px 5%; height: 70px; transition: var(--transition); }
         .brand-text { font-family: 'Modak', cursive; font-size: var(--brand-sz); color: var(--text); white-space: nowrap; transition: var(--transition); letter-spacing: 1px; text-decoration: none; }
+        
         .nav-hub { padding: 10px 5%; border-top: 1px solid #F0F0F0; display: flex; flex-direction: column; align-items: center; transition: var(--transition); }
         .nav-main-line { display: flex; justify-content: space-between; align-items: center; width: 100%; transition: var(--transition); }
         .nav-links { display: flex; gap: 20px; list-style: none; padding: 0; margin: 0; }
         .nav-links a { text-decoration: none; color: var(--text); font-size: 0.8rem; font-weight: 300; text-transform: uppercase; letter-spacing: 1px; }
         .nav-links a.active { color: var(--accent); font-weight: 500; border-bottom: 1px solid var(--accent); }
+        
         .hub-icon-wrap { position: relative; cursor: pointer; }
         .cart-count { position: absolute; top: -8px; right: -10px; background: var(--accent); color: white; font-size: 0.6rem; padding: 2px 5px; border-radius: 10px; font-weight: 600; }
         .icon-stack-line { display: flex; gap: 30px; height: 0; opacity: 0; overflow: hidden; transition: var(--transition); }
 
+        /* HEADER MORPH */
         header.scrolled .branding-area { height: 0; padding: 0; opacity: 0; pointer-events: none; }
         header.scrolled .nav-main-line .hub-icon-wrap, header.scrolled .nav-main-line .fa-magnifying-glass { display: none; }
         header.scrolled .nav-main-line { justify-content: center; }
@@ -73,29 +76,7 @@
         .cart-item-info { flex-grow: 1; }
         .remove-item { color: #ff7675; cursor: pointer; font-size: 0.8rem; padding: 5px; }
 
-        /* --- FEEDBACK MODAL CONFIG --- */
-        #feedback-modal { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.7); z-index: 9999; 
-            display: none; align-items: center; justify-content: center;
-            backdrop-filter: blur(4px);
-        }
-        #feedback-modal.open { display: flex; }
-        .modal-box { 
-            background: white; padding: 30px; border-radius: 12px; 
-            width: 85%; max-width: 380px; text-align: center;
-        }
-        .modal-box h3 { font-family: 'Playfair Display', serif; margin-top: 0; }
-        .modal-box input { 
-            width: 100%; padding: 12px; margin: 10px 0; 
-            border: 1px solid #eee; border-radius: 4px; font-family: 'Work Sans';
-        }
-        .confirm-btn { 
-            width: 100%; background: #1A1A1A; color: white; border: none; 
-            padding: 15px; border-radius: 4px; font-weight: 600; cursor: pointer;
-            text-transform: uppercase; margin-top: 10px;
-        }
-
+        /* --- UTILITY --- */
         .category-wrap { width: 100%; overflow-x: auto; white-space: nowrap; padding: 12px 5%; background: white; border-bottom: 1px solid #f0f0f0; }
         .cat-btn { display: inline-block; padding: 7px 18px; margin-right: 8px; font-size: 0.7rem; text-transform: uppercase; border: 1px solid #eee; border-radius: 20px; cursor: pointer; }
         .cat-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
@@ -165,46 +146,44 @@
         </div>
     </div>
 
-    <!-- FEEDBACK MODAL HTML -->
-    <div id="feedback-modal">
-        <div class="modal-box">
-            <h3>Order Details</h3>
-            <p style="font-size: 0.8rem; color: #666;">Complete your details to finalize the order.</p>
-            <input type="text" id="cust-name" placeholder="Full Name" required>
-            <input type="tel" id="cust-phone" placeholder="Phone Number" required>
-            <button class="confirm-btn" id="final-btn" onclick="sendToSheetAndWA()">Submit & Checkout</button>
-            <p onclick="closeModal()" style="font-size:0.75rem; color:#aaa; margin-top:15px; cursor:pointer;">Cancel</p>
-        </div>
-    </div>
-
     <a href="https://wa.me/2349057835662" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <script>
+        // --- CONFIGURATION ---
         const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv';
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKjteSlEn7_MY-qGzV_a5b1GGwLfzizLgz4zq2gSy-DqkmNml7AWD5RJOOX7PLR9Rw/exec'; // PASTE YOUR URL HERE
+        const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'; // Replace with your Web App URL
         
         let inventory = [];
         let cart = JSON.parse(localStorage.getItem('chinzyCart')) || [];
 
+        // --- INITIALIZATION ---
         async function init() {
-            const r = await fetch(CSV); const t = await r.text();
-            inventory = t.split('\n').slice(1).map(l => {
-                const p = l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                if (p.length < 7) return null;
-                return { n: p[1].replace(/"/g, ''), cat: p[6].trim(), p: p[3].trim(), img: p[4].trim(), stock: parseInt(p[5]) };
-            }).filter(x => x);
+            try {
+                const r = await fetch(CSV); const t = await r.text();
+                inventory = t.split('\n').slice(1).map(l => {
+                    const p = l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    if (p.length < 7) return null;
+                    return { 
+                        n: p[1].replace(/"/g, ''), 
+                        cat: p[6].trim(),       // Col G
+                        p: p[3].trim(),         // Col D
+                        img: p[4].trim(),       // Col E
+                        stock: parseInt(p[5])   // Col F
+                    };
+                }).filter(x => x);
 
-            const cats = ['All', ...new Set(inventory.map(i => i.cat))];
-            const bar = document.getElementById('cat-bar'); bar.innerHTML = '';
-            cats.forEach(c => bar.innerHTML += `<div class="cat-btn ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">${c}</div>`);
+                const cats = ['All', ...new Set(inventory.map(i => i.cat))];
+                const bar = document.getElementById('cat-bar'); bar.innerHTML = '';
+                cats.forEach(c => bar.innerHTML += `<div class="cat-btn ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">${c}</div>`);
 
-            renderShop(inventory);
-            updateCartUI();
+                renderShop(inventory);
+                updateCartUI();
+            } catch (e) { console.error("Sheet Load Failed"); }
         }
 
         function renderShop(data) {
             const grid = document.getElementById('shop-grid'); grid.innerHTML = '';
-            data.forEach((item, index) => {
+            data.forEach((item) => {
                 let statusText = item.stock === 0 ? "Out of Stock" : (item.stock <= 5 ? "Few Remaining" : "In Stock");
                 let statusColor = item.stock === 0 ? "#95a5a6" : (item.stock <= 5 ? "#e67e22" : "#2ecc71");
                 let btnDisabled = item.stock === 0 ? "disabled" : "";
@@ -223,6 +202,7 @@
             });
         }
 
+        // --- CART SYSTEM ---
         function addToCart(n, p, img) {
             const existing = cart.find(c => c.n === n);
             if (existing) { existing.qty++; } else { cart.push({ n, p, img, qty: 1 }); }
@@ -247,15 +227,13 @@
             const list = document.getElementById('cart-list');
             const totalEl = document.getElementById('cart-total');
             list.innerHTML = '';
-            let total = 0;
-            let totalQty = 0;
+            let total = 0; let totalQty = 0;
             if (cart.length === 0) {
                 list.innerHTML = `<div style="text-align:center; padding:40px; color:#999;">Your cart is empty</div>`;
             } else {
                 cart.forEach((item, idx) => {
                     const itemTotal = Number(item.p) * item.qty;
-                    total += itemTotal;
-                    totalQty += item.qty;
+                    total += itemTotal; totalQty += item.qty;
                     list.innerHTML += `<div class="cart-item"><img src="${item.img}"><div class="cart-item-info"><h4 style="font-size:0.75rem; margin:0;">${item.n} <span style="color:var(--accent)">x${item.qty}</span></h4><span style="font-size:0.8rem; color:#888;">₦${itemTotal.toLocaleString()}</span></div><i class="fas fa-trash-can remove-item" onclick="removeFromCart(${idx})"></i></div>`;
                 });
             }
@@ -263,6 +241,38 @@
             document.querySelectorAll('.sync-cart').forEach(e => e.innerText = totalQty);
         }
 
+        // --- DIRECT LOGGING & WA CHECKOUT ---
+        async function checkout() {
+            if(cart.length === 0) return alert("Your cart is empty!");
+
+            const totalValue = document.getElementById('cart-total').innerText;
+            const orderSummary = cart.map(i => `${i.n} (x${i.qty})`).join(', ');
+
+            // SILENT BACKGROUND LOGGING
+            try {
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: "Direct WhatsApp Customer",
+                        phone: "N/A",
+                        order: orderSummary,
+                        total: totalValue,
+                        date: new Date().toLocaleString()
+                    })
+                });
+            } catch (e) { console.log("Silent log failed."); }
+
+            // INSTANT WHATSAPP LAUNCH
+            let msg = `Hello Chinzy Luxury, I'd like to order:\n\n`;
+            cart.forEach(i => msg += `• ${i.n} (x${i.qty}) - ₦${(Number(i.p)*i.qty).toLocaleString()}\n`);
+            msg += `\nTotal: ${totalValue}`;
+            
+            window.open(`https://wa.me/2349057835662?text=${encodeURIComponent(msg)}`);
+        }
+
+        // --- NAVIGATION ---
         function toggleSearch() { document.getElementById('search-panel').classList.toggle('active'); }
         function doSearch() {
             const q = document.getElementById('s-in').value.toLowerCase();
@@ -278,51 +288,10 @@
         }
 
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
-
-        // --- UPDATED CHECKOUT LOGIC ---
-        function checkout() {
-            if(cart.length === 0) return alert("Your cart is empty!");
-            document.getElementById('feedback-modal').classList.add('open');
-        }
-
-        function closeModal() { document.getElementById('feedback-modal').classList.remove('open'); }
-
-        async function sendToSheetAndWA() {
-            const name = document.getElementById('cust-name').value;
-            const phone = document.getElementById('cust-phone').value;
-            const btn = document.getElementById('final-btn');
-            if(!name || !phone) return alert("Please fill in all fields.");
-
-            btn.innerText = "Processing...";
-            btn.disabled = true;
-
-            let orderSummary = cart.map(i => `${i.n} (x${i.qty})`).join(', ');
-            let totalValue = document.getElementById('cart-total').innerText;
-
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', 
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name: name,
-                        phone: phone,
-                        order: orderSummary,
-                        total: totalValue,
-                        date: new Date().toLocaleString()
-                    })
-                });
-            } catch (e) { console.error("Sheet Sync Failed"); }
-
-            let msg = `Hello Chinzy Luxury, I am ${name}.\n\nOrder Details:\n`;
-            cart.forEach(i => msg += `• ${i.n} (x${i.qty}) - ₦${(Number(i.p)*i.qty).toLocaleString()}\n`);
-            msg += `\nTotal: ${totalValue}\nPhone: ${phone}`;
-            
-            window.open(`https://wa.me/2349057835662?text=${encodeURIComponent(msg)}`);
-            
-            closeModal();
-            btn.innerText = "Submit & Checkout";
-            btn.disabled = false;
+        function filterCat(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderShop(cat === 'All' ? inventory : inventory.filter(i => i.cat === cat));
         }
 
         window.onscroll = () => { document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 50); };
