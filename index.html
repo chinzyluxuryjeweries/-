@@ -13,6 +13,13 @@
             --accent: #C5A059; --transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             --brand-sz: 28px;
             --glow: rgba(197, 160, 89, 0.3);
+            @keyframes infiniteScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); } /* Resets seamlessly halfway */
+}
+
+/* Optional: Pauses the flow when a customer's finger is on it */
+.track:hover { animation-play-state: paused; }
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -51,7 +58,13 @@
         /* --- ENDLESS LOOP ARRIVALS (200x170) --- */
         .arrivals-section { padding: 15px 0 30px; overflow: hidden; } /* Reduced space from header */
         .carousel-outer { width: 100%; display: flex; overflow: hidden; }
-        .track { display: flex; gap: 15px; padding: 0 15px; transition: transform 0.6s ease; }
+        .track { 
+    display: flex; 
+    width: max-content; 
+    gap: 15px; 
+    animation: infiniteScroll 25s linear infinite; /* The smooth engine */
+    padding-left: 15px;
+}
         .track img { width: 170px; height: 200px; object-fit: cover; border-radius: 4px; flex-shrink: 0; transition: 0.3s; }
 
         /* --- CEO VIDEO --- */
@@ -143,22 +156,17 @@
     <footer>&copy; 2026 CHINZY LUXURY</footer>
 
     <script>
-        // 1. ENDLESS RE-QUEUE LOOP (New Arrivals)
-        const track = document.getElementById('loop-track');
-        function snapLoop() {
-            const firstImg = track.querySelector('img');
-            const itemWidth = 215; // 200px + 15px gap
-            
-            track.style.transition = "transform 0.6s ease";
-            track.style.transform = `translateX(-${itemWidth}px)`;
+        // Replace your old "Endless Loop" or "Snap Loop" script with this
+const loopImgs = ['products/prod1.jpg','products/prod2.jpg','products/prod3.jpg','products/prod4.jpg','products/prod5.jpg'];
+const track = document.getElementById('loop-track');
 
-            setTimeout(() => {
-                track.style.transition = "none";
-                track.appendChild(firstImg); // Move first to back
-                track.style.transform = "translateX(0)";
-            }, 600);
-        }
-        setInterval(snapLoop, 3500);
+// We duplicate the set to create the "Infinite Mirror" effect
+const fullSet = [...loopImgs, ...loopImgs]; 
+fullSet.forEach(src => {
+    const img = document.createElement('img');
+    img.src = src;
+    track.appendChild(img);
+});
 
         // 2. SEARCH ENGINE
         const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv';
