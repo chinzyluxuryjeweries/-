@@ -11,24 +11,16 @@
         :root {
             --bg-pearl: #FCFCFC; --surface: #FFFFFF; --text: #1A1A1A; 
             --accent: #C5A059; --transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            --brand-sz: 28px;
-            --glow: rgba(197, 160, 89, 0.3);
-            @keyframes infiniteScroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); } /* Resets seamlessly halfway */
-}
-
-/* Optional: Pauses the flow when a customer's finger is on it */
-.track:hover { animation-play-state: paused; }
+            --brand-sz: 28px; --glow: rgba(197, 160, 89, 0.3);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
 
-        /* --- THE MINIMALIST HEADER --- */
+        /* --- EDITORIAL HEADER --- */
         header { background: var(--surface); position: sticky; top: 0; z-index: 2000; width: 100%; transition: var(--transition); box-shadow: 0 2px 20px rgba(0,0,0,0.02); }
         .branding-area { display: flex; align-items: center; justify-content: center; padding: 5px 5%; height: 70px; transition: var(--transition); }
-        .brand-text { font-family: 'Modak', cursive; font-size: var(--brand-sz); color: var(--text); white-space: nowrap; transition: var(--transition); letter-spacing: 1px; }
+        .brand-text { font-family: 'Modak', cursive; font-size: var(--brand-sz); color: var(--text); white-space: nowrap; transition: var(--transition); letter-spacing: 1px; text-decoration: none; }
 
         .nav-hub { padding: 10px 5%; border-top: 1px solid #F0F0F0; display: flex; flex-direction: column; align-items: center; transition: var(--transition); }
         .nav-main-line { display: flex; justify-content: space-between; align-items: center; width: 100%; transition: var(--transition); }
@@ -38,7 +30,6 @@
         
         .hub-icon-wrap { position: relative; cursor: pointer; }
         .cart-count { position: absolute; top: -8px; right: -10px; background: var(--accent); color: white; font-size: 0.6rem; padding: 2px 5px; border-radius: 10px; font-weight: 600; }
-
         .icon-stack-line { display: flex; gap: 30px; height: 0; opacity: 0; overflow: hidden; transition: var(--transition); }
 
         /* MORPH LOGIC */
@@ -55,29 +46,38 @@
         #search-results { max-height: 300px; overflow-y: auto; margin-top: 20px; }
         .search-res-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; cursor: pointer; }
 
-        /* --- ENDLESS LOOP ARRIVALS (200x170) --- */
-        .arrivals-section { padding: 15px 0 30px; overflow: hidden; } /* Reduced space from header */
-        .carousel-outer { width: 100%; display: flex; overflow: hidden; }
+        /* --- TRUE ENDLESS LOOP ARRIVALS --- */
+        .arrivals-section { padding: 15px 0 30px; overflow: hidden; }
+        .carousel-outer { width: 100%; overflow: hidden; display: flex; }
+        
         .track { 
-    display: flex; 
-    width: max-content; 
-    gap: 15px; 
-    animation: infiniteScroll 25s linear infinite; /* The smooth engine */
-    padding-left: 15px;
-}
-        .track img { width: 170px; height: 200px; object-fit: cover; border-radius: 4px; flex-shrink: 0; transition: 0.3s; }
+            display: flex; 
+            width: max-content; /* Dynamic width for the strip */
+            gap: 15px; 
+            animation: infiniteScroll 25s linear infinite; /* THE SMOOTH ENGINE */
+            padding-left: 15px;
+        }
+        
+        .track img { width: 200px; height: 170px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
+
+        @keyframes infiniteScroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); } /* Resets seamlessly halfway */
+        }
+
+        .track:hover { animation-play-state: paused; } /* Pause on hover for luxury feel */
 
         /* --- CEO VIDEO --- */
         .ceo-section { padding: 30px 5%; text-align: center; }
-        .video-caption { font-family: 'Playfair Display'; font-size: 1.3rem; margin-bottom: 15px; color: var(--text); font-weight: 400; }
+        .video-caption { font-family: 'Playfair Display'; font-size: 1.3rem; margin-bottom: 15px; color: var(--text); }
         .video-container { width: 100%; height: 250px; background: #000; position: relative; border-radius: 8px; overflow: hidden; }
         .video-container video { width: 100%; height: 100%; object-fit: cover; }
         .mute-toggle { position: absolute; bottom: 15px; right: 15px; background: rgba(255,255,255,0.9); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
 
-        /* --- TESTIMONIALS (170x220) --- */
+        /* --- TESTIMONIALS (170x220 GLOW) --- */
         .test-section { display: flex; justify-content: center; gap: 20px; padding: 30px 5%; }
         .test-box { 
-            width: 220px; height: 290px; position: relative; overflow: hidden; 
+            width: 170px; height: 220px; position: relative; overflow: hidden; 
             border-radius: 8px; box-shadow: 0 0 20px var(--glow); 
         }
         .test-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0; transition: 1.5s ease-in-out; }
@@ -98,7 +98,7 @@
     </div>
 
     <header id="main-header">
-        <div class="branding-area"><a href="index.html" class="brand-text" style="text-decoration: none;">CHINZY JEWERIES</a></div>
+        <div class="branding-area"><a href="index.html" class="brand-text">CHINZY JEWERIES</a></div>
         <nav class="nav-hub">
             <div class="nav-main-line">
                 <i class="fas fa-magnifying-glass" onclick="toggleSearch()"></i>
@@ -127,11 +127,7 @@
             <h2 style="text-align:center; font-family:'Playfair Display'; font-weight:400; margin-bottom:15px;">New Arrivals</h2>
             <div class="carousel-outer">
                 <div class="track" id="loop-track">
-                    <img src="products/prod1.jpg" alt="1">
-                    <img src="products/prod2.jpg" alt="2">
-                    <img src="products/prod3.jpg" alt="3">
-                    <img src="products/prod4.jpg" alt="4">
-                    <img src="products/prod5.jpg" alt="5">
+                    <!-- Images will be duplicated for infinite effect -->
                 </div>
             </div>
         </section>
@@ -156,22 +152,21 @@
     <footer>&copy; 2026 CHINZY LUXURY</footer>
 
     <script>
-        // Replace your old "Endless Loop" or "Snap Loop" script with this
-const loopImgs = ['products/prod1.jpg','products/prod2.jpg','products/prod3.jpg','products/prod4.jpg','products/prod5.jpg'];
-const track = document.getElementById('loop-track');
-
-// We duplicate the set to create the "Infinite Mirror" effect
-const fullSet = [...loopImgs, ...loopImgs]; 
-fullSet.forEach(src => {
-    const img = document.createElement('img');
-    img.src = src;
-    track.appendChild(img);
-});
+        // 1. TRUE INFINITE ENGINE
+        const loopImgs = ['products/prod1.jpg','products/prod2.jpg','products/prod3.jpg','products/prod4.jpg','products/prod5.jpg'];
+        const track = document.getElementById('loop-track');
+        
+        // We create TWO identical sets of images
+        const fullSet = [...loopImgs, ...loopImgs]; 
+        fullSet.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            track.appendChild(img);
+        });
 
         // 2. SEARCH ENGINE
         const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv';
         let inventory = [];
-
         async function loadInv() {
             const r = await fetch(CSV); const t = await r.text();
             inventory = t.split('\n').slice(1).map(l => {
@@ -180,9 +175,7 @@ fullSet.forEach(src => {
             }).filter(x => x);
         }
         loadInv();
-
         function toggleSearch() { document.getElementById('search-panel').classList.toggle('active'); }
-
         function doSearch() {
             const q = document.getElementById('s-in').value.toLowerCase();
             const res = document.getElementById('search-results');
@@ -197,7 +190,7 @@ fullSet.forEach(src => {
             });
         }
 
-        // 3. FADE TESTIMONIALS (With 170x220 Glow)
+        // 3. FADE TESTIMONIALS (170x220 Glow)
         const tImgs = ['test/test1.jpg','test/test2.jpg','test/test3.jpg','test/test4.jpg','test/test5.jpg','test/test6.jpg'];
         function setupFade(id, s, e) {
             const b = document.getElementById(id);
@@ -216,16 +209,13 @@ fullSet.forEach(src => {
         }
         setupFade('box1', 0, 3); setupFade('box2', 3, 6);
 
-        // 4. GENERAL
+        // 4. MUTE & SCROLL
         function toggleMute() {
-            const v = document.getElementById('ceo-vid');
-            v.muted = !v.muted;
+            const v = document.getElementById('ceo-vid'); v.muted = !v.muted;
             document.getElementById('mute-icon').classList.toggle('fa-volume-xmark');
             document.getElementById('mute-icon').classList.toggle('fa-volume-high');
         }
-
         window.onscroll = () => { document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 50); };
-        
         function sync() {
             const c = localStorage.getItem('cartCount') || 0;
             document.querySelectorAll('.sync-cart').forEach(e => e.innerText = c);
