@@ -5,7 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Chinzy Luxury Jeweries</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Modak&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Modak&famia<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CHINZY JEWERIES | Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Modak&family=Playfair+Display:wght@400&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-pearl: #FCFCFC; --surface: #FFFFFF; --text: #1A1A1A; 
+            --accent: #C5A059; --transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            --brand-sz: 26px; --sub-sz: 25px; 
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Work Sans', sans-serif; margin: 0; background: var(--bg-pearl); overflow-x: hidden; }
+
+        /* --- THE EDITORIAL STACK HEADER --- */
+        header { background: var(--surface); position: sticky; top: 0; z-index: 2000; width: 100%; transition: var(--transition); box-shadow: 0 2px 20px rgba(0,0,0,0.02); }
+        
+        .branding-area { display: flex; align-items: center; justify-content: center; padding: 15px 5%; height: 80px; transition: var(--transition); position: relative; }
+        .date-box { position: absolute; left: 5%; font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 1px; height: var(--sub-sz); display: flex; align-items: center; }
+        .brand-text { font-family: 'Modak', cursive; font-size: var(--brand-sz); color: var(--text); white-space: nowrap; transition: var(--transition); }
+
+        .nav-hub { padding: 12px 5%; border-top: 1px solid #F0F0F0; display: flex; flex-direction: column; align-items: center; transition: var(--transition); }
+        .nav-main-line { display: flex; justify-content: space-between; align-items: center; width: 100%; transition: var(--transition); }
+        .nav-links { display: flex; gap: 25px; list-style: none; padding: 0; margin: 0; }
+        .nav-links a { text-decoration: none; color: var(--text); font-size: 0.85rem; font-weight: 300; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s; }
+        .nav-links a.active { color: var(--accent); font-weight: 500; border-bottom: 1px solid var(--accent); }
+        .hub-icon { font-size: 1.1rem; color: var(--text); cursor: pointer; transition: var(--transition); }
+
+        .icon-stack-line { display: flex; gap: 30px; height: 0; opacity: 0; overflow: hidden; transition: var(--transition); }
+
+        /* SCROLLED MORPH */
+        header.scrolled .branding-area { height: 0; padding: 0; opacity: 0; pointer-events: none; }
+        header.scrolled .nav-hub { padding: 10px 5%; }
+        header.scrolled .nav-main-line .hub-icon { opacity: 0; pointer-events: none; width: 0; }
+        header.scrolled .nav-main-line { justify-content: center; }
+        header.scrolled .nav-links a { font-size: calc(0.85rem - 2px); letter-spacing: 1px; }
+        header.scrolled .icon-stack-line { height: 30px; opacity: 1; margin-top: 8px; overflow: visible; justify-content: center; }
+
+        /* --- HOME CONTENT --- */
+        .hero-title { text-align: center; font-family: 'Playfair Display'; font-weight: 400; margin: 40px 0 20px; }
+        .carousel { width: 100%; overflow: hidden; padding: 20px 0; }
+        .track { display: flex; transition: var(--transition); }
+        .track img { width: 75vw; max-width: 280px; margin-right: 15px; border-radius: 4px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+        .video-box { width: 100%; height: 250px; background: #000; margin: 40px 0; position: relative; }
+        .video-box video { width: 100%; height: 100%; object-fit: cover; }
+        .mute-btn { position: absolute; bottom: 15px; right: 15px; background: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; }
+
+        .testimony-grid { display: grid; gap: 20px; padding: 20px 5%; justify-items: center; }
+        .test-box { width: 90vw; max-width: 340px; height: 450px; position: relative; overflow: hidden; border-radius: 4px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .test-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0; transition: 1.5s; }
+        .test-box img.active { opacity: 1; }
+
+        @media (max-width: 380px) {
+            :root { --brand-sz: 22px; --sub-sz: 21px; }
+            .nav-links { gap: 15px; } .nav-links a { font-size: 0.75rem; }
+        }
+        footer { text-align: center; padding: 40px; color: #999; font-size: 0.7rem; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="branding-area">
+            <div class="date-box" id="live-date"></div>
+            <div class="brand-text">CHINZY JEWERIES</div>
+        </div>
+        <nav class="nav-hub">
+            <div class="nav-main-line">
+                <i class="fas fa-magnifying-glass hub-icon" onclick="window.location.href='shop.html'"></i>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+                <i class="fas fa-shopping-cart hub-icon" onclick="window.location.href='shop.html'"></i>
+            </div>
+            <div class="icon-stack-line">
+                <i class="fas fa-magnifying-glass hub-icon" onclick="window.location.href='shop.html'"></i>
+                <i class="fas fa-shopping-cart hub-icon" onclick="window.location.href='shop.html'"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <h2 class="hero-title">New Arrivals</h2>
+        <div class="carousel">
+            <div class="track" id="tr">
+                <script>for(let i=1;i<=10;i++) document.write(`<img src="products/prod${i}.jpg" onerror="this.style.display='none'">`);</script>
+            </div>
+        </div>
+
+        <div class="video-box">
+            <video id="v" autoplay muted loop playsinline><source src="video/office_tour.mp4" type="video/mp4"></video>
+            <div class="mute-btn" onclick="tM()"><i id="mI" class="fas fa-volume-xmark"></i></div>
+        </div>
+
+        <h2 class="hero-title">Client Stories</h2>
+        <div class="testimony-grid">
+            <div class="test-box" id="b1"></div>
+            <div class="test-box" id="b2"></div>
+        </div>
+    </main>
+
+    <footer>&copy; 2026 CHINZY LUXURY</footer>
+
+    <script>
+        window.addEventListener('scroll', () => { document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 60); });
+        setInterval(() => { document.getElementById('live-date').innerText = new Date().toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'}); }, 1000);
+        function tM() { const v = document.getElementById('v'); const i = document.getElementById('mI'); v.muted = !v.muted; i.classList.toggle('fa-volume-xmark'); i.classList.toggle('fa-volume-high'); }
+
+        const tImgs = ['test/test1.jpg','test/test2.jpg','test/test3.jpg','test/test4.jpg','test/test5.jpg','test/test6.jpg'];
+        function cycle(id, s, e) {
+            const b = document.getElementById(id); let c = 0;
+            const slice = tImgs.slice(s, e);
+            slice.forEach((imgSrc, i) => { const img = document.createElement('img'); img.src = imgSrc; if(i===0) img.classList.add('active'); b.appendChild(img); });
+            setInterval(() => { const p = b.getElementsByTagName('img'); p[c].classList.remove('active'); c = (c + 1) % p.length; p[c].classList.add('active'); }, 3500);
+        }
+        cycle('b1', 0, 3); cycle('b2', 3, 6);
+    </script>
+</body>
+</html>ly=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
         :root {
