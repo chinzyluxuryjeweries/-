@@ -44,7 +44,6 @@
         .img-container { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; }
         .img-container img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Floating Name (Top Right) */
         .product-name-overlay {
             position: absolute; top: 8px; right: 8px;
             background: rgba(255,255,255,0.85);
@@ -54,7 +53,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        /* Floating Stock Tag (Bottom Right) */
         .stock-overlay {
             position: absolute; bottom: 8px; right: 8px;
             background: rgba(255,255,255,0.9);
@@ -63,7 +61,6 @@
             box-shadow: var(--glow); border: 1px solid rgba(197, 160, 89, 0.2);
         }
 
-        /* Reduced space between price and image */
         .card p { color: var(--accent); font-weight: 500; font-size: 0.85rem; margin: 8px 0 8px 0; }
         .add-btn { background: var(--text); color: white; border: none; padding: 10px; width: 90%; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px; cursor: pointer; }
         .add-btn:disabled { background: #eee; color: #aaa; cursor: not-allowed; }
@@ -76,19 +73,39 @@
         .cart-item-info { flex-grow: 1; }
         .remove-item { color: #ff7675; cursor: pointer; font-size: 0.8rem; padding: 5px; }
 
-        /* --- CATEGORY RIBBON --- */
+        /* --- FEEDBACK MODAL CONFIG --- */
+        #feedback-modal { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.7); z-index: 9999; 
+            display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        #feedback-modal.open { display: flex; }
+        .modal-box { 
+            background: white; padding: 30px; border-radius: 12px; 
+            width: 85%; max-width: 380px; text-align: center;
+        }
+        .modal-box h3 { font-family: 'Playfair Display', serif; margin-top: 0; }
+        .modal-box input { 
+            width: 100%; padding: 12px; margin: 10px 0; 
+            border: 1px solid #eee; border-radius: 4px; font-family: 'Work Sans';
+        }
+        .confirm-btn { 
+            width: 100%; background: #1A1A1A; color: white; border: none; 
+            padding: 15px; border-radius: 4px; font-weight: 600; cursor: pointer;
+            text-transform: uppercase; margin-top: 10px;
+        }
+
         .category-wrap { width: 100%; overflow-x: auto; white-space: nowrap; padding: 12px 5%; background: white; border-bottom: 1px solid #f0f0f0; }
         .cat-btn { display: inline-block; padding: 7px 18px; margin-right: 8px; font-size: 0.7rem; text-transform: uppercase; border: 1px solid #eee; border-radius: 20px; cursor: pointer; }
         .cat-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
-        /* --- SEARCH PANEL --- */
         #search-panel { position: fixed; top: -100%; left: 0; width: 100%; background: white; z-index: 3000; padding: 40px 5%; transition: 0.5s; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         #search-panel.active { top: 0; }
         .search-input { width: 100%; border: none; border-bottom: 2px solid var(--accent); font-size: 1.2rem; padding: 10px; outline: none; font-family: 'Work Sans'; text-align: center; text-transform: uppercase; }
         #search-results { max-height: 300px; overflow-y: auto; margin-top: 20px; }
         .search-res-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; cursor: pointer; }
 
-        /* --- WHATSAPP FLOAT --- */
         .whatsapp-float { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 4000; text-decoration: none; }
 
         #toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 12px 30px; border-radius: 30px; font-size: 0.8rem; transition: 0.4s; z-index: 4000; }
@@ -148,10 +165,24 @@
         </div>
     </div>
 
+    <!-- FEEDBACK MODAL HTML -->
+    <div id="feedback-modal">
+        <div class="modal-box">
+            <h3>Order Details</h3>
+            <p style="font-size: 0.8rem; color: #666;">Complete your details to finalize the order.</p>
+            <input type="text" id="cust-name" placeholder="Full Name" required>
+            <input type="tel" id="cust-phone" placeholder="Phone Number" required>
+            <button class="confirm-btn" id="final-btn" onclick="sendToSheetAndWA()">Submit & Checkout</button>
+            <p onclick="closeModal()" style="font-size:0.75rem; color:#aaa; margin-top:15px; cursor:pointer;">Cancel</p>
+        </div>
+    </div>
+
     <a href="https://wa.me/2349057835662" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <script>
         const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgYE39QUtAj5Ewhjr4J8zbC_ZEknbMRJ5gp5V6wlBXWqa9mvbPf9qrmYnqkdR_rSvumbUhAp0F6ef/pub?gid=895459828&single=true&output=csv';
+        const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'; // PASTE YOUR URL HERE
+        
         let inventory = [];
         let cart = JSON.parse(localStorage.getItem('chinzyCart')) || [];
 
@@ -194,11 +225,7 @@
 
         function addToCart(n, p, img) {
             const existing = cart.find(c => c.n === n);
-            if (existing) {
-                existing.qty++;
-            } else {
-                cart.push({ n, p, img, qty: 1 });
-            }
+            if (existing) { existing.qty++; } else { cart.push({ n, p, img, qty: 1 }); }
             saveCart();
             const t = document.getElementById('toast'); t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 2000);
@@ -222,7 +249,6 @@
             list.innerHTML = '';
             let total = 0;
             let totalQty = 0;
-            
             if (cart.length === 0) {
                 list.innerHTML = `<div style="text-align:center; padding:40px; color:#999;">Your cart is empty</div>`;
             } else {
@@ -230,15 +256,7 @@
                     const itemTotal = Number(item.p) * item.qty;
                     total += itemTotal;
                     totalQty += item.qty;
-                    list.innerHTML += `
-                        <div class="cart-item">
-                            <img src="${item.img}">
-                            <div class="cart-item-info">
-                                <h4 style="font-size:0.75rem; margin:0;">${item.n} <span style="color:var(--accent)">x${item.qty}</span></h4>
-                                <span style="font-size:0.8rem; color:#888;">₦${itemTotal.toLocaleString()}</span>
-                            </div>
-                            <i class="fas fa-trash-can remove-item" onclick="removeFromCart(${idx})"></i>
-                        </div>`;
+                    list.innerHTML += `<div class="cart-item"><img src="${item.img}"><div class="cart-item-info"><h4 style="font-size:0.75rem; margin:0;">${item.n} <span style="color:var(--accent)">x${item.qty}</span></h4><span style="font-size:0.8rem; color:#888;">₦${itemTotal.toLocaleString()}</span></div><i class="fas fa-trash-can remove-item" onclick="removeFromCart(${idx})"></i></div>`;
                 });
             }
             totalEl.innerText = `₦${total.toLocaleString()}`;
@@ -260,12 +278,51 @@
         }
 
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
+
+        // --- UPDATED CHECKOUT LOGIC ---
         function checkout() {
-            if(cart.length === 0) return;
-            let msg = "Order Inquiry:\n\n";
+            if(cart.length === 0) return alert("Your cart is empty!");
+            document.getElementById('feedback-modal').classList.add('open');
+        }
+
+        function closeModal() { document.getElementById('feedback-modal').classList.remove('open'); }
+
+        async function sendToSheetAndWA() {
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const btn = document.getElementById('final-btn');
+            if(!name || !phone) return alert("Please fill in all fields.");
+
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            let orderSummary = cart.map(i => `${i.n} (x${i.qty})`).join(', ');
+            let totalValue = document.getElementById('cart-total').innerText;
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        phone: phone,
+                        order: orderSummary,
+                        total: totalValue,
+                        date: new Date().toLocaleString()
+                    })
+                });
+            } catch (e) { console.error("Sheet Sync Failed"); }
+
+            let msg = `Hello Chinzy Luxury, I am ${name}.\n\nOrder Details:\n`;
             cart.forEach(i => msg += `• ${i.n} (x${i.qty}) - ₦${(Number(i.p)*i.qty).toLocaleString()}\n`);
-            msg += `\nTotal: ${document.getElementById('cart-total').innerText}`;
+            msg += `\nTotal: ${totalValue}\nPhone: ${phone}`;
+            
             window.open(`https://wa.me/2349057835662?text=${encodeURIComponent(msg)}`);
+            
+            closeModal();
+            btn.innerText = "Submit & Checkout";
+            btn.disabled = false;
         }
 
         window.onscroll = () => { document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 50); };
